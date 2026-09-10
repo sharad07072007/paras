@@ -3,8 +3,10 @@ services:
     name: dr-paras-leve-ayurveda
     env: node
     plan: free
+    region: oregon
     buildCommand: npm install
     startCommand: node server.js
+    healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
@@ -13,4 +15,21 @@ services:
       - key: ADMIN_PASS
         value: ayurveda2026!
       - key: ADMIN_SECRET
-        value: ayurveda_secure_jwt_secret_key_2026
+        generateValue: true
+      - key: DOCTOR_EMAIL
+        value: sharadpatidar555@gmail.com
+      - key: CLINIC_PHONE
+        value: "+91 7067207752"
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_SECURE
+        value: "false"
+      - key: SMTP_USER
+        value: sharadpatidar555@gmail.com
+      - key: SMTP_PASS
+        sync: false
+      - key: FAST2SMS_API_KEY
+        sync: false
+
