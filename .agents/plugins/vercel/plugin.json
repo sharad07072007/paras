@@ -1,0 +1,5 @@
+{
+  "name": "vercel-plugin",
+  "version": "1.0.0",
+  "description": "Official Vercel plugin for AI coding agents: 35+ skills, CLI workflows, deployments, environment variables, nextjs, and performance optimization."
+}

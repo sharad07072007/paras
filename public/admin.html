@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clinic Portal — Dr. Paras Leve, Ayurvedic Physician</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Karla:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ECE8DC;
+    --panel: #1F3A2E;
+    --panel-dark: #15271F;
+    --panel-text: #ECE8DC;
+    --ink: #23261F;
+    --ink-soft: #5C5A4E;
+    --gold: #C9971F;
+    --gold-light: #FBF4E2;
+    --rust: #8B4A3B;
+    --line: #D6D0BE;
+    --white: #FBFAF6;
+    --success: #2E7D32;
+    --warning: #EF6C00;
+    --info: #0277BD;
+    --danger: #C62828;
+    --whatsapp: #25D366;
+    --radius: 6px;
+    --shadow: 0 4px 18px rgba(31, 58, 46, 0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Karla', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* TOP NAVBAR */
+  .portal-nav {
+    background: var(--panel);
+    color: var(--panel-text);
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--gold);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-logo {
+    width: 36px; height: 36px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .brand-logo svg { width: 20px; height: 20px; fill: var(--panel); }
+  .brand-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+  }
+  .brand-title small {
+    display: block;
+    font-family: 'Karla', sans-serif;
+    font-size: 0.72rem;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+  .nav-right { display: flex; align-items: center; gap: 16px; }
+  .user-tag {
+    font-size: 0.85rem;
+    background: rgba(255,255,255,0.1);
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .btn-logout {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.3);
+    color: var(--panel-text);
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-logout:hover { background: rgba(255,255,255,0.15); border-color: #fff; }
+
+  /* CONTAINER */
+  .container {
+    max-width: 1240px;
+    margin: 32px auto;
+    padding: 0 24px;
+    width: 100%;
+    flex: 1;
+  }
+
+  /* LOGIN CARD */
+  .login-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+  }
+  .login-card {
+    background: var(--white);
+    padding: 40px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 420px;
+  }
+  .login-card h2 {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+    color: var(--panel);
+  }
+  .login-card p {
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+  }
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--ink-soft);
+  }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-size: 0.95rem;
+    background: #FFF;
+    outline: none;
+    font-family: inherit;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--panel);
+    box-shadow: 0 0 0 3px rgba(31,58,46,0.12);
+  }
+  .btn-login {
+    width: 100%;
+    background: var(--panel);
+    color: var(--panel-text);
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-login:hover { background: var(--panel-dark); }
+  .login-tip {
+    margin-top: 18px;
+    background: var(--gold-light);
+    border: 1px dashed var(--gold);
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #724c00;
+  }
+
+  /* STATS GRID */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .stat-card {
+    background: var(--white);
+    padding: 20px 24px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+  }
+  .stat-card .label {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .stat-card .number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.3rem;
+    font-weight: 700;
+    color: var(--panel);
+    line-height: 1;
+  }
+  .stat-card.pending-card .number { color: var(--warning); }
+  .stat-card.confirmed-card .number { color: var(--success); }
+
+  /* TOOLBAR */
+  .toolbar {
+    background: var(--white);
+    padding: 18px 24px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .search-box {
+    display: flex;
+    align-items: center;
+    background: #FFF;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 4px 12px;
+    flex: 1;
+    min-width: 260px;
+  }
+  .search-box input {
+    border: none;
+    outline: none;
+    padding: 6px;
+    font-size: 0.9rem;
+    width: 100%;
+    background: transparent;
+  }
+  .filter-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  select.filter-select {
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: #FFF;
+    font-size: 0.86rem;
+    color: var(--ink);
+  }
+  .btn-action {
+    background: var(--white);
+    border: 1px solid var(--line);
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 0.86rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+  .btn-action:hover { background: #EEEAE0; }
+  .btn-export { background: var(--panel); color: var(--panel-text); border: none; }
+  .btn-export:hover { background: var(--panel-dark); }
+
+  /* DATA TABLE */
+  .table-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  thead {
+    background: #F4EFE2;
+    border-bottom: 1px solid var(--line);
+  }
+  th {
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+  td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+  }
+  tbody tr:hover { background: #FAF7F0; }
+
+  /* BADGES */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .badge-pending { background: #FFF3E0; color: #E65100; border: 1px solid #FFE0B2; }
+  .badge-confirmed { background: #E8F5E9; color: #2E7D32; border: 1px solid #C8E6C9; }
+  .badge-completed { background: #E1F5FE; color: #0277BD; border: 1px solid #B3E5FC; }
+  .badge-cancelled { background: #FFEBEE; color: #C62828; border: 1px solid #FFCDD2; }
+
+  .notif-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.72rem;
+    padding: 2px 7px;
+    border-radius: 10px;
+    margin-top: 4px;
+    font-weight: 600;
+  }
+  .notif-wa { background: #E8F8EE; color: #1B8342; border: 1px solid #C4EED3; }
+  .notif-email { background: #E3F2FD; color: #1565C0; border: 1px solid #BBDEFB; }
+
+  .btn-approve-fast {
+    background: var(--success);
+    color: #FFF;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.2s;
+  }
+  .btn-approve-fast:hover { background: #236326; }
+
+  .btn-icon {
+    background: transparent;
+    border: 1px solid var(--line);
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-left: 4px;
+    transition: all 0.15s;
+  }
+  .btn-icon:hover { background: var(--panel); color: #FFF; border-color: var(--panel); }
+
+  /* MODAL */
+  .modal-backdrop {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(31, 58, 46, 0.6);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal-card {
+    background: var(--white);
+    width: 100%;
+    max-width: 640px;
+    border-radius: 6px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .modal-header {
+    background: var(--panel);
+    color: var(--panel-text);
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-close {
+    background: transparent;
+    border: none;
+    color: var(--panel-text);
+    font-size: 1.4rem;
+    cursor: pointer;
+  }
+  .modal-body { padding: 24px; max-height: 75vh; overflow-y: auto; }
+  .modal-footer {
+    padding: 16px 24px;
+    background: #F3EFE3;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .preview-box {
+    background: #FAF8F2;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 14px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-top: 8px;
+    white-space: pre-wrap;
+    font-family: monospace;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+
+  .tab-btn-group { display: flex; gap: 8px; margin-bottom: 8px; }
+  .tab-btn {
+    background: transparent;
+    border: 1px solid var(--line);
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    cursor: pointer;
+  }
+  .tab-btn.active {
+    background: var(--panel);
+    color: var(--panel-text);
+    border-color: var(--panel);
+    font-weight: 600;
+  }
+
+  .empty-state {
+    padding: 48px;
+    text-align: center;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 900px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .toolbar { flex-direction: column; align-items: stretch; }
+    .table-card { overflow-x: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<div class="portal-nav">
+  <div class="brand">
+    <div class="brand-logo">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8 6 6 10 6 14a6 6 0 0012 0c0-4-2-8-6-12z"/></svg>
+    </div>
+    <div class="brand-title">
+      Dr. Paras Leve
+      <small>CLINICAL CONSULTATION & APPROVAL PORTAL</small>
+    </div>
+  </div>
+  <div class="nav-right" id="navUserControls" style="display: none;">
+    <a href="/" target="_blank" style="color:var(--panel-text); font-size:0.85rem; text-decoration:underline;">Public Clinic Site ↗</a>
+    <span class="user-tag" id="userBadge">Physician: Dr. Leve</span>
+    <button class="btn-logout" onclick="logout()">Logout</button>
+  </div>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+
+  <!-- VIEW: LOGIN -->
+  <div class="login-wrap" id="loginView">
+    <div class="login-card">
+      <h2>Physician Login</h2>
+      <p>Approve patient consultations, trigger instant WhatsApp & Email notifications, and record clinical notes.</p>
+      <div id="loginAlert" style="display:none; padding:10px; background:#FFEBEE; color:#C62828; border-radius:4px; font-size:0.85rem; margin-bottom:16px;"></div>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" value="admin" required autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" value="ayurveda2026!" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn-login" id="loginSubmitBtn">Sign In to Clinic</button>
+      </form>
+      <div class="login-tip">
+        <strong>Default Credentials:</strong><br>
+        Username: <code>admin</code> &nbsp;|&nbsp; Password: <code>ayurveda2026!</code>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW: DASHBOARD -->
+  <div id="dashboardView" style="display: none;">
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="label">Total Consultations</div>
+        <div class="number" id="statTotal">0</div>
+      </div>
+      <div class="stat-card pending-card">
+        <div class="label">Pending Review</div>
+        <div class="number" id="statPending">0</div>
+      </div>
+      <div class="stat-card confirmed-card">
+        <div class="label">Confirmed / Approved</div>
+        <div class="number" id="statConfirmed">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Completed</div>
+        <div class="number" id="statCompleted">0</div>
+      </div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="search-box">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8C8878" stroke-width="2" style="margin-right:6px;"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="searchInput" placeholder="Search patient name, phone, or reference code..." oninput="handleSearch()">
+      </div>
+
+      <div class="filter-group">
+        <select class="filter-select" id="statusFilter" onchange="loadAppointments()">
+          <option value="all">All Statuses</option>
+          <option value="pending">Pending</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+
+        <select class="filter-select" id="typeFilter" onchange="loadAppointments()">
+          <option value="all">All Consultation Types</option>
+          <option value="Online video consultation">Online Video</option>
+          <option value="In-clinic visit">In-Clinic Visit</option>
+        </select>
+
+        <button class="btn-action" onclick="loadDashboard()"><span style="font-size:1.1rem;">↻</span> Refresh</button>
+        <button class="btn-action btn-export" onclick="exportCsv()">⬇ Export CSV</button>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Reference</th>
+            <th>Patient Details</th>
+            <th>Type</th>
+            <th>Scheduled Slot</th>
+            <th>Status</th>
+            <th>Notifications</th>
+            <th>Health Concern</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="appointmentsTableBody">
+          <tr>
+            <td colspan="8" class="empty-state">Loading consultation records...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- APPROVAL & NOTIFICATION MODAL -->
+<div class="modal-backdrop" id="approvalModal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Approve Consultation & Notify Patient</h3>
+      <button class="modal-close" onclick="closeApprovalModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:#FAF8F2; padding:12px; border-radius:4px; border:1px solid var(--line); margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong id="approvePatientName" style="font-size:1.1rem; color:var(--panel);"></strong>
+            <span id="approveRefCode" style="margin-left:8px; font-family:monospace; color:var(--gold); font-weight:bold;"></span>
+          </div>
+          <span id="approveModeBadge" class="badge"></span>
+        </div>
+        <div style="font-size:0.85rem; color:var(--ink-soft); margin-top:4px;">
+          Phone: <a id="approvePhoneLink" href="" style="color:var(--panel); text-decoration:underline;"></a> &nbsp;·&nbsp;
+          Email: <span id="approveEmailText"></span>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div class="form-group">
+          <label for="confDate">Confirmed Consultation Date</label>
+          <input type="date" id="confDate">
+        </div>
+        <div class="form-group">
+          <label for="confTime">Confirmed Time Slot</label>
+          <select id="confTime">
+            <option value="Morning (10:00 AM – 01:00 PM)">Morning (10:00 AM – 01:00 PM)</option>
+            <option value="Afternoon (02:00 PM – 05:00 PM)">Afternoon (02:00 PM – 05:00 PM)</option>
+            <option value="Evening (05:00 PM – 07:00 PM)">Evening (05:00 PM – 07:00 PM)</option>
+            <option value="Exact: 10:30 AM">Exact: 10:30 AM</option>
+            <option value="Exact: 11:30 AM">Exact: 11:30 AM</option>
+            <option value="Exact: 03:00 PM">Exact: 03:00 PM</option>
+            <option value="Exact: 04:30 PM">Exact: 04:30 PM</option>
+            <option value="Exact: 06:00 PM">Exact: 06:00 PM</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group" id="meetingLinkGroup">
+        <label for="confMeetingLink">Video Consultation Meeting Link (Google Meet / Zoom)</label>
+        <input type="url" id="confMeetingLink" placeholder="https://meet.google.com/...">
+      </div>
+
+      <div class="form-group">
+        <label for="confDoctorNotes">Physician Clinical Instructions / Notes</label>
+        <textarea id="confDoctorNotes" rows="2" placeholder="e.g. Advised 3-hour fasting prior to Nadi Pariksha. Bring prior thyroid/lipid panels."></textarea>
+      </div>
+
+      <div style="margin:14px 0 8px;">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.88rem; font-weight:600; color:var(--panel);">
+          <input type="checkbox" id="chkSendEmail" checked style="width:16px; height:16px;">
+          Send Branded Confirmation Email to Patient
+        </label>
+      </div>
+
+      <!-- Preview Tabs -->
+      <div style="margin-top:16px;">
+        <div class="tab-btn-group">
+          <button class="tab-btn active" id="tabWaBtn" onclick="switchPreviewTab('wa')">💬 WhatsApp Message Preview</button>
+          <button class="tab-btn" id="tabEmailBtn" onclick="switchPreviewTab('email')">✉️ Email Notification Preview</button>
+        </div>
+        <div id="waPreviewBox" class="preview-box"></div>
+        <div id="emailPreviewBox" class="preview-box" style="display:none; font-family:sans-serif;"></div>
+      </div>
+
+      <div id="approvalAlert" style="display:none; margin-top:12px; padding:10px; border-radius:4px; font-size:0.85rem;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-action" onclick="closeApprovalModal()">Cancel</button>
+      <button class="btn-action" id="btnOpenWhatsAppDirect" style="background:var(--whatsapp); color:#FFF; border:none; display:none;" onclick="triggerWhatsAppSend()">
+        💬 Open WhatsApp Web / App
+      </button>
+      <button class="btn-action btn-export" id="btnConfirmApproval" onclick="submitApproval()">
+        ✓ Approve & Dispatch Notifications
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let authToken = localStorage.getItem('ayurveda_admin_token') || null;
+  let activeAppt = null;
+  let lastWhatsAppUrl = null;
+  let searchTimeout = null;
+
+  window.addEventListener('DOMContentLoaded', () => {
+    if (authToken) {
+      showDashboard();
+    } else {
+      showLogin();
+    }
+  });
+
+  function showLogin() {
+    document.getElementById('loginView').style.display = 'flex';
+    document.getElementById('dashboardView').style.display = 'none';
+    document.getElementById('navUserControls').style.display = 'none';
+  }
+
+  function showDashboard() {
+    document.getElementById('loginView').style.display = 'none';
+    document.getElementById('dashboardView').style.display = 'block';
+    document.getElementById('navUserControls').style.display = 'flex';
+    loadDashboard();
+  }
+
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const alertBox = document.getElementById('loginAlert');
+    const submitBtn = document.getElementById('loginSubmitBtn');
+    alertBox.style.display = 'none';
+
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Signing in...';
+
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Authentication failed');
+
+      authToken = data.token;
+      localStorage.setItem('ayurveda_admin_token', authToken);
+      showDashboard();
+    } catch (err) {
+      alertBox.textContent = err.message;
+      alertBox.style.display = 'block';
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Sign In to Clinic';
+    }
+  });
+
+  function logout() {
+    authToken = null;
+    localStorage.removeItem('ayurveda_admin_token');
+    showLogin();
+  }
+
+  async function authFetch(url, options = {}) {
+    options.headers = {
+      ...(options.headers || {}),
+      'Authorization': `Bearer ${authToken}`
+    };
+    const res = await fetch(url, options);
+    if (res.status === 401) {
+      logout();
+      throw new Error('Session expired. Please log in again.');
+    }
+    return res;
+  }
+
+  async function loadDashboard() {
+    await Promise.all([loadStats(), loadAppointments()]);
+  }
+
+  async function loadStats() {
+    try {
+      const res = await authFetch('/api/admin/stats');
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('statTotal').textContent = data.stats.total;
+        document.getElementById('statPending').textContent = data.stats.pending;
+        document.getElementById('statConfirmed').textContent = data.stats.confirmed;
+        document.getElementById('statCompleted').textContent = data.stats.completed;
+      }
+    } catch (e) {
+      console.error('Stats error:', e);
+    }
+  }
+
+  function handleSearch() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      loadAppointments();
+    }, 300);
+  }
+
+  async function loadAppointments() {
+    const tableBody = document.getElementById('appointmentsTableBody');
+    const status = document.getElementById('statusFilter').value;
+    const type = document.getElementById('typeFilter').value;
+    const search = document.getElementById('searchInput').value.trim();
+
+    const params = new URLSearchParams();
+    if (status !== 'all') params.append('status', status);
+    if (type !== 'all') params.append('type', type);
+    if (search) params.append('search', search);
+
+    try {
+      const res = await authFetch(`/api/admin/appointments?${params.toString()}`);
+      const json = await res.json();
+
+      if (!json.success || !json.appointments || json.appointments.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="8" class="empty-state">No appointments found matching the current filters.</td></tr>`;
+        return;
+      }
+
+      tableBody.innerHTML = json.appointments.map(appt => {
+        const concernSnippet = appt.health_concern ? (appt.health_concern.length > 45 ? appt.health_concern.substring(0, 42) + '...' : appt.health_concern) : '—';
+        const isPending = appt.status === 'pending';
+        const displayDate = appt.confirmed_date || appt.preferred_date || 'Upcoming';
+        const displayTime = appt.confirmed_time || appt.preferred_time_slot || '';
+
+        const waSent = appt.whatsapp_sent_at ? `<span class="notif-badge notif-wa" title="WhatsApp sent on ${appt.whatsapp_sent_at}">✓ WA</span>` : '<span style="opacity:0.4; font-size:0.75rem;">— WA</span>';
+        const emailSent = appt.email_sent_at ? `<span class="notif-badge notif-email" title="Email sent on ${appt.email_sent_at}">✓ Email</span>` : '<span style="opacity:0.4; font-size:0.75rem;">— Email</span>';
+
+        return `
+          <tr>
+            <td>
+              <strong style="font-family:monospace; color:var(--gold); font-size:0.95rem;">${appt.reference_code}</strong>
+              <div style="font-size:0.75rem; color:var(--ink-soft);">${appt.created_at}</div>
+            </td>
+            <td>
+              <strong>${escapeHtml(appt.patient_name)}</strong>
+              <div style="font-size:0.82rem; color:var(--ink-soft);">${escapeHtml(appt.phone)}</div>
+              ${appt.email ? `<div style="font-size:0.75rem; color:var(--info);">${escapeHtml(appt.email)}</div>` : ''}
+            </td>
+            <td>
+              <span style="font-size:0.82rem; color:var(--ink-soft);">
+                ${appt.consultation_type.includes('Online') ? '📹 Online' : '🏥 In-clinic'}
+              </span>
+            </td>
+            <td>
+              <div><strong>${escapeHtml(displayDate)}</strong></div>
+              <div style="font-size:0.78rem; color:var(--ink-soft);">${escapeHtml(displayTime)}</div>
+            </td>
+            <td>
+              <span class="badge badge-${appt.status}">${appt.status}</span>
+            </td>
+            <td>
+              <div style="display:flex; flex-direction:column; gap:2px;">
+                ${waSent}
+                ${emailSent}
+              </div>
+            </td>
+            <td title="${escapeHtml(appt.health_concern)}" style="max-width:200px; line-height:1.3; font-size:0.82rem;">
+              ${escapeHtml(concernSnippet)}
+            </td>
+            <td>
+              <div style="display:flex; align-items:center;">
+                <button class="btn-approve-fast" onclick="openApprovalModal(${appt.id})" title="Approve & Send WhatsApp/Email">
+                  ${isPending ? '✓ Approve & Notify' : 'Review & Notify'}
+                </button>
+                <button class="btn-icon" style="color:var(--danger);" onclick="deleteAppointment(${appt.id}, '${escapeHtml(appt.reference_code)}')" title="Delete">✕</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+    } catch (e) {
+      console.error('List error:', e);
+      tableBody.innerHTML = `<tr><td colspan="8" class="empty-state" style="color:var(--danger);">Error loading appointments: ${e.message}</td></tr>`;
+    }
+  }
+
+  // Open Approval & Notification Modal
+  async function openApprovalModal(id) {
+    try {
+      const res = await authFetch(`/api/admin/appointments?search=${id}`);
+      const json = await res.json();
+      const appt = json.appointments.find(a => a.id === id);
+      if (!appt) return alert('Appointment not found');
+
+      activeAppt = appt;
+      document.getElementById('approvePatientName').textContent = appt.patient_name;
+      document.getElementById('approveRefCode').textContent = appt.reference_code;
+      document.getElementById('approveModeBadge').textContent = appt.consultation_type;
+      document.getElementById('approveModeBadge').className = `badge badge-${appt.status}`;
+      document.getElementById('approvePhoneLink').textContent = appt.phone;
+      document.getElementById('approvePhoneLink').href = `tel:${appt.phone}`;
+      document.getElementById('approveEmailText').textContent = appt.email || '(No email provided)';
+
+      // Set confirmed date / time
+      const today = new Date().toISOString().slice(0, 10);
+      document.getElementById('confDate').value = appt.confirmed_date || appt.preferred_date || today;
+      document.getElementById('confTime').value = appt.confirmed_time || appt.preferred_time_slot || 'Morning (10:00 AM – 01:00 PM)';
+      document.getElementById('confDoctorNotes').value = appt.doctor_notes || '';
+
+      const isOnline = appt.consultation_type.includes('Online');
+      document.getElementById('meetingLinkGroup').style.display = isOnline ? 'block' : 'none';
+      document.getElementById('confMeetingLink').value = appt.meeting_link || (isOnline ? `https://meet.google.com/ayur-${appt.reference_code.toLowerCase().replace(/[^a-z0-9]/g, '-')}` : '');
+
+      // Refresh previews
+      updatePreviews();
+
+      // Hook up input changes to auto-update previews
+      document.getElementById('confDate').oninput = updatePreviews;
+      document.getElementById('confTime').onchange = updatePreviews;
+      document.getElementById('confMeetingLink').oninput = updatePreviews;
+
+      document.getElementById('btnOpenWhatsAppDirect').style.display = 'none';
+      document.getElementById('btnConfirmApproval').disabled = false;
+      document.getElementById('btnConfirmApproval').textContent = '✓ Approve & Dispatch Notifications';
+      document.getElementById('approvalAlert').style.display = 'none';
+
+      document.getElementById('approvalModal').classList.add('open');
+    } catch (e) {
+      alert('Error opening modal: ' + e.message);
+    }
+  }
+
+  function closeApprovalModal() {
+    document.getElementById('approvalModal').classList.remove('open');
+    activeAppt = null;
+  }
+
+  function switchPreviewTab(tab) {
+    document.getElementById('tabWaBtn').classList.toggle('active', tab === 'wa');
+    document.getElementById('tabEmailBtn').classList.toggle('active', tab === 'email');
+    document.getElementById('waPreviewBox').style.display = tab === 'wa' ? 'block' : 'none';
+    document.getElementById('emailPreviewBox').style.display = tab === 'email' ? 'block' : 'none';
+  }
+
+  function updatePreviews() {
+    if (!activeAppt) return;
+    const date = document.getElementById('confDate').value;
+    const time = document.getElementById('confTime').value;
+    const meetLink = document.getElementById('confMeetingLink').value;
+    const isOnline = activeAppt.consultation_type.includes('Online');
+
+    // WhatsApp Message Text
+    const waText = 
+`*SHREE AYUSH CLINIC — DR. PARAS LEVE*
+_BAMS, CRAV (Reg. No. AY-2019-04831)_
+
+Namaste *${activeAppt.patient_name}* 🙏
+
+Your consultation appointment has been *APPROVED & CONFIRMED* by Dr. Paras Leve.
+
+📋 *Appointment Summary:*
+• *Booking Ref:* ${activeAppt.reference_code}
+• *Consultation Type:* ${activeAppt.consultation_type}
+• *Date:* ${date}
+• *Time Slot:* ${time}
+${isOnline ? `• *Video Consultation Link:* ${meetLink}\n` : '• *Clinic Location:* Shree Ayush Clinic, MP Nagar, Zone-II, Bhopal (M.P.) – 462011\n'}
+🌿 *Patient Instructions for Assessment:*
+1. Maintain 2–3 hour light gap after heavy meals for Nadi Pariksha.
+2. Keep previous diagnostic or blood reports ready.
+
+For queries or assistance: +91 98765 43210.
+_Wishing you holistic health, vitality, and balance._`;
+
+    document.getElementById('waPreviewBox').textContent = waText;
+
+    // Email Summary
+    document.getElementById('emailPreviewBox').innerHTML = `
+      <div style="background:#FFF; padding:12px; border:1px solid #D6D0BE; border-radius:4px;">
+        <p><strong>To:</strong> ${activeAppt.email || 'None'}</p>
+        <p><strong>Subject:</strong> ✓ Consultation Confirmed [${activeAppt.reference_code}] — Dr. Paras Leve</p>
+        <p><strong>Scheduled:</strong> ${date} (${time})</p>
+        <p><strong>Mode:</strong> ${activeAppt.consultation_type} ${isOnline ? `(Meeting: ${meetLink})` : ''}</p>
+      </div>
+    `;
+  }
+
+  // Submit Approval
+  async function submitApproval() {
+    if (!activeAppt) return;
+
+    const confirmed_date = document.getElementById('confDate').value;
+    const confirmed_time = document.getElementById('confTime').value;
+    const meeting_link = document.getElementById('confMeetingLink').value;
+    const doctor_notes = document.getElementById('confDoctorNotes').value;
+    const send_email = document.getElementById('chkSendEmail').checked;
+
+    const btn = document.getElementById('btnConfirmApproval');
+    const alertBox = document.getElementById('approvalAlert');
+
+    btn.disabled = true;
+    btn.textContent = 'Processing Approval & Dispatching...';
+    alertBox.style.display = 'none';
+
+    try {
+      const res = await authFetch(`/api/admin/appointments/${activeAppt.id}/approve`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          confirmed_date,
+          confirmed_time,
+          meeting_link,
+          doctor_notes,
+          send_email
+        })
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to approve appointment');
+
+      lastWhatsAppUrl = data.whatsapp.url;
+
+      alertBox.style.display = 'block';
+      alertBox.style.background = '#E8F5E9';
+      alertBox.style.color = '#2E7D32';
+      alertBox.style.border = '1px solid #C8E6C9';
+      alertBox.innerHTML = `
+        <strong>✓ Consultation Approved!</strong><br>
+        ${data.email_sent ? '✓ Confirmation email dispatched to ' + activeAppt.email + '.<br>' : ''}
+        Ready to send WhatsApp message to ${activeAppt.phone}. Click below to open WhatsApp:
+      `;
+
+      btn.style.display = 'none';
+      const waBtn = document.getElementById('btnOpenWhatsAppDirect');
+      waBtn.style.display = 'inline-flex';
+
+      loadDashboard();
+    } catch (err) {
+      alertBox.style.display = 'block';
+      alertBox.style.background = '#FFEBEE';
+      alertBox.style.color = '#C62828';
+      alertBox.textContent = err.message;
+      btn.disabled = false;
+      btn.textContent = '✓ Approve & Dispatch Notifications';
+    }
+  }
+
+  // Trigger WhatsApp and record sent timestamp
+  async function triggerWhatsAppSend() {
+    if (!lastWhatsAppUrl || !activeAppt) return;
+
+    // Record WA timestamp
+    authFetch(`/api/admin/appointments/${activeAppt.id}/mark-whatsapp-sent`, { method: 'POST' }).catch(() => {});
+
+    // Open WhatsApp Web or mobile app in new window/tab
+    window.open(lastWhatsAppUrl, '_blank');
+    closeApprovalModal();
+    loadDashboard();
+  }
+
+  // Delete appointment
+  async function deleteAppointment(id, refCode) {
+    if (!confirm(`Delete appointment ${refCode}? This action cannot be undone.`)) return;
+
+    try {
+      const res = await authFetch(`/api/admin/appointments/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to delete');
+      loadDashboard();
+    } catch (e) {
+      alert('Error: ' + e.message);
+    }
+  }
+
+  // Export CSV
+  function exportCsv() {
+    authFetch('/api/admin/export')
+      .then(res => res.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `ayurveda_consultations_${new Date().toISOString().slice(0, 10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      })
+      .catch(err => alert('CSV export error: ' + err.message));
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+</script>
+</body>
+</html>

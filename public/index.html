@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dr. Paras Leve, BAMS, CRAV — Ayurvedic Physician</title>
+  <meta name="description"
+    content="Ayurvedic care rooted in classical diagnosis (Prakriti & Nadi Pariksha) by Dr. Paras Leve, BAMS, CRAV. Online and in-clinic consultations for chronic health conditions.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Karla:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ECE8DC;
+      --panel: #1F3A2E;
+      --panel-text: #ECE8DC;
+      --ink: #23261F;
+      --ink-soft: #5C5A4E;
+      --gold: #C9971F;
+      --gold-light: #F4E8C1;
+      --rust: #8B4A3B;
+      --line: #D6D0BE;
+      --white: #FBFAF6;
+      --success: #2E7D32;
+      --error: #C62828;
+      --whatsapp: #25D366;
+      --whatsapp-dark: #1EBE5D;
+      --radius: 4px;
+      --shadow: 0 10px 30px rgba(31, 58, 46, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Karla', 'Noto Sans Devanagari', sans-serif;
+      line-height: 1.6;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: 'Cormorant Garamond', 'Noto Sans Devanagari', serif;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* TOP STRIP */
+    .top-strip {
+      background: var(--panel);
+      color: var(--panel-text);
+      font-size: 0.82rem;
+      padding: 8px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 100%;
+      margin: 0 auto;
+      gap: 12px;
+    }
+
+    .top-strip-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .top-strip .info-group {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .top-strip span {
+      opacity: 0.85;
+    }
+
+    .top-strip-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .track-link {
+      color: var(--gold);
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      font-family: inherit;
+      text-decoration: underline;
+    }
+
+    .track-link:hover {
+      color: #e5b338;
+    }
+
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .lang-switch button {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: var(--panel-text);
+      font-size: 0.78rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-family: 'Karla', 'Noto Sans Devanagari', sans-serif;
+      transition: all 0.2s ease;
+    }
+
+    .lang-switch button.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--panel);
+      font-weight: 600;
+    }
+
+    /* NAV */
+    header {
+      background: var(--bg);
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(8px);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 32px;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(201, 151, 31, 0.3);
+    }
+
+    .brand-mark svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .brand-name {
+      font-family: 'Cormorant Garamond', 'Noto Sans Devanagari', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      line-height: 1.1;
+    }
+
+    .brand-name small {
+      display: block;
+      font-family: 'Karla', 'Noto Sans Devanagari', sans-serif;
+      font-size: 0.72rem;
+      color: var(--ink-soft);
+      letter-spacing: 0.03em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 26px;
+      font-size: 0.92rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      border-bottom: 1px solid transparent;
+      padding-bottom: 3px;
+      transition: border-color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      border-color: var(--ink);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-book {
+      background: var(--rust);
+      color: var(--white);
+      padding: 10px 20px;
+      border-radius: 3px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background 0.2s ease, transform 0.1s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-book:hover {
+      background: #723a2d;
+      transform: translateY(-1px);
+    }
+
+    /* HERO */
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 56px;
+      align-items: center;
+      padding: 72px 32px 96px;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .hero-copy .creds-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .hero-copy .cred {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+      border: 1px solid var(--line);
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: rgba(251, 250, 246, 0.5);
+    }
+
+    .cred .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    .hero-copy h1 {
+      font-size: 3rem;
+      line-height: 1.12;
+      margin-bottom: 20px;
+    }
+
+    .hero-copy p {
+      color: var(--ink-soft);
+      font-size: 1.08rem;
+      max-width: 44ch;
+      margin-bottom: 30px;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--panel);
+      color: var(--panel-text);
+      padding: 13px 24px;
+      border-radius: 3px;
+      font-size: 0.95rem;
+      border: none;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.1s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-primary:hover {
+      background: #17291f;
+      transform: translateY(-1px);
+    }
+
+    .link-secondary {
+      font-size: 0.92rem;
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 2px;
+      cursor: pointer;
+    }
+
+    .hero-art {
+      position: relative;
+      height: 420px;
+      border: 1px solid var(--line);
+      background: var(--white);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+    }
+
+    .doctor-photo {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      background: var(--white);
+      padding: 24px;
+    }
+
+    .doctor-photo-circle {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid var(--gold);
+      box-shadow: 0 8px 24px rgba(31, 58, 46, 0.12);
+    }
+
+    .doctor-photo-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .doctor-photo .doc-name {
+      font-family: 'Cormorant Garamond', 'Noto Sans Devanagari', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .doctor-photo .doc-caption {
+      font-size: 0.85rem;
+      color: var(--ink-soft);
+      text-align: center;
+      max-width: 240px;
+      line-height: 1.4;
+    }
+
+    /* ACHIEVEMENTS SLIDER */
+    .achievements {
+      padding: 0 32px 90px;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .achievements .section-head {
+      margin-bottom: 28px;
+    }
+
+    .ach-slider {
+      position: relative;
+      border: 1px solid var(--line);
+      background: var(--white);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+    }
+
+    .ach-track {
+      display: flex;
+      transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    .ach-slide {
+      min-width: 100%;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      align-items: stretch;
+    }
+
+    .ach-photo {
+      height: 220px;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+      border-right: 1px dashed var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ach-photo img,
+    .ach-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .ach-slide:hover .ach-img {
+      transform: scale(1.04);
+    }
+
+    .ach-photo svg {
+      width: 60px;
+      height: 60px;
+      opacity: 0.6;
+    }
+
+    .ach-text {
+      padding: 32px 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .ach-text h3 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .ach-text p {
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+      max-width: 48ch;
+    }
+
+    .ach-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+      border-top: 1px solid var(--line);
+      background: var(--white);
+    }
+
+    /* TRUST BAR */
+    .trust-bar {
+      background: var(--white);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 28px 32px;
+    }
+
+    .trust-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      text-align: center;
+    }
+
+    .trust-inner .item b {
+      display: block;
+      font-family: 'Cormorant Garamond', 'Noto Sans Devanagari', serif;
+      font-size: 1.7rem;
+      color: var(--panel);
+    }
+
+    .trust-inner .item span {
+      font-size: 0.85rem;
+      color: var(--ink-soft);
+    }
+
+    /* SECTION HEAD */
+    .section-head {
+      margin-bottom: 44px;
+      max-width: 580px;
+    }
+
+    .section-head .kicker {
+      color: var(--gold);
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+
+    .section-head h2 {
+      font-size: 2.1rem;
+      margin-bottom: 12px;
+    }
+
+    .section-head p {
+      color: var(--ink-soft);
+      font-size: 1rem;
+    }
+
+    /* SERVICES SLIDER */
+    .services {
+      padding: 90px 32px;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .slider {
+      position: relative;
+      border: 1px solid var(--line);
+      background: var(--white);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+    }
+
+    .schedule-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      line-height: 1.2;
+    }
+
+    .schedule-group span {
+      margin: 0;
+      padding: 0;
+    }
+
+    .slider-track {
+      display: flex;
+      transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    .slide {
+      min-width: 100%;
+      padding: 56px 60px;
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .slide .num {
+      font-family: 'Cormorant Garamond', 'Noto Sans Devanagari', serif;
+      font-size: 3rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .slide h3 {
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .slide p {
+      color: var(--ink-soft);
+      font-size: 1rem;
+      max-width: 55ch;
+    }
+
+    .slider-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px;
+      border-top: 1px solid var(--line);
+      background: var(--white);
+    }
+
+    .slider-dots {
+      display: flex;
+      gap: 10px;
+    }
+
+    .slider-dots button {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: none;
+      background: var(--line);
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .slider-dots button.active {
+      background: var(--panel);
+      width: 22px;
+      border-radius: 4px;
+    }
+
+    .slider-arrows {
+      display: flex;
+      gap: 10px;
+    }
+
+    .slider-arrows button {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--line);
+      background: var(--white);
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slider-arrows button:hover {
+      background: var(--panel);
+      color: var(--panel-text);
+      border-color: var(--panel);
+    }
+
+    /* HOW IT WORKS */
+    .how {
+      background: var(--panel);
+      color: var(--panel-text);
+      padding: 90px 32px;
+    }
+
+    .how-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .how .section-head h2,
+    .how .section-head p {
+      color: var(--panel-text);
+    }
+
+    .how .section-head p {
+      opacity: 0.75;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+    }
+
+    .step {
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 20px;
+    }
+
+    .step .step-num {
+      font-family: 'Cormorant Garamond', 'Noto Sans Devanagari', serif;
+      font-size: 1.6rem;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .step h3 {
+      color: var(--panel-text);
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .step p {
+      font-size: 0.9rem;
+      opacity: 0.75;
+    }
+
+    /* BOOKING / CONTACT */
+    .contact {
+      padding: 90px 32px;
+      max-width: 1120px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 56px;
+      align-items: start;
+    }
+
+    .contact-form {
+      background: var(--white);
+      padding: 36px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .contact-form h2 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .contact-form>p {
+      color: var(--ink-soft);
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .field-row {
+      display: flex;
+      gap: 14px;
+    }
+
+    .field-row>div {
+      flex: 1;
+    }
+
+    label {
+      font-size: 0.82rem;
+      color: var(--ink-soft);
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      font-family: 'Karla', 'Noto Sans Devanagari', sans-serif;
+      padding: 10px 13px;
+      border: 1px solid var(--line);
+      background: #FFF;
+      font-size: 0.92rem;
+      border-radius: 3px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--panel);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(31, 58, 46, 0.12);
+    }
+
+    /* TOAST NOTIFICATION STYLES */
+    #toastContainer {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 380px;
+      pointer-events: none;
+    }
+
+    .toast-message {
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 18px;
+      background: #1F3A2E;
+      color: #ECE8DC;
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transform: translateX(120%);
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease;
+      opacity: 0;
+      border-left: 5px solid var(--gold);
+    }
+
+    .toast-message.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .toast-message.success {
+      border-left-color: #25D366;
+    }
+
+    .toast-message.error {
+      border-left-color: #C62828;
+      background: #3A1F1F;
+      color: #FFEBEE;
+    }
+
+    .toast-message.info {
+      border-left-color: var(--gold);
+    }
+
+    .dev-otp-card {
+      background: var(--gold-light);
+      color: #614202;
+      padding: 10px 14px;
+      border-radius: 4px;
+      margin-top: 10px;
+      font-size: 0.82rem;
+      border: 1px solid #E5CE8D;
+      line-height: 1.4;
+    }
+
+    .form-alert {
+      padding: 12px 14px;
+      border-radius: 3px;
+      font-size: 0.88rem;
+      display: none;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .form-alert.error {
+      background: #FFEBEE;
+      color: var(--error);
+      border: 1px solid #FFCDD2;
+      display: block;
+    }
+
+    .form-alert.success {
+      background: #E8F5E9;
+      color: var(--success);
+      border: 1px solid #C8E6C9;
+      display: block;
+    }
+
+    .clinic-info {
+      padding: 24px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .ach-img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+    }
+
+    .clinic-info h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+    }
+
+    .clinic-info .row {
+      margin-bottom: 20px;
+    }
+
+    .clinic-info .row b {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 0.92rem;
+      color: var(--ink);
+    }
+
+    .clinic-info .row span {
+      color: var(--ink-soft);
+      font-size: 0.88rem;
+      line-height: 1.4;
+      display: block;
+    }
+
+    .disclaimer {
+      margin-top: 24px;
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      line-height: 1.5;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 32px;
+      text-align: center;
+      color: var(--ink-soft);
+      font-size: 0.82rem;
+      background: var(--bg);
+    }
+
+    .footer-links {
+      margin-top: 8px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .footer-links a {
+      color: var(--ink-soft);
+      text-decoration: underline;
+      font-size: 0.8rem;
+    }
+
+    /* MODALS */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(31, 58, 46, 0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: var(--white);
+      width: 100%;
+      max-width: 480px;
+      border-radius: 6px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      background: var(--panel);
+      color: var(--panel-text);
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h3 {
+      color: var(--panel-text);
+      font-size: 1.25rem;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--panel-text);
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .ref-badge {
+      background: var(--gold-light);
+      border: 1px dashed var(--gold);
+      color: #7A5503;
+      font-family: monospace;
+      font-size: 1.3rem;
+      font-weight: 700;
+      padding: 10px 16px;
+      border-radius: 4px;
+      text-align: center;
+      margin: 16px 0;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      background: #F3EFE3;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--line);
+      padding: 8px 16px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 48px;
+      }
+
+      .hero-art {
+        height: 280px;
+        order: -1;
+      }
+
+      .hero-copy h1 {
+        font-size: 2.2rem;
+      }
+
+      .trust-inner {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .steps {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .contact {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .top-strip-inner {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+      }
+
+      .ach-slide {
+        grid-template-columns: 1fr;
+      }
+
+      .ach-photo {
+        height: 220px;
+        border-right: none;
+        border-bottom: 1px dashed var(--line);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOP STRIP -->
+  <div class="top-strip">
+    <div class="top-strip-inner">
+      <div class="info-group">
+        <span data-en="Reg. No. AY-2019-04831 (Ministry of AYUSH) · CRAV"
+          data-hi="पंजीकरण सं. AY-2019-04831 (आयुष मंत्रालय) · CRAV">Reg. No. AY-2019-04831 (Ministry of AYUSH) ·
+          CRAV</span>
+        <div class="schedule-group">
+          <!-- <span data-en="Mon–Fri, 10am–7pm | Wednesday OFF | +91 7067207752"
+            data-hi="सोम–शुक्र, सुबह 10 – शाम 7 | +91 7067207752">Mon–Fri, 10am–7pm | +91 7067207752</span> -->
+          <!-- <span data-en="Mon–Fri, Morning: 10am–2pm, Evening: 4pm–8pm | +91 7067207752"
+      data-hi="सोम–शुक्र, सुबह: 10 – दोपहर 2, शाम: 4 – 8 | +91 7067207752">Mon–Fri, Morning: 10am–2pm, Evening: 4pm–8pm | +91 7067207752</span>
+          <span data-en="Sat–Sun, 10am–5pm | Shree Ayush Clinic, Bhopal"
+            data-hi="शनि–रवि, सुबह 10 – शाम 5 | श्री आयुष क्लिनिक, भोपाल">Sat–Sun, 10am–5pm | Shree Ayush Clinic,
+            Bhopal</span> -->
+
+          <span data-en="Mon–Fri, Morning: 10am–2pm, Evening: 4pm–8pm | Bhopal"
+            data-hi="सोम–शुक्र, सुबह: 10 – दोपहर 2, शाम: 4 – 8 | भोपाल">Mon–Fri, Morning : 10am–2pm , Evening : 4pm-8pm|
+            BHOPAL</span>
+
+          <span data-en="Sat–Sun, 10am–5pm | Kalapipal" data-hi="शनि–रवि, सुबह 10 – शाम 5 | कालापीपल">Sat–Sun, 10am–5pm
+            | KALAPIPAL</span>
+
+        </div>
+      </div>
+      <div class="top-strip-actions">
+        <button class="track-link" id="openTrackModalBtn" data-en="Track Appointment" data-hi="अपॉइंटमेंट स्थिति">Track
+          Appointment</button>
+        <div class="lang-switch">
+          <button id="btnEn" class="active" onclick="setLang('en')">EN</button>
+          <button id="btnHi" onclick="setLang('hi')">हिंदी</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER / NAV -->
+  <header>
+    <nav>
+      <div class="brand">
+        <div class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C8 6 6 10 6 14a6 6 0 0012 0c0-4-2-8-6-12z" fill="#1F3A2E" />
+          </svg>
+        </div>
+        <div class="brand-name">Dr. Paras Leve<small data-en="BAMS · CRAV · Ayurvedic Physician"
+            data-hi="BAMS · CRAV · आयुर्वेदाचार्य">BAMS · CRAV · Ayurvedic Physician</small></div>
+      </div>
+      <div class="nav-links">
+        <a href="#services" data-en="Treatments" data-hi="उपचार">Treatments</a>
+        <a href="#how" data-en="Consultation" data-hi="परामर्श">Consultation</a>
+        <a href="#contact" data-en="Contact" data-hi="संपर्क करें">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <a href="#contact" class="btn-book" data-en="Book Consultation" data-hi="परामर्श बुक करें">Book Consultation</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="creds-row">
+        <div class="cred"><span class="dot"></span><span data-en="BAMS · Registered Ayurvedic Physician"
+            data-hi="BAMS · पंजीकृत आयुर्वेदाचार्य">BAMS · Registered Ayurvedic Physician</span></div>
+        <div class="cred"><span class="dot"></span><span data-en="CRAV · Rashtriya Ayurveda Vidyapeeth"
+            data-hi="CRAV · राष्ट्रीय आयुर्वेद विद्यापीठ">CRAV · Rashtriya Ayurveda Vidyapeeth</span></div>
+      </div>
+      <h1 data-en="Ayurvedic care rooted in diagnosis, not guesswork."
+        data-hi="निदान पर आधारित आयुर्वेदिक उपचार, अनुमान पर नहीं।">Ayurvedic care rooted in diagnosis, not guesswork.
+      </h1>
+      <p data-en="Consultations for digestion, joint pain, skin conditions, and chronic lifestyle disorders — combining classical Ayurvedic assessment (Nadi & Prakriti Pariksha) with a personalized treatment plan you can actually follow."
+        data-hi="पाचन, जोड़ों के दर्द, त्वचा की समस्याओं और जीवनशैली संबंधी पुरानी बीमारियों के लिए परामर्श — पारंपरिक आयुर्वेदिक मूल्यांकन (नाड़ी और प्रकृति परीक्षा) के साथ एक स्पष्ट उपचार योजना जिसे आप वास्तव में अपना सकें।">
+        Consultations for digestion, joint pain, skin conditions, and chronic lifestyle disorders — combining classical
+        Ayurvedic assessment (Nadi & Prakriti Pariksha) with a personalized treatment plan you can actually follow.</p>
+      <div class="hero-cta">
+        <a href="#contact" class="btn-primary" data-en="Book a consultation" data-hi="परामर्श बुक करें">Book a
+          consultation</a>
+        <a href="#how" class="link-secondary" data-en="How it works" data-hi="यह कैसे काम करता है">How it works</a>
+      </div>
+    </div>
+
+    <div class="hero-art">
+      <div class="doctor-photo">
+        <div class="doctor-photo-circle">
+          <img src="image.png" alt="Dr. Paras Leve - Ayurvedic Physician"
+            onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><circle cx=\'50\' cy=\'50\' r=\'50\' fill=\'%231F3A2E\'/><text x=\'50\' y=\'55\' fill=\'%23C9971F\' font-size=\'22\' text-anchor=\'middle\' font-family=\'serif\'>Dr. P.L.</text></svg>'" />
+        </div>
+        <div class="doc-name">Dr. Paras Leve</div>
+        <div class="doc-caption" data-en="BAMS, CRAV · 2+ Years Clinical Practice in Classical Ayurveda"
+          data-hi="BAMS, CRAV · पारंपरिक आयुर्वेद में 2+ वर्षों का नैदानिक अनुभव">BAMS, CRAV · 2+ Years Clinical
+          Practice in Classical Ayurveda</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACHIEVEMENTS SECTION -->
+  <section class="achievements">
+    <div class="section-head">
+      <div class="kicker" data-en="Recognition" data-hi="सम्मान">Recognition</div>
+      <h2 data-en="Achievements & recognition" data-hi="उपलब्धियां और सम्मान">Achievements & recognition</h2>
+    </div>
+    <div class="ach-slider" id="achSlider">
+      <div class="ach-track" id="achTrack">
+        <div class="ach-slide">
+          <div class="ach-photo">
+            <img src="cc.png" alt="Excellence in Classical Ayurveda Award" class="ach-img" loading="lazy">
+          </div>
+          <div class="ach-text">
+            <h3 data-en="Excellence in Classical Ayurveda — 2024"
+              data-hi="पारंपरिक आयुर्वेद में उत्कृष्टता पुरस्कार — 2024">Excellence in Classical Ayurveda — 2024</h3>
+            <p data-en="Recognised for ethical clinical outcomes and adherence to classical Charaka & Sushruta therapeutic protocols."
+              data-hi="सटीक नैदानिक परिणामों और चरक व सुश्रुत संहिताओं के नैतिक पालन के लिए सम्मानित।">Recognised for
+              ethical clinical outcomes and adherence to classical Charaka & Sushruta therapeutic protocols.</p>
+          </div>
+        </div>
+        <div class="ach-slide">
+          <div class="ach-photo">
+            <img src="grp.png" alt="Featured in National Health Digest" class="ach-img" loading="lazy">
+          </div>
+          <div class="ach-text">
+            <h3 data-en="Featured in National Health Digest" data-hi="National Health Digest में प्रकाशित">Featured in
+              National Health Digest</h3>
+            <p data-en="Interviewed on integrating classical Nadi Pariksha with modern lifestyle disease management."
+              data-hi="आधुनिक जीवनशैली की बीमारियों के प्रबंधन में पारंपरिक नाड़ी परीक्षा के महत्व पर साक्षात्कार।">
+              Interviewed on integrating classical Nadi Pariksha with modern lifestyle disease management.</p>
+          </div>
+        </div>
+        <div class="ach-slide">
+          <div class="ach-photo">
+            <img src="single.png" alt="Rashtriya Ayurveda Vidyapeeth Fellow" class="ach-img" loading="lazy">
+          </div>
+          <div class="ach-text">
+            <h3 data-en="Rashtriya Ayurveda Vidyapeeth Fellow (CRAV)"
+              data-hi="राष्ट्रीय आयुर्वेद विद्यापीठ फेलो (CRAV)">Rashtriya Ayurveda Vidyapeeth Fellow (CRAV)</h3>
+            <p data-en="Completed prestigious Guru-Shishya parampara clinical training in advanced Panchakarma and herbal pharmacotherapy."
+              data-hi="उन्नत पंचकर्म और हर्बल उपचार में प्रतिष्ठित गुरु-शिष्य परंपरा का नैदानिक प्रशिक्षण पूर्ण।">
+              Completed prestigious Guru-Shishya parampara clinical training in advanced Panchakarma and herbal
+              pharmacotherapy.</p>
+          </div>
+        </div>
+      </div>
+      <div class="ach-controls">
+        <div class="slider-dots" id="achDots"></div>
+        <div class="slider-arrows">
+          <button id="achPrev" aria-label="Previous">&#8592;</button>
+          <button id="achNext" aria-label="Next">&#8594;</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <div class="trust-bar">
+    <div class="trust-inner">
+      <div class="item">
+        <b>400+</b>
+        <span data-en="Consultations completed" data-hi="परामर्श पूर्ण हुए">Consultations completed</span>
+      </div>
+      <div class="item">
+        <b data-en="Online + In-clinic" data-hi="ऑनलाइन + क्लिनिक">Online + In-clinic</b>
+        <span data-en="Dual consultation options" data-hi="परामर्श के दोनों विकल्प">Dual consultation options</span>
+      </div>
+      <div class="item">
+        <b data-en="Classical Nadi Pariksha" data-hi="पारंपरिक नाड़ी परीक्षा">Classical Nadi Pariksha</b>
+        <span data-en="Root-cause diagnosis" data-hi="मूल कारण निदान">Root-cause diagnosis</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICES SECTION -->
+  <section class="services" id="services">
+    <div class="section-head">
+      <div class="kicker" data-en="Treatments" data-hi="उपचार">Treatments</div>
+      <h2 data-en="Areas of practice" data-hi="अभ्यास के क्षेत्र">Areas of practice</h2>
+      <p data-en="Assessment follows classical Ayurvedic diagnosis (Prakriti constitution and Nadi Pariksha) before any treatment plan is customized."
+        data-hi="किसी भी उपचार योजना का सुझाव देने से पहले पारंपरिक आयुर्वेदिक निदान (प्रकृति और नाड़ी परीक्षा) किया जाता है।">
+        Assessment follows classical Ayurvedic diagnosis (Prakriti constitution and Nadi Pariksha) before any treatment
+        plan is customized.</p>
+    </div>
+    <div class="slider" id="serviceSlider">
+      <div class="slider-track" id="sliderTrack">
+        <div class="slide">
+          <div class="num">01</div>
+          <div>
+            <h3 data-en="Digestive Health (Gastrointestinal)" data-hi="पाचन स्वास्थ्य">Digestive Health
+              (Gastrointestinal)</h3>
+            <p data-en="Acidity, IBS, chronic constipation, bloating, and metabolic sluggishness managed through gut agni restoration and targeted herbal formulations."
+              data-hi="एसिडिटी, IBS, गैस और पुरानी पाचन संबंधी समस्याओं का उपचार जठराग्नि सुधार और शास्त्रीय औषधियों से किया जाता है।">
+              Acidity, IBS, chronic constipation, bloating, and metabolic sluggishness managed through gut agni
+              restoration and targeted herbal formulations.</p>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="num">02</div>
+          <div>
+            <h3 data-en="Joint & Muscle Care (Sandhivata)" data-hi="जोड़ और मांसपेशी देखभाल">Joint & Muscle Care
+              (Sandhivata)</h3>
+            <p data-en="Arthritis, back pain, sciatica, and cervical stiffness addressed with specialized Panchakarma therapies (Janu/Kati Basti) and internal medicine."
+              data-hi="गठिया, कमर दर्द और अकड़न का उपचार पंचकर्म चिकित्सा (जानु/कटि बस्ति) और लक्षित आंतरिक औषधियों से किया जाता है।">
+              Arthritis, back pain, sciatica, and cervical stiffness addressed with specialized Panchakarma therapies
+              (Janu/Kati Basti) and internal medicine.</p>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="num">03</div>
+          <div>
+            <h3 data-en="Skin Conditions (Kushtha Chikitsa)" data-hi="त्वचा संबंधी समस्याएं">Skin Conditions (Kushtha
+              Chikitsa)</h3>
+            <p data-en="Eczema, psoriasis, allergic dermatitis, and acne treated by blood purification (Raktamokshana / detox) rather than surface suppression."
+              data-hi="एक्ज़िमा, सोरायसिस और मुंहासों का उपचार केवल ऊपरी लक्षणों के बजाय रक्त शुद्धि और आंतरिक संतुलन से किया जाता है।">
+              Eczema, psoriasis, allergic dermatitis, and acne treated by blood purification (Raktamokshana / detox)
+              rather than surface suppression.</p>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="num">04</div>
+          <div>
+            <h3 data-en="Women's Health (Stree Roga)" data-hi="महिला स्वास्थ्य">Women's Health (Stree Roga)</h3>
+            <p data-en="Menstrual irregularities, PCOS/PCOD, menopausal wellness, and hormonal balance supported through classical dietary and botanical protocols."
+              data-hi="मासिक धर्म की अनियमितता, PCOS और हार्मोनल संतुलन के लिए आहार और प्राकृतिक हर्बल उपचार।">Menstrual
+              irregularities, PCOS/PCOD, menopausal wellness, and hormonal balance supported through classical dietary
+              and botanical protocols.</p>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="num">05</div>
+          <div>
+            <h3 data-en="Stress & Sleep (Manas Roga)" data-hi="तनाव और नींद">Stress & Sleep (Manas Roga)</h3>
+            <p data-en="Anxiety, chronic insomnia, and burn-out stabilized with Ayurvedic circadian routine (Dinacharya) and adaptogenic herbs like Ashwagandha & Brahmi."
+              data-hi="चिंता, अनिद्रा और जीवनशैली संबंधी तनाव का प्रबंधन आयुर्वेदिक दिनचर्या योजना और मेध्य औषधियों से किया जाता है।">
+              Anxiety, chronic insomnia, and burn-out stabilized with Ayurvedic circadian routine (Dinacharya) and
+              adaptogenic herbs like Ashwagandha & Brahmi.</p>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="num">06</div>
+          <div>
+            <h3 data-en="Chronic Disease Support" data-hi="पुरानी बीमारियों में सहायता">Chronic Disease Support</h3>
+            <p data-en="Supportive complementary care for diabetes, hypertension, and fatty liver disease alongside your ongoing modern medical prescriptions."
+              data-hi="मधुमेह और उच्च रक्तचाप के लिए आपके मौजूदा उपचार के साथ सहायक आयुर्वेदिक देखभाल, प्रतिस्थापन के रूप में नहीं।">
+              Supportive complementary care for diabetes, hypertension, and fatty liver disease alongside your ongoing
+              modern medical prescriptions.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slider-controls">
+        <div class="slider-dots" id="sliderDots"></div>
+        <div class="slider-arrows">
+          <button id="prevSlide" aria-label="Previous">&#8592;</button>
+          <button id="nextSlide" aria-label="Next">&#8594;</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="how-inner">
+      <div class="section-head">
+        <div class="kicker" data-en="Process" data-hi="प्रक्रिया">Process</div>
+        <h2 data-en="How a consultation works" data-hi="परामर्श कैसे काम करता है">How a consultation works</h2>
+        <p data-en="Whether online or in person, every first visit follows the same structured classical diagnostic protocol."
+          data-hi="ऑनलाइन हो या व्यक्तिगत रूप से, हर पहली मुलाकात एक ही संरचित प्रक्रिया का पालन करती है।">Whether
+          online or in person, every first visit follows the same structured classical diagnostic protocol.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">01</span>
+          <h3 data-en="Book a slot" data-hi="स्लॉट बुक करें">Book a slot</h3>
+          <p data-en="Choose online video or in-clinic visit, and select your preferred consultation time."
+            data-hi="ऑनलाइन वीडियो या क्लिनिक चुनें, और अपने लिए उपयुक्त समय चुनें।">Choose online video or in-clinic
+            visit, and select your preferred consultation time.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">02</span>
+          <h3 data-en="Initial assessment" data-hi="प्रारंभिक मूल्यांकन">Initial assessment</h3>
+          <p data-en="A thorough 25–30 minute history taking, Nadi analysis, and Prakriti (dosha constitution) diagnosis."
+            data-hi="विस्तृत जानकारी, नाड़ी विश्लेषण और प्रकृति का मूल्यांकन — आमतौर पर 25–30 मिनट।">A thorough 25–30
+            minute history taking, Nadi analysis, and Prakriti (dosha constitution) diagnosis.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">03</span>
+          <h3 data-en="Treatment plan" data-hi="उपचार योजना">Treatment plan</h3>
+          <p data-en="Receive a personalized regimen covering Ahara (diet), Vihara (lifestyle), and classical herbal preparations."
+            data-hi="आपको आहार, दिनचर्या और पारंपरिक हर्बल औषधियों की विस्तृत योजना मिलती है।">Receive a personalized
+            regimen covering Ahara (diet), Vihara (lifestyle), and classical herbal preparations.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">04</span>
+          <h3 data-en="Follow-up & review" data-hi="फॉलो-अप और समीक्षा">Follow-up & review</h3>
+          <p data-en="A structured check-in after 2–3 weeks to evaluate bodily response and fine-tune dosages."
+            data-hi="प्रगति के आधार पर योजना और खुराक को समायोजित करने के लिए 2–3 सप्ताह बाद फॉलो-अप।">A structured
+            check-in after 2–3 weeks to evaluate bodily response and fine-tune dosages.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING / CONTACT SECTION WITH WHATSAPP OTP -->
+  <section class="contact" id="contact">
+    <div class="contact-form">
+      <h2 data-en="Book your consultation" data-hi="अपना परामर्श बुक करें">Book your consultation</h2>
+      <p data-en="Fill in your details to book a consultation — slots are confirmed promptly."
+        data-hi="परामर्श बुक करने के लिए अपना विवरण भरें — स्लॉट की तुरंत पुष्टि की जाती है।">Fill in your details to
+        book a consultation — slots are confirmed promptly.</p>
+
+      <!-- Inline Status Alert -->
+      <div id="formAlert" class="form-alert"></div>
+
+      <form id="appointmentForm" novalidate>
+        <div class="field-row">
+          <div>
+            <label for="name" data-en="Full name *" data-hi="पूरा नाम *">Full name *</label>
+            <input id="name" name="name" type="text" data-en-ph="e.g. Rajesh Sharma" data-hi-ph="उदा. राजेश शर्मा"
+              placeholder="e.g. Rajesh Sharma" required>
+          </div>
+          <div>
+            <label for="phone" data-en="Mobile number *" data-hi="मोबाइल नंबर *">Mobile number *</label>
+            <input id="phone" name="phone" type="tel" maxlength="15" data-en-ph="e.g. 9876543210"
+              data-hi-ph="उदा. 98765*****" placeholder="e.g. 98765*****" required>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div>
+            <label for="mode" data-en="Consultation type" data-hi="परामर्श का प्रकार">Consultation type</label>
+            <select id="mode" name="mode">
+              <option value="Online video consultation" data-en="Online video consultation"
+                data-hi="ऑनलाइन वीडियो परामर्श">Online video consultation</option>
+              <option value="In-clinic visit" data-hi="क्लिनिक विज़िट" data-en="In-clinic visit">In-clinic visit
+              </option>
+            </select>
+          </div>
+          <div>
+            <label for="email" data-en="Email (for instant receipt)" data-hi="ईमेल (पुष्टि रसीद हेतु)">Email (for
+              instant receipt)</label>
+            <input id="email" name="email" type="email" placeholder="name@example.com">
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div>
+            <label for="preferredDate" data-en="Preferred date" data-hi="पसंदीदा तारीख">Preferred date</label>
+            <input id="preferredDate" name="preferredDate" type="date">
+          </div>
+          <div>
+            <label for="preferredTime" data-en="Preferred time slot" data-hi="पसंदीदा समय">Preferred time slot</label>
+            <select id="preferredTime" name="preferredTime">
+              <!-- <option value="Morning (10:00 AM – 02:00 PM)" data-en="Morning (10:00 AM – 01:00 PM)"
+                data-hi="सुबह (10:00 – 01:00)">Morning (10:00 AM – 01:00 PM)</option>
+              <option value="Evening (04:00 PM – 08:00 PM)" data-en="Evening (05:00 PM – 07:00 PM)"
+                data-hi="शाम (05:00 – 07:00)">Evening (05:00 PM – 07:00 PM)</option> -->
+
+              <option value="Morning (10:00 AM – 02:00 PM)" data-en="Morning (10:00 AM – 02:00 PM)"
+                data-hi="सुबह (10:00 – 02:00)">Morning (10:00 AM – 02:00 PM)</option>
+              <option value="Evening (04:00 PM – 08:00 PM)" data-en="Evening (04:00 PM – 08:00 PM)"
+                data-hi="शाम (04:00 – 08:00)">Evening (04:00 PM – 08:00 PM)</option>
+
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label for="concern" data-en="Health concern / symptoms *" data-hi="स्वास्थ्य समस्या / लक्षण *">Health concern
+            / symptoms *</label>
+          <textarea id="concern" name="concern" rows="3"
+            data-en-ph="Briefly describe your symptoms, duration, and any past treatments..."
+            data-hi-ph="कृपया अपने लक्षण, अवधि और पहले लिए गए उपचार संक्षेप में बताएं..."
+            placeholder="Briefly describe your symptoms, duration, and any past treatments..." required></textarea>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn-primary" style="margin-top:6px;">
+          <span id="submitText" data-en="Request appointment" data-hi="अपॉइंटमेंट का अनुरोध करें">Request
+            appointment</span>
+          <span id="submitSpinner" class="spinner" style="display:none; margin-left:8px;"></span>
+        </button>
+      </form>
+    </div>
+
+    <div class="clinic-info">
+      <h3 data-en="Clinic & contact details" data-hi="क्लिनिक और संपर्क विवरण">Clinic & contact details</h3>
+      <div class="row">
+        <b data-en="Clinic Address" data-hi="क्लिनिक का पता">Clinic Address</b>
+        <!-- <span data-en="Shree Ayush Clinic, MP Nagar, Zone-II, Bhopal (M.P.) – 462011"
+          data-hi="श्री आयुष क्लिनिक, एमपी नगर, ज़ोन-2, भोपाल (म.प्र.) – 462011"> 52 LIG, Housing Board Colony,Gautam Nagar,Bhopal (M.P.) – 462011 <br> Near Bus Stand Kalapipal (M.P) - 465337</span> -->
+        <span
+          data-en="52 LIG, Housing Board Colony, Gautam Nagar, Bhopal (M.P.) – 462011 | Near Bus Stand, Kalapipal (M.P.) – 465337"
+          data-hi="52 एलआईजी, हाउसिंग बोर्ड कॉलोनी, गौतम नगर, भोपाल (म.प्र.) – 462011 | बस स्टैंड के पास, कालापीपल (म.प्र.) – 465337">52
+          LIG, Housing Board Colony, Gautam Nagar, Bhopal (M.P.) – 462011 <br> Near Bus Stand, Kalapipal (M.P.) –
+          465337</span>
+      </div>
+      <div class="row">
+        <b data-en="Consultation Timings" data-hi="परामर्श का समय">Consultation Timings</b>
+        <!-- <span data-en="Mon–Fri: 10:00 AM – 7:00 PM | Sat–Sun: 10:00 AM – 5:00 PM"
+          data-hi="सोम–शुक्र: 10:00 – शाम 7:00 | शनि–रवि: 10:00 – शाम 5:00">Mon–Fri(Wed Off): 10:00 AM – 2:00 PM || 4:00 PM – 8:00 PM | Sat–Sun: 10:00
+          AM – 5:00 PM</span> -->
+        <span data-en="Mon–Fri (Wed Off): 10:00 AM – 2:00 PM, 4:00 PM – 8:00 PM | Sat–Sun: 10:00 AM – 5:00 PM"
+          data-hi="सोम–शुक्र (बुधवार अवकाश): 10:00 – 2:00, शाम 4:00 – 8:00 | शनि–रवि: 10:00 – शाम 5:00">Mon–Fri(Wed
+          Off): 10:00 AM – 2:00 PM || 4:00 PM – 8:00 PM | Sat–Sun: 10:00 AM – 5:00 PM</span>
+      </div>
+      <div class="row">
+        <b data-en="Direct WhatsApp / Phone" data-hi="व्हाट्सएप / फ़ोन">Direct WhatsApp / Phone</b>
+        <span>+91 7389808594</span>
+      </div>
+      <div class="row">
+        <b data-en="Official Registration" data-hi="आधिकारिक पंजीकरण">Official Registration</b>
+        <span data-en="AY-2019-04831 (State Ayurveda Board & Ministry of AYUSH)"
+          data-hi="AY-2019-04831 (राज्य आयुर्वेद बोर्ड एवं आयुष मंत्रालय)">AY-2019-04831 (State Ayurveda Board &
+          Ministry of AYUSH)</span>
+      </div>
+      <div class="disclaimer"
+        data-en="Notice: Only authenticated patients with verified mobile numbers are scheduled to prevent unauthorized bookings. In cases of acute surgical emergencies, please consult hospital services immediately."
+        data-hi="सूचना: फर्जी बुकिंग रोकने के लिए केवल सत्यापित मोबाइल नंबर वाले मरीजों को ही समय दिया जाता है। आपातकालीन चिकित्सा स्थिति में कृपया तुरंत आपातकालीन अस्पताल से संपर्क करें।">
+        Notice: Only authenticated patients with verified mobile numbers are scheduled to prevent unauthorized bookings.
+        In cases of acute surgical emergencies, please consult hospital services immediately.
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div data-en="© 2026 Dr. Paras Leve, BAMS, CRAV. All rights reserved. Content for informational purposes."
+      data-hi="© 2026 डॉ. पारस लेवे, BAMS, CRAV। सर्वाधिकार सुरक्षित। सभी सामग्री केवल जानकारी हेतु।">
+      &copy; 2026 Dr. Paras Leve, BAMS, CRAV. All rights reserved. Content for informational purposes.
+    </div>
+    <div class="footer-links">
+      <a href="javascript:void(0)" onclick="openTrackModal()" data-en="Track Appointment Status"
+        data-hi="अपॉइंटमेंट स्थिति जांचें">Track Appointment Status</a>
+      <span>·</span>
+      <a href="/admin.html" target="_blank" data-en="Doctor / Staff Portal" data-hi="डॉक्टर / स्टाफ पोर्टल">Doctor /
+        Staff Portal</a>
+    </div>
+  </footer>
+
+  <!-- SUCCESS MODAL -->
+  <div class="modal-backdrop" id="bookingSuccessModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 data-en="Consultation Requested" data-hi="परामर्श अनुरोध प्राप्त हुआ">Consultation Requested</h3>
+        <button class="modal-close" onclick="closeModal('bookingSuccessModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--success); font-weight:600; margin-bottom: 8px;"
+          data-en="✓ Thank you! Your booking has been registered."
+          data-hi="✓ धन्यवाद! आपका अनुरोध पंजीकृत कर लिया गया है।">✓ Thank you! Your booking has been registered.</p>
+        <p style="font-size:0.9rem; color:var(--ink-soft);"
+          data-en="Please save your Booking Reference Code for future tracking:"
+          data-hi="भविष्य में स्थिति जांचने के लिए कृपया अपना संदर्भ कोड नोट कर लें:">Please save your Booking Reference
+          Code for future tracking:</p>
+        <div class="ref-badge" id="modalRefCode">AYU-2026-XXXX</div>
+        <div
+          style="font-size:0.86rem; color:var(--ink-soft); line-height: 1.5; background: #FAF8F2; padding: 12px; border-radius: 4px; border:1px solid var(--line);">
+          <p><strong data-en="Patient:" data-hi="मरीज:">Patient:</strong> <span id="modalPatientName"></span></p>
+          <p><strong data-en="Mode:" data-hi="माध्यम:">Mode:</strong> <span id="modalType"></span></p>
+          <p><strong data-en="Preferred Time:" data-hi="समय:">Preferred Time:</strong> <span id="modalTimeSlot"></span>
+          </p>
+          <p style="margin-top:8px; color: var(--panel);"
+            data-en="Dr. Leve will review and approve your consultation shortly. Confirmation will be sent to your verified mobile number."
+            data-hi="डॉ. लेवे शीघ्र ही आपके परामर्श की समीक्षा करेंगे। पुष्टि आपके सत्यापित मोबाइल नंबर पर भेजी जाएगी।">
+            Dr. Leve will review and approve your consultation shortly. Confirmation will be sent to your verified
+            mobile number.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="copyRefCode()" data-en="Copy Reference" data-hi="कोड कॉपी करें">Copy
+          Reference</button>
+        <button class="btn-primary" onclick="closeModal('bookingSuccessModal')" data-en="Done"
+          data-hi="पूर्ण">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRACKING LOOKUP MODAL -->
+  <div class="modal-backdrop" id="trackModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 data-en="Track Appointment Status" data-hi="अपॉइंटमेंट स्थिति जांचें">Track Appointment Status</h3>
+        <button class="modal-close" onclick="closeModal('trackModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.9rem; color: var(--ink-soft); margin-bottom: 12px;"
+          data-en="Enter your Booking Reference Code (e.g. AYU-2026-4821) or 10-digit phone number:"
+          data-hi="अपना संदर्भ कोड (उदा. AYU-2026-4821) या 10 अंकों का मोबाइल नंबर दर्ज करें:">Enter your Booking
+          Reference Code (e.g. AYU-2026-4821) or 10-digit phone number:</p>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="trackInput" placeholder="AYU-2026-XXXX or Phone" style="flex:1;">
+          <button class="btn-primary" id="trackLookupBtn" style="padding: 10px 18px;" onclick="lookupAppointment()">
+            <span data-en="Check" data-hi="जांचें">Check</span>
+          </button>
+        </div>
+        <div id="trackResult" style="margin-top: 16px; display: none;"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="closeModal('trackModal')" data-en="Close" data-hi="बंद करें">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    let currentLang = 'en';
+    let phoneVerificationToken = null;
+    let verifiedPhone = null;
+    let devLatestOtp = null;
+    let countdownTimer = null;
+
+    function setLang(lang) {
+      currentLang = lang;
+      document.querySelectorAll('[data-en]').forEach(function (el) {
+        var text = lang === 'hi' ? el.getAttribute('data-hi') : el.getAttribute('data-en');
+        if (text !== null) el.textContent = text;
+      });
+      document.querySelectorAll('[data-en-ph]').forEach(function (el) {
+        var ph = lang === 'hi' ? el.getAttribute('data-hi-ph') : el.getAttribute('data-en-ph');
+        if (ph !== null) el.setAttribute('placeholder', ph);
+      });
+      document.getElementById('btnEn').classList.toggle('active', lang === 'en');
+      document.getElementById('btnHi').classList.toggle('active', lang === 'hi');
+      document.documentElement.setAttribute('lang', lang);
+    }
+
+    function openTrackModal() {
+      document.getElementById('trackModal').classList.add('open');
+      document.getElementById('trackInput').focus();
+    }
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('open');
+    }
+    document.getElementById('openTrackModalBtn').addEventListener('click', openTrackModal);
+
+    document.querySelectorAll('.modal-backdrop').forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('open');
+      });
+    });
+
+    function copyRefCode() {
+      const code = document.getElementById('modalRefCode').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        alert('Reference Code copied: ' + code);
+      }).catch(() => { });
+    }
+
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const dateInput = document.getElementById('preferredDate');
+      dateInput.min = today;
+      dateInput.value = today;
+    } catch (e) { }
+
+    // Slider 1: Services Slider
+    (function () {
+      const track = document.getElementById('sliderTrack');
+      const dotsWrap = document.getElementById('sliderDots');
+      if (!track || !dotsWrap) return;
+      const slides = track.children;
+      const total = slides.length;
+      let index = 0;
+      let timer;
+
+      for (let i = 0; i < total; i++) {
+        const dot = document.createElement('button');
+        if (i === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => goTo(i));
+        dotsWrap.appendChild(dot);
+      }
+
+      function update() {
+        track.style.transform = `translateX(-${index * 100}%)`;
+        [...dotsWrap.children].forEach((d, i) => d.classList.toggle('active', i === index));
+      }
+
+      function goTo(i) {
+        index = (i + total) % total;
+        update();
+        resetTimer();
+      }
+
+      function next() { goTo(index + 1); }
+      function prev() { goTo(index - 1); }
+
+      function resetTimer() {
+        clearInterval(timer);
+        timer = setInterval(next, 5000);
+      }
+
+      const nextBtn = document.getElementById('nextSlide');
+      const prevBtn = document.getElementById('prevSlide');
+      if (nextBtn) nextBtn.addEventListener('click', next);
+      if (prevBtn) prevBtn.addEventListener('click', prev);
+
+      resetTimer();
+    })();
+
+    // Slider 2: Achievements Slider
+    (function () {
+      const track = document.getElementById('achTrack');
+      const dotsWrap = document.getElementById('achDots');
+      if (!track || !dotsWrap) return;
+      const slides = track.children;
+      const total = slides.length;
+      let index = 0;
+      let timer;
+
+      for (let i = 0; i < total; i++) {
+        const dot = document.createElement('button');
+        if (i === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => goTo(i));
+        dotsWrap.appendChild(dot);
+      }
+
+      function update() {
+        track.style.transform = `translateX(-${index * 100}%)`;
+        [...dotsWrap.children].forEach((d, i) => d.classList.toggle('active', i === index));
+      }
+
+      function goTo(i) {
+        index = (i + total) % total;
+        update();
+        resetTimer();
+      }
+
+      function next() { goTo(index + 1); }
+      function prev() { goTo(index - 1); }
+
+      function resetTimer() {
+        clearInterval(timer);
+        timer = setInterval(next, 6000);
+      }
+
+      const nextBtn = document.getElementById('achNext');
+      const prevBtn = document.getElementById('achPrev');
+      if (nextBtn) nextBtn.addEventListener('click', next);
+      if (prevBtn) prevBtn.addEventListener('click', prev);
+
+      resetTimer();
+    })();
+
+    // --- TOAST NOTIFICATION UTILITY ---
+    function showToast(message, type = 'info') {
+      let container = document.getElementById('toastContainer');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'toastContainer';
+        document.body.appendChild(container);
+      }
+      const toast = document.createElement('div');
+      toast.className = `toast-message ${type}`;
+
+      let icon = '💬';
+      if (type === 'success') icon = '✓';
+      else if (type === 'error') icon = '✕';
+
+      toast.innerHTML = `<span style="font-weight:bold; font-size:1.1rem; flex-shrink:0;">${icon}</span><span>${message}</span>`;
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.add('show');
+      });
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 350);
+      }, 4500);
+    }
+
+    // Form submission with backend integration
+    const form = document.getElementById('appointmentForm');
+    const alertBox = document.getElementById('formAlert');
+    const submitBtn = document.getElementById('submitBtn');
+    const submitSpinner = document.getElementById('submitSpinner');
+    const submitText = document.getElementById('submitText');
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      alertBox.style.display = 'none';
+      alertBox.className = 'form-alert';
+
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const mode = document.getElementById('mode').value;
+      const preferred_date = document.getElementById('preferredDate').value;
+      const preferred_time = document.getElementById('preferredTime').value;
+      const concern = document.getElementById('concern').value.trim();
+
+      if (!name || name.length < 2) {
+        showToast('Please enter your full name.', 'error');
+        showAlert(currentLang === 'hi' ? 'कृपया अपना पूरा नाम दर्ज करें।' : 'Please enter your full name.', 'error');
+        return;
+      }
+      const cleanDigits = phone.replace(/\D/g, '');
+      if (!phone || cleanDigits.length < 10) {
+        showToast('Please enter a valid 10-digit mobile number.', 'error');
+        showAlert(currentLang === 'hi' ? 'कृपया एक वैध 10 अंकों का मोबाइल नंबर दर्ज करें।' : 'Please enter a valid 10-digit phone number.', 'error');
+        return;
+      }
+
+      if (!concern || concern.length < 5) {
+        showToast('Please briefly describe your health concern.', 'error');
+        showAlert(currentLang === 'hi' ? 'कृपया अपनी स्वास्थ्य समस्या संक्षेप में बताएं।' : 'Please briefly describe your health concern.', 'error');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitSpinner.style.display = 'inline-block';
+      submitText.textContent = currentLang === 'hi' ? 'प्रक्रिया जारी है...' : 'Submitting...';
+
+      try {
+        const response = await fetch('/api/appointments', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            phone,
+            email,
+            mode,
+            preferred_date,
+            preferred_time,
+            concern
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          const errorMsg = data.details ? data.details.join(' ') : (data.error || 'Failed to submit booking');
+          throw new Error(errorMsg);
+        }
+
+        form.reset();
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('preferredDate').value = today;
+
+        showToast('Appointment requested successfully!', 'success');
+
+        // Populate & open confirmation modal
+        document.getElementById('modalRefCode').textContent = data.data.reference_code;
+        document.getElementById('modalPatientName').textContent = data.data.patient_name;
+        document.getElementById('modalType').textContent = data.data.consultation_type;
+        document.getElementById('modalTimeSlot').textContent = `${data.data.preferred_date} (${data.data.preferred_time_slot})`;
+
+        document.getElementById('bookingSuccessModal').classList.add('open');
+
+      } catch (err) {
+        console.error('Submission error:', err);
+        showToast(err.message || 'An error occurred while booking.', 'error');
+        showAlert(err.message || 'An error occurred while booking. Please try again or call the clinic.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitSpinner.style.display = 'none';
+        submitText.textContent = currentLang === 'hi' ? 'अपॉइंटमेंट का अनुरोध करें' : 'Request appointment';
+      }
+    });
+
+    function showAlert(msg, type) {
+      alertBox.textContent = msg;
+      alertBox.className = 'form-alert ' + type;
+      alertBox.style.display = 'block';
+      alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Live Tracking lookup
+    async function lookupAppointment() {
+      const input = document.getElementById('trackInput').value.trim();
+      const resultBox = document.getElementById('trackResult');
+      if (!input) return;
+
+      resultBox.style.display = 'block';
+      resultBox.innerHTML = '<p style="color:var(--ink-soft); font-size:0.9rem;">Checking records...</p>';
+
+      try {
+        const res = await fetch('/api/appointments/track/' + encodeURIComponent(input));
+        const json = await res.json();
+
+        if (!res.ok) {
+          resultBox.innerHTML = `<div style="padding:10px; background:#FFEBEE; color:#C62828; border-radius:4px; font-size:0.88rem;">${json.error || 'Not found'}</div>`;
+          return;
+        }
+
+        const appt = json.data;
+        const statusColors = {
+          pending: '#E65100',
+          confirmed: '#2E7D32',
+          completed: '#1565C0',
+          cancelled: '#C62828'
+        };
+        const badgeColor = statusColors[appt.status] || '#333';
+
+        resultBox.innerHTML = `
+        <div style="border:1px solid var(--line); border-radius:4px; padding:12px; background:#FFF; font-size:0.88rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <strong style="font-family:monospace; font-size:1rem; color:var(--gold);">${appt.reference_code}</strong>
+            <span style="background:${badgeColor}; color:#FFF; padding:2px 8px; border-radius:12px; font-size:0.75rem; text-transform:uppercase; font-weight:600;">${appt.status}</span>
+          </div>
+          <p><strong>Patient:</strong> ${appt.patient_name}</p>
+          <p><strong>Type:</strong> ${appt.consultation_type}</p>
+          <p><strong>Schedule:</strong> ${appt.confirmed_date || appt.preferred_date} (${appt.confirmed_time || appt.preferred_time_slot})</p>
+          ${appt.meeting_link ? `<p style="margin-top:4px;"><a href="${appt.meeting_link}" target="_blank" style="color:var(--panel); font-weight:bold; text-decoration:underline;">Join Video Consultation ↗</a></p>` : ''}
+          <p style="font-size:0.78rem; color:var(--ink-soft); margin-top:6px;">Booked on: ${appt.created_at}</p>
+        </div>
+      `;
+      } catch (e) {
+        resultBox.innerHTML = '<div style="padding:10px; background:#FFEBEE; color:#C62828; border-radius:4px; font-size:0.88rem;">Unable to connect to clinic server.</div>';
+      }
+    }
+
+    document.getElementById('trackInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') lookupAppointment();
+    });
+  </script>
+
+  <div id="toastContainer"></div>
+</body>
+
+</html>

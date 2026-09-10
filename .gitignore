@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Environment configuration & credentials
+.env
+.env.local
+.env.*.local
+.env.production
+
+# SQLite databases & concurrency journals
+data/*.db
+data/*.db-shm
+data/*.db-wal
+
+# Logs & OS artifacts
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db

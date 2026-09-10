@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: dr-paras-leve-ayurveda
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ADMIN_USER
+        value: admin
+      - key: ADMIN_PASS
+        value: ayurveda2026!
+      - key: ADMIN_SECRET
+        value: ayurveda_secure_jwt_secret_key_2026
