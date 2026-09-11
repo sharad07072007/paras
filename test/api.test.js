@@ -121,7 +121,21 @@ async function runTests() {
       adminToken = res.body.token;
     }
 
-    // 6. Admin Approval
+    // 6. Fetch Appointment by ID
+    {
+      const res = await makeRequest({
+        hostname: 'localhost',
+        port: PORT,
+        path: `/api/admin/appointments/${testApptId}`,
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${adminToken}`
+        }
+      });
+      assert(res.status === 200 && res.body.appointment && res.body.appointment.id === testApptId, 'GET /api/admin/appointments/:id returns single appointment');
+    }
+
+    // 7. Admin Approval
     {
       const res = await makeRequest({
         hostname: 'localhost',

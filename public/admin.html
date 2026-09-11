@@ -649,6 +649,7 @@
   let activeAppt = null;
   let lastWhatsAppUrl = null;
   let searchTimeout = null;
+  let appointmentCache = new Map();
 
   window.addEventListener('DOMContentLoaded', () => {
     if (authToken) {
@@ -769,6 +770,9 @@
         return;
       }
 
+      appointmentCache.clear();
+      json.appointments.forEach(appt => appointmentCache.set(Number(appt.id), appt));
+
       tableBody.innerHTML = json.appointments.map(appt => {
         const concernSnippet = appt.health_concern ? (appt.health_concern.length > 45 ? appt.health_concern.substring(0, 42) + '...' : appt.health_concern) : '—';
         const isPending = appt.status === 'pending';
@@ -831,10 +835,21 @@
   // Open Approval & Notification Modal
   async function openApprovalModal(id) {
     try {
-      const res = await authFetch(`/api/admin/appointments?search=${id}`);
-      const json = await res.json();
-      const appt = json.appointments.find(a => a.id === id);
-      if (!appt) return alert('Appointment not found');
+      const numId = Number(id);
+      let appt = appointmentCache.get(numId);
+
+      if (!appt) {
+        const res = await authFetch(`/api/admin/appointments/${numId}`);
+        const json = await res.json();
+        if (json.success && json.appointment) {
+          appt = json.appointment;
+          appointmentCache.set(numId, appt);
+        }
+      }
+
+      if (!appt) {
+        return alert('Appointment not found. Please click Refresh and try again.');
+      }
 
       activeAppt = appt;
       document.getElementById('approvePatientName').textContent = appt.patient_name;

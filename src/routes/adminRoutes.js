@@ -111,8 +111,14 @@ router.get('/appointments', (req, res) => {
 
     if (search && search.trim()) {
       const term = `%${search.trim()}%`;
-      query += ' AND (patient_name LIKE ? OR phone LIKE ? OR reference_code LIKE ? OR health_concern LIKE ?)';
-      params.push(term, term, term, term);
+      const num = parseInt(search.trim(), 10);
+      if (!isNaN(num) && num > 0) {
+        query += ' AND (id = ? OR patient_name LIKE ? OR phone LIKE ? OR reference_code LIKE ? OR health_concern LIKE ?)';
+        params.push(num, term, term, term, term);
+      } else {
+        query += ' AND (patient_name LIKE ? OR phone LIKE ? OR reference_code LIKE ? OR health_concern LIKE ?)';
+        params.push(term, term, term, term);
+      }
     }
 
     query += ' ORDER BY id DESC LIMIT ? OFFSET ?';
@@ -128,6 +134,27 @@ router.get('/appointments', (req, res) => {
   } catch (error) {
     console.error('Error listing appointments:', error);
     return res.status(500).json({ error: 'Failed to list appointments.' });
+  }
+});
+
+/**
+ * GET /api/admin/appointments/:id
+ * Fetch single appointment by numeric ID
+ */
+router.get('/appointments/:id', (req, res) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) {
+      return res.status(400).json({ error: 'Invalid appointment ID.' });
+    }
+    const appointment = db.prepare('SELECT * FROM appointments WHERE id = ?').get(id);
+    if (!appointment) {
+      return res.status(404).json({ error: 'Appointment not found.' });
+    }
+    return res.json({ success: true, appointment });
+  } catch (error) {
+    console.error('Error fetching appointment:', error);
+    return res.status(500).json({ error: 'Failed to retrieve appointment.' });
   }
 });
 
