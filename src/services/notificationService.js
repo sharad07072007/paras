@@ -17,7 +17,7 @@ function getBaseUrl() {
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;
   }
-  return 'https://temporary-quick-oasis-nk4m7uh.vercel.app';
+  return 'https://parasleve.vercel.app';
 }
 
 function getSmtpCredentials() {
