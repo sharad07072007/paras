@@ -39,6 +39,9 @@
 
     html {
       scroll-behavior: smooth;
+      width: 100%;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
     }
 
     body {
@@ -46,6 +49,16 @@
       color: var(--ink);
       font-family: 'Karla', 'Noto Sans Devanagari', sans-serif;
       line-height: 1.6;
+      width: 100%;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    img,
+    svg,
+    video {
+      max-width: 100%;
+      height: auto;
     }
 
     h1,
@@ -241,6 +254,93 @@
       background: #723a2d;
       transform: translateY(-1px);
     } 
+
+    /* MOBILE NAVIGATION DRAWER & TOGGLE */
+    .mobile-menu-toggle {
+      display: none;
+      background: transparent;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      width: 40px;
+      height: 40px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+    }
+
+    .mobile-menu-toggle span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--ink);
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu-toggle.open span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .mobile-menu-toggle.open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .mobile-menu-toggle.open span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    .mobile-nav-drawer {
+      display: none;
+      background: var(--white);
+      border-bottom: 2px solid var(--gold);
+      padding: 18px 20px 24px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+      animation: slideDown 0.25s ease-out;
+    }
+
+    .mobile-nav-drawer.open {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .mobile-nav-drawer a {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--ink);
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line);
+      display: block;
+    }
+
+    .mobile-nav-drawer .mobile-track-btn {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: #7A5503;
+      padding: 11px 14px;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      display: block;
+      font-family: inherit;
+      margin-top: 4px;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
     /* HERO */
     .hero {
@@ -1024,6 +1124,7 @@
       }
     }
 
+    /* RESPONSIVE MEDIA QUERIES */
     @media (max-width: 860px) {
       .hero {
         grid-template-columns: 1fr;
@@ -1031,34 +1132,16 @@
       }
 
       .hero-art {
-        height: 280px;
+        height: auto;
         order: -1;
       }
 
       .hero-copy h1 {
-        font-size: 2.2rem;
-      }
-
-      .trust-inner {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .steps {
-        grid-template-columns: repeat(2, 1fr);
+        font-size: 2.3rem;
       }
 
       .contact {
         grid-template-columns: 1fr;
-      }
-
-      .nav-links {
-        display: none;
-      }
-
-      .top-strip-inner {
-        flex-direction: column;
-        gap: 8px;
-        align-items: flex-start;
       }
 
       .ach-slide {
@@ -1071,13 +1154,449 @@
         border-bottom: 1px dashed var(--line);
       }
       .site-credits {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: #555;
-}
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #555;
+      }
     }
-    
-</style>
+
+    @media (max-width: 768px) {
+      /* TOP STRIP */
+      .top-strip {
+        padding: 8px 16px;
+      }
+
+      .top-strip-inner {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+
+      .top-strip .info-group {
+        flex-direction: column;
+        gap: 4px;
+        font-size: 0.76rem;
+      }
+
+      .top-strip-actions {
+        width: 100%;
+        justify-content: space-between;
+        padding-top: 8px;
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+      }
+
+      .track-link {
+        font-size: 0.8rem;
+      }
+
+      /* NAV */
+      nav {
+        padding: 12px 16px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .mobile-menu-toggle {
+        display: flex;
+      }
+
+      .nav-actions .btn-book {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+      }
+
+      .brand-name {
+        font-size: 1.15rem;
+      }
+
+      .brand-name small {
+        font-size: 0.68rem;
+        max-width: 160px;
+      }
+
+      /* HERO */
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 28px;
+        padding: 32px 16px 44px;
+      }
+
+      .hero-art {
+        order: -1;
+        height: auto;
+        max-width: 320px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .doctor-photo {
+        padding: 20px 16px;
+      }
+
+      .doctor-photo-circle {
+        width: 140px;
+        height: 140px;
+      }
+
+      .hero-copy h1 {
+        font-size: 1.85rem;
+        line-height: 1.2;
+        margin-bottom: 14px;
+        word-break: break-word;
+      }
+
+      .hero-copy p {
+        font-size: 0.95rem;
+        line-height: 1.55;
+        margin-bottom: 22px;
+        max-width: 100%;
+      }
+
+      .hero-copy .creds-row {
+        gap: 6px;
+        margin-bottom: 16px;
+      }
+
+      .hero-copy .cred {
+        font-size: 0.74rem;
+        padding: 4px 10px;
+      }
+
+      .hero-cta {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        width: 100%;
+      }
+
+      .hero-cta .btn-primary {
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 1rem;
+        min-height: 48px;
+      }
+
+      .hero-cta .link-secondary {
+        text-align: center;
+        padding: 6px 0;
+      }
+
+      /* ACHIEVEMENTS */
+      .achievements {
+        padding: 0 16px 56px;
+      }
+
+      .ach-slide {
+        grid-template-columns: 1fr;
+      }
+
+      .ach-photo {
+        height: 190px;
+        border-right: none;
+        border-bottom: 1px dashed var(--line);
+      }
+
+      .ach-text {
+        padding: 22px 18px;
+      }
+
+      .ach-text h3 {
+        font-size: 1.15rem;
+        margin-bottom: 8px;
+      }
+
+      .ach-text p {
+        font-size: 0.88rem;
+        line-height: 1.5;
+      }
+
+      .ach-controls {
+        padding: 12px 16px;
+      }
+
+      .slider-arrows button,
+      .ach-controls button {
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+      }
+
+      /* TRUST BAR */
+      .trust-bar {
+        padding: 24px 16px;
+      }
+
+      .trust-inner {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .trust-inner .item {
+        background: rgba(251, 250, 246, 0.9);
+        padding: 14px 16px;
+        border-radius: 4px;
+        border: 1px solid var(--line);
+      }
+
+      .trust-inner .item b {
+        font-size: 1.5rem;
+        margin-bottom: 2px;
+      }
+
+      .trust-inner .item span {
+        font-size: 0.84rem;
+      }
+
+      /* SERVICES / TREATMENTS */
+      .services {
+        padding: 56px 16px;
+      }
+
+      .section-head {
+        margin-bottom: 28px;
+      }
+
+      .section-head h2 {
+        font-size: 1.7rem;
+      }
+
+      .slide {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 24px 18px;
+      }
+
+      .slide .num {
+        font-size: 1.7rem;
+        line-height: 1;
+        display: inline-block;
+        margin-bottom: 4px;
+      }
+
+      .slide h3 {
+        font-size: 1.25rem;
+        margin-bottom: 8px;
+      }
+
+      .slide p {
+        font-size: 0.92rem;
+        line-height: 1.5;
+      }
+
+      .slider-controls {
+        padding: 14px 16px;
+      }
+
+      /* HOW IT WORKS */
+      .how {
+        padding: 56px 16px;
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .step {
+        padding-top: 14px;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .step .step-num {
+        font-size: 1.4rem;
+        margin-bottom: 4px;
+      }
+
+      .step h3 {
+        font-size: 1.1rem;
+      }
+
+      .step p {
+        font-size: 0.88rem;
+        line-height: 1.5;
+      }
+
+      /* CONTACT / BOOKING */
+      .contact {
+        grid-template-columns: 1fr;
+        gap: 28px;
+        padding: 56px 16px;
+      }
+
+      .contact-form {
+        padding: 24px 16px;
+        width: 100%;
+      }
+
+      .contact-form h2 {
+        font-size: 1.65rem;
+      }
+
+      .field-row {
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .field-row > div {
+        width: 100%;
+      }
+
+      /* Mobile input sizing: prevents iOS/Android automatic zoom */
+      input,
+      select,
+      textarea {
+        font-size: 16px !important;
+        min-height: 46px;
+        padding: 10px 12px;
+      }
+
+      textarea {
+        min-height: 90px;
+      }
+
+      #submitBtn {
+        width: 100%;
+        min-height: 48px;
+        font-size: 1rem;
+      }
+
+      .clinic-info {
+        padding: 24px 16px;
+        width: 100%;
+      }
+
+      /* TOAST NOTIFICATIONS */
+      #toastContainer {
+        top: 12px;
+        left: 12px;
+        right: 12px;
+        max-width: calc(100% - 24px);
+        width: calc(100% - 24px);
+      }
+
+      .toast-message {
+        width: 100%;
+        transform: translateY(-130%);
+        font-size: 0.86rem;
+        padding: 10px 14px;
+      }
+
+      .toast-message.show {
+        transform: translateY(0);
+      }
+
+      /* MODALS */
+      .modal-backdrop {
+        padding: 12px;
+        align-items: center;
+      }
+
+      .modal-card {
+        max-width: 100%;
+        width: 100%;
+        max-height: 90vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .modal-header {
+        padding: 14px 18px;
+      }
+
+      .modal-header h3 {
+        font-size: 1.15rem;
+      }
+
+      .modal-body {
+        padding: 18px 16px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .modal-footer {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .modal-footer button {
+        flex: 1;
+        min-height: 44px;
+        text-align: center;
+        justify-content: center;
+        font-size: 0.9rem;
+      }
+
+      .ref-badge {
+        font-size: 1.15rem;
+        padding: 8px 12px;
+        word-break: break-all;
+      }
+
+      #trackInput {
+        font-size: 16px !important;
+        min-height: 44px;
+      }
+
+      #trackLookupBtn {
+        min-height: 44px;
+        padding: 0 16px;
+      }
+
+      /* FOOTER */
+      footer {
+        padding: 24px 16px;
+      }
+
+      .footer-links {
+        flex-direction: column;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .footer-links span {
+        display: none;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-copy h1 {
+        font-size: 1.6rem;
+      }
+
+      .section-head h2 {
+        font-size: 1.45rem;
+      }
+
+      .contact-form h2 {
+        font-size: 1.45rem;
+      }
+
+      .brand-name {
+        font-size: 1.05rem;
+      }
+
+      .brand-name small {
+        display: none;
+      }
+
+      .nav-actions .btn-book {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+      }
+
+      .doctor-photo-circle {
+        width: 120px;
+        height: 120px;
+      }
+
+      .hero-art {
+        max-width: 280px;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -1137,8 +1656,20 @@
       </div>
       <div class="nav-actions">
         <a href="#contact" class="btn-book" data-en="Book Consultation" data-hi="परामर्श बुक करें">Book Consultation</a>
+        <button class="mobile-menu-toggle" id="mobileMenuBtn" aria-label="Toggle navigation menu" onclick="toggleMobileMenu()">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
     </nav>
+    <div class="mobile-nav-drawer" id="mobileDrawer">
+      <a href="#services" data-en="Treatments" data-hi="उपचार" onclick="closeMobileMenu()">Treatments</a>
+      <a href="#how" data-en="Consultation" data-hi="परामर्श" onclick="closeMobileMenu()">Consultation</a>
+      <a href="#contact" data-en="Contact" data-hi="संपर्क करें" onclick="closeMobileMenu()">Contact</a>
+      <button class="mobile-track-btn" onclick="openTrackModal(); closeMobileMenu();" data-en="Track Appointment Status" data-hi="अपॉइंटमेंट स्थिति">Track Appointment Status</button>
+      <a href="#contact" class="btn-primary" style="margin-top: 6px; width: 100%; text-align: center; justify-content: center;" data-en="Book Consultation" data-hi="परामर्श बुक करें" onclick="closeMobileMenu()">Book Consultation</a>
+    </div>
   </header>
 
   <!-- HERO SECTION -->
@@ -1613,6 +2144,24 @@
       document.documentElement.setAttribute('lang', lang);
     }
 
+    function toggleMobileMenu() {
+      const btn = document.getElementById('mobileMenuBtn');
+      const drawer = document.getElementById('mobileDrawer');
+      if (btn && drawer) {
+        btn.classList.toggle('open');
+        drawer.classList.toggle('open');
+      }
+    }
+
+    function closeMobileMenu() {
+      const btn = document.getElementById('mobileMenuBtn');
+      const drawer = document.getElementById('mobileDrawer');
+      if (btn && drawer) {
+        btn.classList.remove('open');
+        drawer.classList.remove('open');
+      }
+    }
+
     function openTrackModal() {
       document.getElementById('trackModal').classList.add('open');
       document.getElementById('trackInput').focus();
@@ -1683,6 +2232,21 @@
       if (nextBtn) nextBtn.addEventListener('click', next);
       if (prevBtn) prevBtn.addEventListener('click', prev);
 
+      // Touch swipe support for mobile
+      let touchStartX = 0;
+      let touchEndX = 0;
+      const sliderEl = document.getElementById('serviceSlider');
+      if (sliderEl) {
+        sliderEl.addEventListener('touchstart', e => {
+          touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        sliderEl.addEventListener('touchend', e => {
+          touchEndX = e.changedTouches[0].screenX;
+          if (touchStartX - touchEndX > 45) next();
+          else if (touchEndX - touchStartX > 45) prev();
+        }, { passive: true });
+      }
+
       resetTimer();
     })();
 
@@ -1726,6 +2290,21 @@
       const prevBtn = document.getElementById('achPrev');
       if (nextBtn) nextBtn.addEventListener('click', next);
       if (prevBtn) prevBtn.addEventListener('click', prev);
+
+      // Touch swipe support for mobile
+      let achTouchStartX = 0;
+      let achTouchEndX = 0;
+      const achSliderEl = document.getElementById('achSlider');
+      if (achSliderEl) {
+        achSliderEl.addEventListener('touchstart', e => {
+          achTouchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        achSliderEl.addEventListener('touchend', e => {
+          achTouchEndX = e.changedTouches[0].screenX;
+          if (achTouchStartX - achTouchEndX > 45) next();
+          else if (achTouchEndX - achTouchStartX > 45) prev();
+        }, { passive: true });
+      }
 
       resetTimer();
     })();
