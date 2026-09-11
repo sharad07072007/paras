@@ -7,25 +7,43 @@ const CLINIC_PHONE = process.env.CLINIC_PHONE || '+91 7067207752';
 const CLINIC_ADDRESS = 'Shree Ayush Clinic, MP Nagar, Zone-II, Bhopal (M.P.) – 462011';
 const DOCTOR_EMAIL = process.env.DOCTOR_EMAIL || 'sharadpatidar555@gmail.com';
 
+function getBaseUrl() {
+  if (process.env.BASE_URL && !process.env.BASE_URL.includes('localhost')) {
+    return process.env.BASE_URL.replace(/\/+$/, '');
+  }
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  }
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  return 'https://temporary-quick-oasis-nk4m7uh.vercel.app';
+}
+
+function getSmtpCredentials() {
+  const user = (process.env.SMTP_USER || process.env.GMAIL_USER || 'sharadpatidar555@gmail.com').trim();
+  const pass = (process.env.SMTP_PASS || process.env.GMAIL_APP_PASS || 'wjkijknsktabczlh').trim();
+  return { user, pass };
+}
+
 // Setup email transporter
 let transporter = null;
 
 function getTransporter() {
   if (transporter) return transporter;
 
-  const smtpUser = process.env.SMTP_USER || process.env.GMAIL_USER;
-  const smtpPass = process.env.SMTP_PASS || process.env.GMAIL_APP_PASS;
+  const { user, pass } = getSmtpCredentials();
 
-  if (smtpUser && smtpPass) {
+  if (user && pass) {
     // Real Gmail / SMTP delivery
     transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: smtpUser.trim(),
-        pass: smtpPass.trim()
+        user,
+        pass
       }
     });
-    console.log(`✉️ [EMAIL SERVICE] Live Gmail SMTP connected for sender: ${smtpUser}`);
+    console.log(`✉️ [EMAIL SERVICE] Live Gmail SMTP connected for sender: ${user}`);
   } else {
     // Fallback stream transporter when credentials not yet set
     transporter = nodemailer.createTransport({
@@ -184,14 +202,14 @@ async function sendPatientConfirmationEmail(appointment) {
   `;
 
   try {
-    const sender = process.env.SMTP_USER || process.env.SMTP_FROM || 'clinic@drparasleve.com';
+    const { user: sender } = getSmtpCredentials();
     const info = await client.sendMail({
       from: `"Dr. Paras Leve Clinic" <${sender}>`,
       to: appointment.email,
       subject: `✓ Consultation Confirmed [${appointment.reference_code}] — Dr. Paras Leve`,
       html: htmlContent
     });
-    console.log(`📧 [EMAIL SENT TO PATIENT]: ${appointment.email}`);
+    console.log(`📧 [EMAIL SENT TO PATIENT]: ${appointment.email} (Message ID: ${info.messageId || 'local'})`);
     return { sent: true, messageId: info.messageId || 'local-stream' };
   } catch (err) {
     console.error('Failed to dispatch email to patient:', err.message);
@@ -206,9 +224,10 @@ async function sendPatientConfirmationEmail(appointment) {
 async function sendDoctorNewBookingAlert(appointment) {
   const targetEmail = process.env.DOCTOR_EMAIL || 'sharadpatidar555@gmail.com';
   const client = getTransporter();
+  const baseUrl = getBaseUrl();
 
-  const quickApproveUrl = `${BASE_URL}/api/appointments/quick-approve?token=${appointment.approval_token}&date=${encodeURIComponent(appointment.preferred_date || '')}&time=${encodeURIComponent(appointment.preferred_time_slot || '')}`;
-  const dashboardUrl = `${BASE_URL}/admin.html`;
+  const quickApproveUrl = `${baseUrl}/api/appointments/quick-approve?token=${appointment.approval_token}&date=${encodeURIComponent(appointment.preferred_date || '')}&time=${encodeURIComponent(appointment.preferred_time_slot || '')}`;
+  const dashboardUrl = `${baseUrl}/admin.html`;
   const cleanPhone = formatWhatsAppPhone(appointment.phone);
   const patientWaUrl = `https://wa.me/${cleanPhone}`;
   const callPhoneUrl = `tel:${appointment.phone.replace(/[^0-9+]/g, '')}`;
@@ -313,7 +332,7 @@ async function sendDoctorNewBookingAlert(appointment) {
   console.log('====================================================');
 
   try {
-    const sender = process.env.SMTP_USER || process.env.SMTP_FROM || 'clinic@drparasleve.com';
+    const { user: sender } = getSmtpCredentials();
     const info = await client.sendMail({
       from: `"Dr. Paras Leve Clinic" <${sender}>`,
       to: targetEmail,
@@ -329,9 +348,106 @@ async function sendDoctorNewBookingAlert(appointment) {
   }
 }
 
+/**
+ * Send Patient Booking Acknowledgment Email (immediately upon submission)
+ */
+async function sendPatientBookingReceivedEmail(appointment) {
+  if (!appointment.email || !appointment.email.includes('@')) {
+    return { sent: false, reason: 'Patient provided no email address' };
+  }
+
+  const client = getTransporter();
+  const baseUrl = getBaseUrl();
+  const date = appointment.preferred_date || 'Earliest available';
+  const time = appointment.preferred_time_slot || 'Regular hours';
+  const trackUrl = `${baseUrl}/#contact`;
+
+  const htmlContent = `
+    <div style="font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif; max-width:600px; margin:0 auto; background:#ECE8DC; padding:24px; border-radius:8px;">
+      <div style="background:#1F3A2E; color:#ECE8DC; padding:24px; border-radius:6px 6px 0 0; text-align:center; border-bottom:3px solid #C9971F;">
+        <h1 style="margin:0; font-size:24px; font-weight:600; color:#FBFAF6;">Dr. Paras Leve</h1>
+        <p style="margin:4px 0 0; font-size:13px; color:#C9971F; letter-spacing:0.05em;">BAMS, CRAV · REGISTERED AYURVEDIC PHYSICIAN</p>
+      </div>
+
+      <div style="background:#FBFAF6; padding:32px; border-radius:0 0 6px 6px; box-shadow:0 4px 12px rgba(0,0,0,0.06); color:#23261F;">
+        <div style="text-align:center; margin-bottom:20px;">
+          <span style="background:#FFF3E0; color:#E65100; border:1px solid #FFE0B2; padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; text-transform:uppercase;">
+            ⏳ Request Received — Pending Review
+          </span>
+        </div>
+
+        <h2 style="font-size:20px; color:#1F3A2E; margin-top:0;">Namaste ${appointment.patient_name},</h2>
+        <p style="font-size:15px; line-height:1.6; color:#5C5A4E;">
+          Thank you for requesting an Ayurvedic consultation with <strong>Dr. Paras Leve</strong>. We have received your booking details and our clinic team will review and confirm your scheduled slot shortly.
+        </p>
+
+        <div style="background:#FAF8F2; border:1px solid #D6D0BE; border-radius:6px; padding:18px; margin:20px 0;">
+          <table style="width:100%; border-collapse:collapse; font-size:14px;">
+            <tr>
+              <td style="padding:6px 0; color:#5C5A4E; width:40%;">Booking Reference:</td>
+              <td style="padding:6px 0; font-weight:700; color:#C9971F; font-family:monospace; font-size:16px;">${appointment.reference_code}</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 0; color:#5C5A4E;">Consultation Mode:</td>
+              <td style="padding:6px 0; font-weight:600; color:#1F3A2E;">${appointment.consultation_type}</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 0; color:#5C5A4E;">Requested Date:</td>
+              <td style="padding:6px 0; font-weight:600;">${date}</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 0; color:#5C5A4E;">Requested Time Slot:</td>
+              <td style="padding:6px 0; font-weight:600;">${time}</td>
+            </tr>
+          </table>
+        </div>
+
+        <div style="background:#FFF9E6; border-left:4px solid #C9971F; padding:14px; margin:20px 0; font-size:13px; color:#6B5310; line-height:1.5;">
+          <strong>What happens next?</strong>
+          <ul style="margin:6px 0 0 16px; padding:0;">
+            <li>Dr. Paras Leve will review your consultation request.</li>
+            <li>You will receive an official confirmation email & WhatsApp message once approved.</li>
+            <li>You can track your appointment status anytime on our website using your reference code: <strong>${appointment.reference_code}</strong>.</li>
+          </ul>
+        </div>
+
+        <div style="text-align:center; margin-top:24px;">
+          <a href="${trackUrl}" style="background:#1F3A2E; color:#ECE8DC; padding:12px 24px; text-decoration:none; border-radius:4px; font-weight:600; font-size:14px; display:inline-block;">
+            🔍 Track Appointment Status
+          </a>
+        </div>
+
+        <p style="font-size:13px; color:#5C5A4E; margin-top:24px; text-align:center;">
+          Need urgent assistance? Call the clinic directly at <strong>${CLINIC_PHONE}</strong>.
+        </p>
+
+        <div style="margin-top:28px; padding-top:20px; border-top:1px solid #D6D0BE; font-size:12px; color:#8C8878; text-align:center;">
+          Shree Ayush Clinic · Reg. No. AY-2019-04831 · Bhopal (M.P.)
+        </div>
+      </div>
+    </div>
+  `;
+
+  try {
+    const { user: sender } = getSmtpCredentials();
+    const info = await client.sendMail({
+      from: `"Dr. Paras Leve Clinic" <${sender}>`,
+      to: appointment.email,
+      subject: `🌿 Consultation Request Received [${appointment.reference_code}] — Dr. Paras Leve`,
+      html: htmlContent
+    });
+    console.log(`📧 [RECEIPT SENT TO PATIENT]: ${appointment.email}`);
+    return { sent: true, messageId: info.messageId || 'local-stream' };
+  } catch (err) {
+    console.error('Failed to dispatch receipt to patient:', err.message);
+    return { sent: false, error: err.message };
+  }
+}
+
 module.exports = {
   formatWhatsAppPhone,
   generateWhatsAppMessage,
   sendPatientConfirmationEmail,
+  sendPatientBookingReceivedEmail,
   sendDoctorNewBookingAlert
 };

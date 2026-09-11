@@ -7,6 +7,7 @@ const { rateLimiter } = require('../middleware/rateLimiter');
 const {
   generateWhatsAppMessage,
   sendPatientConfirmationEmail,
+  sendPatientBookingReceivedEmail,
   sendDoctorNewBookingAlert
 } = require('../services/notificationService');
 
@@ -83,8 +84,25 @@ router.post('/', bookingLimiter, validateAppointmentInput, async (req, res) => {
       SELECT * FROM appointments WHERE id = ?
     `).get(result.lastInsertRowid);
 
-    // Asynchronously notify doctor with Quick Approve link
-    sendDoctorNewBookingAlert(newRecord).catch(e => console.warn('Doctor alert notice:', e.message));
+    // Dispatch automated emails to both Doctor and Patient (if email provided)
+    // We await them so serverless environments (e.g. Vercel) complete network transmission
+    const emailTasks = [
+      sendDoctorNewBookingAlert(newRecord).catch(e => {
+        console.error('Doctor alert dispatch error:', e.message);
+        return { sent: false, error: e.message };
+      })
+    ];
+
+    if (newRecord.email && newRecord.email.includes('@')) {
+      emailTasks.push(
+        sendPatientBookingReceivedEmail(newRecord).catch(e => {
+          console.error('Patient receipt dispatch error:', e.message);
+          return { sent: false, error: e.message };
+        })
+      );
+    }
+
+    await Promise.allSettled(emailTasks);
 
     return res.status(201).json({
       success: true,
