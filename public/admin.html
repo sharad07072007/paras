@@ -619,14 +619,22 @@
       <p>Approve patient consultations, trigger instant WhatsApp & Email notifications, and record clinical notes.</p>
       <div id="loginAlert" style="display:none; padding:10px; background:#FFEBEE; color:#C62828; border-radius:4px; font-size:0.85rem; margin-bottom:16px;"></div>
       <form id="loginForm">
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label for="username">Username</label>
           <input type="text" id="username" value="admin" required autocomplete="username">
         </div>
         <div class="form-group">
           <label for="password">Password</label>
           <input type="password" id="password" value="ayurveda2026!" required autocomplete="current-password">
-        </div>
+        </div> -->
+        <div class="form-group">
+  <label for="username">Username</label>
+  <input type="text" id="username" required autocomplete="off">
+</div>
+<div class="form-group">
+  <label for="password">Password</label>
+  <input type="password" id="password" required autocomplete="new-password">
+</div>
         <button type="submit" class="btn-login" id="loginSubmitBtn">Sign In to Clinic</button>
       </form>
       <!-- <div class="login-tip">
