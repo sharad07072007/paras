@@ -23,5 +23,8 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "nodemailer": "^10.0.1"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   }
 }

@@ -87,8 +87,8 @@ try {
   console.warn('Seed notice:', e.message);
 }
 
-// Start Server
-if (require.main === module) {
+// Start Server (only in standalone Node.js environments, NOT under Vercel serverless runtime)
+if (require.main === module && !process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log('====================================================');
     console.log(`🌿 Dr. Paras Leve - Ayurvedic Physician Backend`);
@@ -102,3 +102,4 @@ if (require.main === module) {
 }
 
 module.exports = app;
+

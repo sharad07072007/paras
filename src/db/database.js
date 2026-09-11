@@ -4,7 +4,11 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 require('dotenv').config();
 
-const dbPath = process.env.DB_PATH || path.join(__dirname, '../../data/clinic.db');
+const isVercel = Boolean(process.env.VERCEL);
+const defaultDbPath = isVercel
+  ? path.join('/tmp', 'clinic.db')
+  : path.join(__dirname, '../../data/clinic.db');
+const dbPath = process.env.DB_PATH || defaultDbPath;
 const dbDir = path.dirname(dbPath);
 
 if (!fs.existsSync(dbDir)) {
