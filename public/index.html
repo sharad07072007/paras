@@ -1588,160 +1588,213 @@
       }
       /*patidar  */
      /* Parent Section */
-.achievements-section {
-  width: 100%;
-  padding: 50px 20px;
-  background-color: #f7f6f2;
-  font-family: Georgia, serif;
-  box-sizing: border-box;
+    /* ==========================================================
+   ACHIEVEMENTS & CLINICAL PRACTICE SECTION STYLES
+   ========================================================== */
+
+/* 1. Parent Section Container */
+section.achievements-section {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 60px 20px !important;
+  background-color: #f7f6f2 !important;
+  font-family: Georgia, serif !important;
+  box-sizing: border-box !important;
 }
 
-.achievements-header {
-  text-align: center;
-  margin-bottom: 25px;
+/* 2. Header & Titles */
+section.achievements-section .achievements-header {
+  text-align: center !important;
+  margin-bottom: 30px !important;
+  width: 100% !important;
 }
 
-.achievements-header .sub-tag {
-  font-size: 0.8rem;
-  letter-spacing: 1.5px;
-  color: #b58943;
-  font-family: Arial, sans-serif;
-  font-weight: 700;
-  display: block;
-  margin-bottom: 6px;
+section.achievements-section .achievements-header .sub-tag {
+  font-size: 0.8rem !important;
+  letter-spacing: 1.5px !important;
+  color: #b58943 !important;
+  font-family: Arial, sans-serif !important;
+  font-weight: 700 !important;
+  display: block !important;
+  margin-bottom: 8px !important;
+  text-transform: uppercase !important;
 }
 
-.achievements-header h2 {
-  font-size: 2rem;
-  color: #1a2a24;
-  margin: 0;
-  font-weight: 500;
+section.achievements-section .achievements-header h2 {
+  font-size: 2.1rem !important;
+  color: #1a2a24 !important;
+  margin: 0 !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.5px !important;
 }
 
-/* Strict Desktop Constraints: exactly 40% width, centered */
-.slider-wrapper {
+/* 3. Outer Wrapper - Strict Desktop Centering at ~40% */
+section.achievements-section .slider-wrapper {
   width: 40% !important;
   max-width: 440px !important;
-  min-width: 320px;
+  min-width: 320px !important;
   margin-left: auto !important;
   margin-right: auto !important;
-  box-sizing: border-box;
+  display: block !important;
+  box-sizing: border-box !important;
 }
 
-/* Mobile Screen: 90% width */
-@media screen and (max-width: 768px) {
-  .slider-wrapper {
-    width: 90% !important;
-    max-width: 380px !important;
+/* 4. Main Slider Box Frame */
+section.achievements-section .portrait-slider {
+  width: 100% !important;
+  position: relative !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+  border: 1px solid #e7e3d8 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05) !important;
+  box-sizing: border-box !important;
+}
+
+/* 5. Slide Element Control */
+section.achievements-section .portrait-card {
+  display: none !important;
+  width: 100% !important;
+}
+
+section.achievements-section .portrait-card.active {
+  display: block !important;
+}
+
+/* 6. True Portrait Aspect Ratio (4:5) for Desktop & Mobile */
+section.achievements-section .portrait-card .image-box {
+  width: 100% !important;
+  aspect-ratio: 4 / 5 !important;
+  max-height: 520px !important;
+  overflow: hidden !important;
+  background-color: #eee !important;
+  position: relative !important;
+}
+
+section.achievements-section .portrait-card .image-box img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center top !important;
+  display: block !important;
+}
+
+/* 7. Compact 2-3 Line White Text Content Box */
+section.achievements-section .portrait-card .card-content {
+  padding: 14px 18px 12px 18px !important;
+  background: #ffffff !important;
+  box-sizing: border-box !important;
+}
+
+section.achievements-section .portrait-card h3 {
+  font-size: 0.95rem !important;
+  color: #1a2a24 !important;
+  margin: 0 !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+/* 8. Controls (Navigation Arrows & Indicators) */
+section.achievements-section .slider-footer {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 12px 18px !important;
+  border-top: 1px solid #ede8dd !important;
+  background: #ffffff !important;
+  box-sizing: border-box !important;
+}
+
+section.achievements-section .slider-dots {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+section.achievements-section .slider-dots .dot {
+  display: inline-block !important;
+  height: 8px !important;
+  width: 8px !important;
+  background-color: #d8d4c9 !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+}
+
+section.achievements-section .slider-dots .dot.active {
+  width: 22px !important;
+  border-radius: 6px !important;
+  background-color: #1e3b30 !important;
+}
+
+section.achievements-section .slider-nav {
+  display: flex !important;
+  gap: 8px !important;
+}
+
+section.achievements-section .nav-btn {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  border: 1px solid #c9c4b5 !important;
+  background: transparent !important;
+  color: #1e3b30 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.05rem !important;
+  transition: background-color 0.2s ease, border-color 0.2s ease !important;
+}
+
+section.achievements-section .nav-btn:hover {
+  background-color: #ebe7de !important;
+  border-color: #1e3b30 !important;
+}
+
+/* ==========================================================
+   RESPONSIVE BREAKPOINTS (TABLETS & PHONES)
+   ========================================================== */
+
+/* Tablets / Medium Screens */
+@media screen and (max-width: 992px) {
+  section.achievements-section .slider-wrapper {
+    width: 60% !important;
+    max-width: 400px !important;
   }
 }
 
-.portrait-slider {
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-  background: #ffffff;
-  border: 1px solid #e7e3d8;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
+/* Mobile Screens */
+@media screen and (max-width: 768px) {
+  section.achievements-section {
+    padding: 35px 15px !important;
+  }
 
-.portrait-card {
-  display: none;
-  width: 100%;
-}
+  section.achievements-section .achievements-header h2 {
+    font-size: 1.75rem !important;
+  }
 
-.portrait-card.active {
-  display: block;
-}
+  section.achievements-section .slider-wrapper {
+    width: 92% !important;
+    max-width: 360px !important;
+  }
 
-/* Vertical Aspect Ratio 4:5 with fixed max-height on desktop */
-.portrait-card .image-box {
-  width: 100%;
-  aspect-ratio: 4 / 5;
-  max-height: 520px; /* Prevents vertical distortion */
-  overflow: hidden;
-  background-color: #f0eee9;
-}
+  section.achievements-section .portrait-card .card-content {
+    padding: 12px 14px 10px 14px !important;
+  }
 
-.portrait-card .image-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
+  section.achievements-section .portrait-card h3 {
+    font-size: 0.88rem !important;
+    line-height: 1.35 !important;
+  }
 }
-
-/* Compact White Box */
-.portrait-card .card-content {
-  padding: 12px 16px 10px 16px;
-  background: #ffffff;
-}
-
-.portrait-card h3 {
-  font-size: 0.95rem;
-  color: #1a2a24;
-  margin: 0;
-  font-weight: 500;
-  line-height: 1.35;
-}
-
-/* Controls */
-.slider-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 16px;
-  border-top: 1px solid #ede8dd;
-  background: #ffffff;
-}
-
-.slider-dots {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.slider-dots .dot {
-  display: inline-block;
-  height: 8px;
-  width: 8px;
-  background-color: #d8d4c9;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.slider-dots .dot.active {
-  width: 20px;
-  border-radius: 6px;
-  background-color: #1e3b30;
-}
-
-.slider-nav {
-  display: flex;
-  gap: 8px;
-}
-
-.nav-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1px solid #c9c4b5;
-  background: transparent;
-  color: #1e3b30;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  transition: background-color 0.2s;
-}
-
-.nav-btn:hover {
-  background-color: #ebe7de;
-}
-
     /* pat st */
 
       .doctor-photo-circle {
@@ -1950,50 +2003,54 @@ data-hi="प्रामाणिक आयुर्वेदिक सिद्
   </div>
 
   <!-- WORK -->
-  <!-- Place before <section id="treatments"> / Areas of Practice -->
-<section class="achievements-section">
-  <div class="achievements-header">
-    <span class="sub-tag" data-en="CLINICAL EXCELLENCE & CARE" data-hi="नैदानिक उत्कृष्टता एवं सेवा">CLINICAL EXCELLENCE & CARE</span>
-    <h2 data-en="Clinical Practice & Patient Care" data-hi="नैदानिक अभ्यास एवं रोगी देखभाल">Clinical Practice & Patient Care</h2>
+  <section class="achievements-section" style="width: 100% !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; padding: 50px 20px !important; background-color: #f7f6f2 !important; box-sizing: border-box !important; font-family: Georgia, serif !important;">
+
+  <div class="achievements-header" style="text-align: center !important; margin-bottom: 25px !important; width: 100% !important;">
+    <span class="sub-tag" data-en="CLINICAL EXCELLENCE & CARE" data-hi="नैदानिक उत्कृष्टता एवं सेवा" style="font-size: 0.8rem !important; letter-spacing: 1.5px !important; color: #b58943 !important; font-family: Arial, sans-serif !important; font-weight: 700 !important; display: block !important; margin-bottom: 6px !important;">CLINICAL EXCELLENCE & CARE</span>
+    <h2 data-en="Clinical Practice & Patient Care" data-hi="नैदानिक अभ्यास एवं रोगी देखभाल" style="font-size: 2rem !important; color: #1a2a24 !important; margin: 0 !important; font-weight: 500 !important;">Clinical Practice & Patient Care</h2>
   </div>
 
-  <div class="slider-wrapper">
-    <div class="portrait-slider" id="portraitSlider">
+  <!-- Locked to 40% centered with auto margins -->
+  <div class="slider-wrapper" style="width: 40% !important; max-width: 440px !important; min-width: 320px !important; margin: 0 auto !important; box-sizing: border-box !important;">
+    <div class="portrait-slider" id="portraitSlider" style="width: 100% !important; position: relative !important; overflow: hidden !important; background: #ffffff !important; border: 1px solid #e7e3d8 !important; border-radius: 4px !important; box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05) !important;">
       
       <!-- Slide 1 -->
       <div class="portrait-card active">
-        <div class="image-box">
-          <img src="clinic.png" alt="Personalised Ayurvedic consultation" />
+        <div class="image-box" style="width: 100% !important; aspect-ratio: 4 / 5 !important; max-height: 520px !important; overflow: hidden !important; background-color: #eee !important;">
+          <img src="clinic.png" alt="Personalised Ayurvedic consultation" style="width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: center top !important; display: block !important;" />
         </div>
-        <div class="card-content">
+        <div class="card-content" style="padding: 12px 16px 10px 16px !important; background: #ffffff !important;">
           <h3 data-en="Personalised Ayurvedic consultation, focused on understanding the root cause and promoting holistic wellness."
-              data-hi="व्यक्तिगत आयुर्वेदिक परामर्श, जो रोग के मूल कारण को समझने और समग्र स्वास्थ्य संवर्धन पर केंद्रित है।">
+              data-hi="व्यक्तिगत आयुर्वेदिक परामर्श, जो रोग के मूल कारण को समझने और समग्र स्वास्थ्य संवर्धन पर केंद्रित है।"
+              style="font-size: 0.95rem !important; color: #1a2a24 !important; margin: 0 !important; font-weight: 500 !important; line-height: 1.35 !important;">
             Personalised Ayurvedic consultation, focused on understanding the root cause and promoting holistic wellness.
           </h3>
         </div>
       </div>
 
       <!-- Slide 2 -->
-      <div class="portrait-card">
-        <div class="image-box">
-          <img src="clin.png" alt="Bringing Ayurveda closer to the community" />
+      <div class="portrait-card" style="display: none;">
+        <div class="image-box" style="width: 100% !important; aspect-ratio: 4 / 5 !important; max-height: 520px !important; overflow: hidden !important; background-color: #eee !important;">
+          <img src="clin.png" alt="Bringing Ayurveda closer to the community" style="width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: center top !important; display: block !important;" />
         </div>
-        <div class="card-content">
+        <div class="card-content" style="padding: 12px 16px 10px 16px !important; background: #ffffff !important;">
           <h3 data-en="Bringing Ayurveda closer to the community through dedicated health camps & compassionate patient care."
-              data-hi="समर्पित स्वास्थ्य शिविरों और संवेदनशील रोगी देखभाल के माध्यम से आयुर्वेद को जन-जन तक पहुंचाना।">
+              data-hi="समर्पित स्वास्थ्य शिविरों और संवेदनशील रोगी देखभाल के माध्यम से आयुर्वेद को जन-जन तक पहुंचाना।"
+              style="font-size: 0.95rem !important; color: #1a2a24 !important; margin: 0 !important; font-weight: 500 !important; line-height: 1.35 !important;">
             Bringing Ayurveda closer to the community through dedicated health camps & compassionate patient care.
           </h3>
         </div>
       </div>
 
       <!-- Slide 3 -->
-      <div class="portrait-card">
-        <div class="image-box">
-          <img src="clini.png" alt="Classical Ayurveda practice" />
+      <div class="portrait-card" style="display: none;">
+        <div class="image-box" style="width: 100% !important; aspect-ratio: 4 / 5 !important; max-height: 520px !important; overflow: hidden !important; background-color: #eee !important;">
+          <img src="clini.png" alt="Classical Ayurveda practice" style="width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: center top !important; display: block !important;" />
         </div>
-        <div class="card-content">
+        <div class="card-content" style="padding: 12px 16px 10px 16px !important; background: #ffffff !important;">
           <h3 data-en="Dedicated to evidence-based classical Ayurvedic treatments and holistic patient recovery."
-              data-hi="प्रमाण-आधारित पारंपरिक आयुर्वेदिक उपचार और समग्र रोगी स्वास्थ्य लाभ हेतु समर्पित।">
+              data-hi="प्रमाण-आधारित पारंपरिक आयुर्वेदिक उपचार और समग्र रोगी स्वास्थ्य लाभ हेतु समर्पित।"
+              style="font-size: 0.95rem !important; color: #1a2a24 !important; margin: 0 !important; font-weight: 500 !important; line-height: 1.35 !important;">
             Dedicated to evidence-based classical Ayurvedic treatments and holistic patient recovery.
           </h3>
         </div>
@@ -2001,17 +2058,27 @@ data-hi="प्रामाणिक आयुर्वेदिक सिद्
 
     </div>
 
-    <!-- Controls -->
-    <div class="slider-footer">
-      <div class="slider-dots" id="sliderDots">
-        <!-- Leave empty; JavaScript fills dynamically -->
+    <!-- Controls: Progress indicators and Next/Prev buttons -->
+    <div class="slider-footer" style="display: flex !important; align-items: center !important; justify-content: space-between !important; padding: 10px 16px !important; border-top: 1px solid #ede8dd !important; background: #ffffff !important;">
+      <div class="slider-dots" id="sliderDots" style="display: flex !important; align-items: center !important; gap: 6px !important;">
+        <!-- Filled dynamically by JS -->
       </div>
-      <div class="slider-nav">
+      <div class="slider-nav" style="display: flex !important; gap: 8px !important;">
         <button class="nav-btn prev" onclick="moveSlide(-1)" aria-label="Previous Slide">←</button>
         <button class="nav-btn next" onclick="moveSlide(1)" aria-label="Next Slide">→</button>
       </div>
     </div>
   </div>
+
+  <style>
+    /* Responsive adjustment strictly for mobile screens */
+    @media screen and (max-width: 768px) {
+      .achievements-section .slider-wrapper {
+        width: 90% !important;
+        max-width: 360px !important;
+      }
+    }
+  </style>
 </section>
 
   <!-- SERVICES SECTION -->
@@ -2662,36 +2729,7 @@ data-hi="प्रामाणिक आयुर्वेदिक सिद्
     }
 
     // patidar 
-//     let currentAchievementSlide = 0;
-
-// function showSlide(index) {
-//   const slides = document.querySelectorAll(".portrait-card");
-//   const dots = document.querySelectorAll("#sliderDots .dot");
-
-//   if (!slides.length) return;
-
-//   if (index >= slides.length) {
-//     currentAchievementSlide = 0;
-//   } else if (index < 0) {
-//     currentAchievementSlide = slides.length - 1;
-//   } else {
-//     currentAchievementSlide = index;
-//   }
-
-//   slides.forEach((slide) => slide.classList.remove("active"));
-//   dots.forEach((dot) => dot.classList.remove("active"));
-
-//   slides[currentAchievementSlide].classList.add("active");
-//   if (dots[currentAchievementSlide]) {
-//     dots[currentAchievementSlide].classList.add("active");
-//   }
-// }
-
-// function moveSlide(step) {
-//   showSlide(currentAchievementSlide + step);
-// }
-
-    let currentAchievementSlide = 0;
+let currentAchievementSlide = 0;
 
 function setupAchievementSlider() {
   const slides = document.querySelectorAll(".portrait-card");
@@ -2699,10 +2737,8 @@ function setupAchievementSlider() {
 
   if (!slides.length || !dotsContainer) return;
 
-  // Clear container to guarantee no extra dots render
   dotsContainer.innerHTML = "";
 
-  // Dynamically insert exactly as many dots as there are slides (2 slides = 2 dots)
   slides.forEach((_, index) => {
     const dot = document.createElement("span");
     dot.classList.add("dot");
@@ -2726,10 +2762,15 @@ function showSlide(index) {
     currentAchievementSlide = index;
   }
 
-  slides.forEach((slide) => slide.classList.remove("active"));
+  slides.forEach((slide) => {
+    slide.classList.remove("active");
+    slide.style.display = "none";
+  });
   dots.forEach((dot) => dot.classList.remove("active"));
 
   slides[currentAchievementSlide].classList.add("active");
+  slides[currentAchievementSlide].style.display = "block";
+
   if (dots[currentAchievementSlide]) {
     dots[currentAchievementSlide].classList.add("active");
   }
@@ -2738,6 +2779,8 @@ function showSlide(index) {
 function moveSlide(step) {
   showSlide(currentAchievementSlide + step);
 }
+
+document.addEventListener("DOMContentLoaded", setupAchievementSlider);
 
 // Initialize on DOM load
 document.addEventListener("DOMContentLoaded", setupAchievementSlider);
