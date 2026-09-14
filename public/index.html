@@ -1586,6 +1586,143 @@
         padding: 6px 10px;
         font-size: 0.75rem;
       }
+      /*patidar  */
+      .achievements-section {
+  padding: 60px 20px;
+  background-color: #f7f6f2; /* Matches the beige background */
+  font-family: Georgia, serif;
+}
+
+.achievements-header .sub-tag {
+  font-size: 0.8rem;
+  letter-spacing: 1.5px;
+  color: #b58943;
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.achievements-header h2 {
+  font-size: 2.2rem;
+  color: #1a2a24;
+  margin: 0 0 30px 0;
+  font-weight: 500;
+}
+
+.slider-wrapper {
+  max-width: 480px; /* Constrains card to neat portrait width */
+  margin: 0 auto;
+}
+
+.portrait-slider {
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e7e3d8;
+  border-radius: 4px;
+}
+
+.portrait-card {
+  display: none;
+}
+
+.portrait-card.active {
+  display: block;
+}
+
+/* Enforces the Portrait (vertical) image format */
+.portrait-card .image-box {
+  width: 100%;
+  aspect-ratio: 4 / 5; /* 4 units wide by 5 units tall */
+  overflow: hidden;
+  background-color: #eee;
+}
+
+.portrait-card .image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.portrait-card .card-content {
+  padding: 24px 20px 15px;
+}
+
+.portrait-card h3 {
+  font-size: 1.35rem;
+  color: #1a2a24;
+  margin: 0 0 10px 0;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* .portrait-card p {
+  font-family: Arial, sans-serif;
+  font-size: 0.92rem;
+  color: #555555;
+  line-height: 1.55;
+  margin: 0;
+} */
+
+/* Footer with lines/dots and circular arrow buttons */
+.slider-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-top: 1px solid #ede8dd;
+  background: #ffffff;
+}
+
+.slider-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.slider-dots .dot {
+  display: inline-block;
+  height: 8px;
+  width: 8px;
+  background-color: #d8d4c9;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+/* Active pill indicator */
+.slider-dots .dot.active {
+  width: 22px;
+  border-radius: 6px;
+  background-color: #1e3b30;
+}
+
+.slider-nav {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid #c9c4b5;
+  background: transparent;
+  color: #1e3b30;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  transition: background-color 0.2s;
+}
+
+.nav-btn:hover {
+  background-color: #ebe7de;
+}
+      /* pat st */
 
       .doctor-photo-circle {
         width: 120px;
@@ -1797,6 +1934,57 @@ data-hi="प्रामाणिक आयुर्वेदिक सिद्
     </div>
   </div>
 
+  <!-- WORK -->
+  <!-- Place before <section id="treatments"> / Areas of Practice -->
+<section class="achievements-section">
+  <div class="achievements-header">
+    <span class="sub-tag" data-en="HONOURS & CLINICAL MILESTONES" data-hi="सम्मान एवं उपलब्धियां">HONOURS & CLINICAL MILESTONES</span>
+    <h2 data-en="Achievements & Recognition" data-hi="उपलब्धियां एवं सम्मान">Achievements & Recognition</h2>
+  </div>
+
+  <div class="slider-wrapper">
+    <div class="portrait-slider" id="portraitSlider">
+      
+      <!-- Slide 1 -->
+      <div class="portrait-card active">
+        <div class="image-box">
+          <img src="clinic.png" alt="Personalised Ayurvedic consultation, focused on understanding the root cause and promoting holistic wellness." />
+        </div>
+        <div class="card-content">
+          <h3 data-en="Personalised Ayurvedic consultation, focused on understanding the root cause and promoting holistic wellness."
+  data-hi="व्यक्तिगत आयुर्वेदिक परामर्श, जो रोग के मूल कारण को समझने और समग्र स्वास्थ्य संवर्धन पर केंद्रित है।">
+  Personalised Ayurvedic consultation, focused on understanding the root cause and promoting holistic wellness.</h3>
+        </div>
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="portrait-card">
+        <div class="image-box">
+          <img src="clin.png" alt="Bringing Ayurveda closer to the community through dedicated health camps & compassionate patient care." />
+        </div>
+        <div class="card-content">
+          <h3 data-en="Bringing Ayurveda closer to the community through dedicated health camps & compassionate patient care."
+  data-hi="समर्पित स्वास्थ्य शिविरों और संवेदनशील रोगी देखभाल के माध्यम से आयुर्वेद को जन-जन तक पहुंचाना।">Bringing Ayurveda closer to the community through dedicated health camps & compassionate patient care.</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls: Progress indicators and Next/Prev buttons -->
+    <div class="slider-footer">
+      <div class="slider-dots" id="sliderDots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+      <div class="slider-nav">
+        <button class="nav-btn prev" onclick="moveSlide(-1)" aria-label="Previous Slide">←</button>
+        <button class="nav-btn next" onclick="moveSlide(1)" aria-label="Next Slide">→</button>
+      </div>
+    </div>
+  </div>
+</section>
+  
+
   <!-- SERVICES SECTION -->
   <section class="services" id="services">
     <div class="section-head">
@@ -1823,8 +2011,6 @@ data-hi="प्रामाणिक आयुर्वेदिक सिद्
         <div class="slide">
           <div class="num">02</div>
           <div>
-            <!-- <h3 data-en="Joint & Muscle Care (Sandhivata)" data-hi="जोड़ और मांसपेशी देखभाल">Joint & Spine Care
-              (Sandhivata)</h3> -->
             <h3 data-en="Joint & Spine Care (Sandhivata)" 
   data-hi="जोड़ एवं रीढ़ की हड्डी की देखभाल (संधिवात)"> Joint & Spine Care (Sandhivata)</h3>
             <p data-en="Arthritis, back pain, sciatica, and cervical stiffness addressed with specialized Panchakarma therapies (Janu/Kati Basti) and internal medicine."
@@ -1877,13 +2063,8 @@ data-hi="प्रामाणिक आयुर्वेदिक सिद्
         <div class="slide">
           <div class="num">07</div>
           <div>
-            <!-- <h3 data-en="Neurological & Stress Disorders (Vata-Manas Vikara)"
-  data-hi="तंत्रिका एवं तनाव विकार (वात-मानस विकार)">Neurological & Stress Disorders (Vata-Manas Vikara)</h3> -->
             <h3 data-en="Respiratory & Allergic Disorders (Pranavaha Srotas)" 
     data-hi="श्वसन एवं एलर्जी विकार (प्राणवह स्रोतस)">Respiratory & Allergic Disorders (Pranavaha Srotas)</h3>
-<!-- <p data-en="Migraine, vertigo, stress, and sleep disturbances managed through tailored Ayurvedic protocols to restore nervous system balance."
-  data-hi="माइग्रेन, चक्कर, तनाव और अनिद्रा का व्यक्तिगत आयुर्वेदिक उपचार, जो तंत्रिका तंत्र के प्राकृतिक संतुलन को पुनर्स्थापित करता है।">
-  Migraine, vertigo, stress, and sleep disturbances managed through tailored Ayurvedic protocols to restore nervous system balance.</p> -->
             <p data-en="Personalised Ayurvedic care for allergic rhinitis, sinusitis, asthma, and recurrent respiratory concerns, with a focus on long-term respiratory wellness." 
     data-hi="एलर्जिक राइनाइटिस, साइनस, दमा (अस्थमा) और बार-बार होने वाले श्वसन संक्रमण हेतु व्यक्तिगत आयुर्वेदिक उपचार, जो दीर्घकालिक श्वसन स्वास्थ्य को सुदृढ़ करता है।">Personalised Ayurvedic care for allergic rhinitis, sinusitis, asthma, and recurrent respiratory concerns, with a focus on long-term respiratory wellness.</p>
           </div>
@@ -2098,13 +2279,12 @@ data-hi="प्रामाणिक आयुर्वेदिक सिद्
           <p><strong data-en="Mode:" data-hi="माध्यम:">Mode:</strong> <span id="modalType"></span></p>
           <p><strong data-en="Preferred Time:" data-hi="समय:">Preferred Time:</strong> <span id="modalTimeSlot"></span>
           </p>
-          <p style="margin-top:8px; color: var(--panel);"
-            data-en="Dr. Leve will review and approve your consultation shortly. Confirmation will be sent to your verified mobile number."
-            data-hi="डॉ. लेवे शीघ्र ही आपके परामर्श की समीक्षा करेंगे। पुष्टि आपके सत्यापित मोबाइल नंबर पर भेजी जाएगी।">
-            Dr. Leve will review and approve your consultation shortly. Confirmation will be sent to your verified
-            mobile number.</p>
+          <p style="margin-top:8px; color: var(--panel);" 
+        data-en="Dr. Leve will review and approve your consultation shortly. Confirmation will be sent to your verified email or WhatsApp number."
+  data-hi="डॉ. लेवे शीघ्र ही आपके परामर्श की समीक्षा करेंगे। पुष्टि आपके सत्यापित ईमेल या व्हाट्सएप नंबर पर भेजी जाएगी।">
+  Dr. Leve will review and approve your consultation shortly. Confirmation will be sent to your verified email or WhatsApp number.</p>
         </div>
-      </div>
+      </div
       <div class="modal-footer">
         <button class="btn-outline" onclick="copyRefCode()" data-en="Copy Reference" data-hi="कोड कॉपी करें">Copy
           Reference</button>
@@ -2452,6 +2632,37 @@ data-hi="प्रामाणिक आयुर्वेदिक सिद्
       alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
+    // patidar 
+    let currentAchievementSlide = 0;
+
+function showSlide(index) {
+  const slides = document.querySelectorAll(".portrait-card");
+  const dots = document.querySelectorAll("#sliderDots .dot");
+
+  if (!slides.length) return;
+
+  if (index >= slides.length) {
+    currentAchievementSlide = 0;
+  } else if (index < 0) {
+    currentAchievementSlide = slides.length - 1;
+  } else {
+    currentAchievementSlide = index;
+  }
+
+  slides.forEach((slide) => slide.classList.remove("active"));
+  dots.forEach((dot) => dot.classList.remove("active"));
+
+  slides[currentAchievementSlide].classList.add("active");
+  if (dots[currentAchievementSlide]) {
+    dots[currentAchievementSlide].classList.add("active");
+  }
+}
+
+function moveSlide(step) {
+  showSlide(currentAchievementSlide + step);
+}
+
+    // pat sat 
     // Live Tracking lookup
     async function lookupAppointment() {
       const input = document.getElementById('trackInput').value.trim();
