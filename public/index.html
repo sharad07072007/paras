@@ -1587,15 +1587,17 @@
         font-size: 0.75rem;
       }
       /*patidar  */
-      /* 1. Force the parent section to center all children */
+     /* Parent Section */
 .achievements-section {
+  width: 100%;
   padding: 50px 20px;
   background-color: #f7f6f2;
   font-family: Georgia, serif;
+  box-sizing: border-box;
 }
 
 .achievements-header {
-  text-align: center; /* Centers the header text */
+  text-align: center;
   margin-bottom: 25px;
 }
 
@@ -1616,36 +1618,50 @@
   font-weight: 500;
 }
 
-/* 40% Width Centered Container */
+/* Strict Desktop Constraints: exactly 40% width, centered */
 .slider-wrapper {
-  width: 40%;              /* Occupies ~40% of viewport width */
-  min-width: 320px;        /* Prevents shrinking too small on phones */
-  max-width: 460px;        /* Keeps it clean on wide desktop screens */
-  margin: 0 auto;          /* Centers horizontally */
+  width: 40% !important;
+  max-width: 440px !important;
+  min-width: 320px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box;
+}
+
+/* Mobile Screen: 90% width */
+@media screen and (max-width: 768px) {
+  .slider-wrapper {
+    width: 90% !important;
+    max-width: 380px !important;
+  }
 }
 
 .portrait-slider {
+  width: 100%;
   position: relative;
   overflow: hidden;
   background: #ffffff;
   border: 1px solid #e7e3d8;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 
 .portrait-card {
   display: none;
+  width: 100%;
 }
 
 .portrait-card.active {
   display: block;
 }
 
-/* Vertical Portrait Photo (4:5 Ratio) */
+/* Vertical Aspect Ratio 4:5 with fixed max-height on desktop */
 .portrait-card .image-box {
   width: 100%;
   aspect-ratio: 4 / 5;
+  max-height: 520px; /* Prevents vertical distortion */
   overflow: hidden;
-  background-color: #eee;
+  background-color: #f0eee9;
 }
 
 .portrait-card .image-box img {
@@ -1656,21 +1672,21 @@
   display: block;
 }
 
-/* Compact White Text Area (2-3 Lines) */
+/* Compact White Box */
 .portrait-card .card-content {
   padding: 12px 16px 10px 16px;
   background: #ffffff;
 }
 
 .portrait-card h3 {
-  font-size: 0.95rem;      /* Compact readable font size */
+  font-size: 0.95rem;
   color: #1a2a24;
   margin: 0;
   font-weight: 500;
-  line-height: 1.35;       /* Tightens line spacing */
+  line-height: 1.35;
 }
 
-/* Bottom Controls */
+/* Controls */
 .slider-footer {
   display: flex;
   align-items: center;
@@ -1696,7 +1712,6 @@
   transition: all 0.3s ease;
 }
 
-/* Active indicator pill */
 .slider-dots .dot.active {
   width: 20px;
   border-radius: 6px;
@@ -1936,10 +1951,10 @@ data-hi="प्रामाणिक आयुर्वेदिक सिद्
 
   <!-- WORK -->
   <!-- Place before <section id="treatments"> / Areas of Practice -->
-  <section class="achievements-section">
+<section class="achievements-section">
   <div class="achievements-header">
     <span class="sub-tag" data-en="CLINICAL EXCELLENCE & CARE" data-hi="नैदानिक उत्कृष्टता एवं सेवा">CLINICAL EXCELLENCE & CARE</span>
-<h2 data-en="Clinical Practice & Patient Care" data-hi="नैदानिक अभ्यास एवं रोगी देखभाल">Clinical Practice & Patient Care</h2>
+    <h2 data-en="Clinical Practice & Patient Care" data-hi="नैदानिक अभ्यास एवं रोगी देखभाल">Clinical Practice & Patient Care</h2>
   </div>
 
   <div class="slider-wrapper">
@@ -1971,18 +1986,25 @@ data-hi="प्रामाणिक आयुर्वेदिक सिद्
         </div>
       </div>
 
+      <!-- Slide 3 -->
       <div class="portrait-card">
         <div class="image-box">
-          <img src="clini.png" alt="mah" />
+          <img src="clini.png" alt="Classical Ayurveda practice" />
+        </div>
+        <div class="card-content">
+          <h3 data-en="Dedicated to evidence-based classical Ayurvedic treatments and holistic patient recovery."
+              data-hi="प्रमाण-आधारित पारंपरिक आयुर्वेदिक उपचार और समग्र रोगी स्वास्थ्य लाभ हेतु समर्पित।">
+            Dedicated to evidence-based classical Ayurvedic treatments and holistic patient recovery.
+          </h3>
         </div>
       </div>
+
     </div>
 
-    <!-- Controls: Exactly 2 Dots Container & Nav Buttons -->
+    <!-- Controls -->
     <div class="slider-footer">
       <div class="slider-dots" id="sliderDots">
-        <span class="dot active"></span>
-        <span class="dot"></span>
+        <!-- Leave empty; JavaScript fills dynamically -->
       </div>
       <div class="slider-nav">
         <button class="nav-btn prev" onclick="moveSlide(-1)" aria-label="Previous Slide">←</button>
