@@ -1587,62 +1587,57 @@
         font-size: 0.75rem;
       }
       /*patidar  */
-      .achievements-section {
+      /* 1. Force the parent section to center all children */
+.achievements-section {
   padding: 50px 20px;
   background-color: #f7f6f2;
   font-family: Georgia, serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers header and slider on all screen sizes */
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .achievements-header {
-  text-align: center; /* Centers the header text */
+  text-align: center;
   margin-bottom: 25px;
+  width: 100%;
 }
 
-.achievements-header .sub-tag {
-  font-size: 0.8rem;
-  letter-spacing: 1.5px;
-  color: #b58943;
-  font-family: Arial, sans-serif;
-  font-weight: 700;
-  display: block;
-  margin-bottom: 6px;
-}
-
-.achievements-header h2 {
-  font-size: 2rem;
-  color: #1a2a24;
-  margin: 0;
-  font-weight: 500;
-}
-
-/* 40% Width Centered Container */
+/* 2. Strictly constrain and center the wrapper on desktop */
 .slider-wrapper {
-  width: 40%;              /* Occupies ~40% of viewport width */
-  min-width: 320px;        /* Prevents shrinking too small on phones */
-  max-width: 460px;        /* Keeps it clean on wide desktop screens */
-  margin: 0 auto;          /* Centers horizontally */
+  width: 40% !important;     /* Locks to 40% width */
+  max-width: 440px !important;/* Prevents oversized stretching on wide monitors */
+  min-width: 320px;
+  margin: 0 auto !important; /* Centers horizontally */
+  display: block;
+  box-sizing: border-box;
+}
+
+/* 3. Mobile responsiveness: expand only on phones */
+@media screen and (max-width: 768px) {
+  .slider-wrapper {
+    width: 90% !important;
+    max-width: 380px !important;
+  }
 }
 
 .portrait-slider {
+  width: 100%;
   position: relative;
   overflow: hidden;
   background: #ffffff;
   border: 1px solid #e7e3d8;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 
-.portrait-card {
-  display: none;
-}
-
-.portrait-card.active {
-  display: block;
-}
-
-/* Vertical Portrait Photo (4:5 Ratio) */
+/* 4. Restrict portrait image box height so it does not blow up vertically */
 .portrait-card .image-box {
   width: 100%;
   aspect-ratio: 4 / 5;
+  max-height: 520px;         /* Prevents vertical distortion on desktop */
   overflow: hidden;
   background-color: #eee;
 }
@@ -1655,76 +1650,6 @@
   display: block;
 }
 
-/* Compact White Text Area (2-3 Lines) */
-.portrait-card .card-content {
-  padding: 12px 16px 10px 16px;
-  background: #ffffff;
-}
-
-.portrait-card h3 {
-  font-size: 0.95rem;      /* Compact readable font size */
-  color: #1a2a24;
-  margin: 0;
-  font-weight: 500;
-  line-height: 1.35;       /* Tightens line spacing */
-}
-
-/* Bottom Controls */
-.slider-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 16px;
-  border-top: 1px solid #ede8dd;
-  background: #ffffff;
-}
-
-.slider-dots {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.slider-dots .dot {
-  display: inline-block;
-  height: 8px;
-  width: 8px;
-  background-color: #d8d4c9;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-/* Active indicator pill */
-.slider-dots .dot.active {
-  width: 20px;
-  border-radius: 6px;
-  background-color: #1e3b30;
-}
-
-.slider-nav {
-  display: flex;
-  gap: 8px;
-}
-
-.nav-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1px solid #c9c4b5;
-  background: transparent;
-  color: #1e3b30;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  transition: background-color 0.2s;
-}
-
-.nav-btn:hover {
-  background-color: #ebe7de;
-}
 
     /* pat st */
 
