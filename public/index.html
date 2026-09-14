@@ -1587,13 +1587,15 @@
         font-size: 0.75rem;
       }
       /*patidar  */
-      .achievements-section {
+
+      
+      /* .achievements-section {
   padding: 60px 20px;
   background-color: #f7f6f2; /* Matches the beige background */
-  font-family: Georgia, serif;
+  /* font-family: Georgia, serif; */
 }
 
-.achievements-header .sub-tag {
+/* .achievements-header .sub-tag {
   font-size: 0.8rem;
   letter-spacing: 1.5px;
   color: #b58943;
@@ -1608,38 +1610,38 @@
   color: #1a2a24;
   margin: 0 0 30px 0;
   font-weight: 500;
-}
+} */
 
-.slider-wrapper {
+/* .slider-wrapper {
   max-width: 480px; /* Constrains card to neat portrait width */
-  margin: 0 auto;
-}
+  /* margin: 0 auto;
+} */
 
-.portrait-slider {
+/* .portrait-slider {
   position: relative;
   overflow: hidden;
   background: #ffffff;
   border: 1px solid #e7e3d8;
   border-radius: 4px;
-}
+} */
 
-.portrait-card {
+/* .portrait-card {
   display: none;
-}
-
+} */
+/* 
 .portrait-card.active {
   display: block;
-}
+} */ 
 
 /* Enforces the Portrait (vertical) image format */
-.portrait-card .image-box {
+/* .portrait-card .image-box {
   width: 100%;
   aspect-ratio: 4 / 5; /* 4 units wide by 5 units tall */
-  overflow: hidden;
+  /* overflow: hidden;
   background-color: #eee;
-}
+}  */
 
-.portrait-card .image-box img {
+/* .portrait-card .image-box img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -1657,7 +1659,7 @@
   margin: 0 0 10px 0;
   font-weight: 500;
   line-height: 1.3;
-}
+} */ 
 
 /* .portrait-card p {
   font-family: Arial, sans-serif;
@@ -1668,7 +1670,7 @@
 } */
 
 /* Footer with lines/dots and circular arrow buttons */
-.slider-footer {
+/* .slider-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1690,10 +1692,10 @@
   background-color: #d8d4c9;
   border-radius: 50%;
   transition: all 0.3s ease;
-}
+} */
 
 /* Active pill indicator */
-.slider-dots .dot.active {
+/* .slider-dots .dot.active {
   width: 22px;
   border-radius: 6px;
   background-color: #1e3b30;
@@ -1716,6 +1718,148 @@
   align-items: center;
   justify-content: center;
   font-size: 1.1rem;
+  transition: background-color 0.2s;
+}
+
+.nav-btn:hover {
+  background-color: #ebe7de;
+} */
+
+
+
+
+    .achievements-section {
+  padding: 50px 20px;
+  background-color: #f7f6f2;
+  font-family: Georgia, serif;
+}
+
+.achievements-header {
+  text-align: center; /* Centers the header text */
+  margin-bottom: 25px;
+}
+
+.achievements-header .sub-tag {
+  font-size: 0.8rem;
+  letter-spacing: 1.5px;
+  color: #b58943;
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.achievements-header h2 {
+  font-size: 2rem;
+  color: #1a2a24;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* 40% Width Centered Container */
+.slider-wrapper {
+  width: 40%;              /* Occupies ~40% of viewport width */
+  min-width: 320px;        /* Prevents shrinking too small on phones */
+  max-width: 460px;        /* Keeps it clean on wide desktop screens */
+  margin: 0 auto;          /* Centers horizontally */
+}
+
+.portrait-slider {
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e7e3d8;
+  border-radius: 4px;
+}
+
+.portrait-card {
+  display: none;
+}
+
+.portrait-card.active {
+  display: block;
+}
+
+/* Vertical Portrait Photo (4:5 Ratio) */
+.portrait-card .image-box {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background-color: #eee;
+}
+
+.portrait-card .image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+/* Compact White Text Area (2-3 Lines) */
+.portrait-card .card-content {
+  padding: 12px 16px 10px 16px;
+  background: #ffffff;
+}
+
+.portrait-card h3 {
+  font-size: 0.95rem;      /* Compact readable font size */
+  color: #1a2a24;
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.35;       /* Tightens line spacing */
+}
+
+/* Bottom Controls */
+.slider-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-top: 1px solid #ede8dd;
+  background: #ffffff;
+}
+
+.slider-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.slider-dots .dot {
+  display: inline-block;
+  height: 8px;
+  width: 8px;
+  background-color: #d8d4c9;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Active indicator pill */
+.slider-dots .dot.active {
+  width: 20px;
+  border-radius: 6px;
+  background-color: #1e3b30;
+}
+
+.slider-nav {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid #c9c4b5;
+  background: transparent;
+  color: #1e3b30;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
   transition: background-color 0.2s;
 }
 
@@ -1936,7 +2080,7 @@ data-hi="प्रामाणिक आयुर्वेदिक सिद्
 
   <!-- WORK -->
   <!-- Place before <section id="treatments"> / Areas of Practice -->
-<section class="achievements-section">
+<!-- <section class="achievements-section">
   <div class="achievements-header">
     <span class="sub-tag" data-en="HONOURS & CLINICAL MILESTONES" data-hi="सम्मान एवं उपलब्धियां">HONOURS & CLINICAL MILESTONES</span>
     <h2 data-en="Achievements & Recognition" data-hi="उपलब्धियां एवं सम्मान">Achievements & Recognition</h2>
@@ -1946,7 +2090,7 @@ data-hi="प्रामाणिक आयुर्वेदिक सिद्
     <div class="portrait-slider" id="portraitSlider">
       
       <!-- Slide 1 -->
-      <div class="portrait-card active">
+      <!-- <div class="portrait-card active">
         <div class="image-box">
           <img src="clinic.png" alt="Personalised Ayurvedic consultation, focused on understanding the root cause and promoting holistic wellness." />
         </div>
@@ -1955,10 +2099,10 @@ data-hi="प्रामाणिक आयुर्वेदिक सिद्
   data-hi="व्यक्तिगत आयुर्वेदिक परामर्श, जो रोग के मूल कारण को समझने और समग्र स्वास्थ्य संवर्धन पर केंद्रित है।">
   Personalised Ayurvedic consultation, focused on understanding the root cause and promoting holistic wellness.</h3>
         </div>
-      </div>
+      </div> -->
 
       <!-- Slide 2 -->
-      <div class="portrait-card">
+      <!-- <div class="portrait-card">
         <div class="image-box">
           <img src="clin.png" alt="Bringing Ayurveda closer to the community through dedicated health camps & compassionate patient care." />
         </div>
@@ -1967,10 +2111,10 @@ data-hi="प्रामाणिक आयुर्वेदिक सिद्
   data-hi="समर्पित स्वास्थ्य शिविरों और संवेदनशील रोगी देखभाल के माध्यम से आयुर्वेद को जन-जन तक पहुंचाना।">Bringing Ayurveda closer to the community through dedicated health camps & compassionate patient care.</h3>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Controls: Progress indicators and Next/Prev buttons -->
-    <div class="slider-footer">
+    <!-- <div class="slider-footer">
       <div class="slider-dots" id="sliderDots">
         <span class="dot active"></span>
         <span class="dot"></span>
@@ -1983,7 +2127,7 @@ data-hi="प्रामाणिक आयुर्वेदिक सिद्
     </div>
   </div>
 </section>
-  
+   --> 
 
   <!-- SERVICES SECTION -->
   <section class="services" id="services">
@@ -2633,7 +2777,55 @@ data-hi="प्रामाणिक आयुर्वेदिक सिद्
     }
 
     // patidar 
+//     let currentAchievementSlide = 0;
+
+// function showSlide(index) {
+//   const slides = document.querySelectorAll(".portrait-card");
+//   const dots = document.querySelectorAll("#sliderDots .dot");
+
+//   if (!slides.length) return;
+
+//   if (index >= slides.length) {
+//     currentAchievementSlide = 0;
+//   } else if (index < 0) {
+//     currentAchievementSlide = slides.length - 1;
+//   } else {
+//     currentAchievementSlide = index;
+//   }
+
+//   slides.forEach((slide) => slide.classList.remove("active"));
+//   dots.forEach((dot) => dot.classList.remove("active"));
+
+//   slides[currentAchievementSlide].classList.add("active");
+//   if (dots[currentAchievementSlide]) {
+//     dots[currentAchievementSlide].classList.add("active");
+//   }
+// }
+
+// function moveSlide(step) {
+//   showSlide(currentAchievementSlide + step);
+// }
+
     let currentAchievementSlide = 0;
+
+function setupAchievementSlider() {
+  const slides = document.querySelectorAll(".portrait-card");
+  const dotsContainer = document.getElementById("sliderDots");
+
+  if (!slides.length || !dotsContainer) return;
+
+  // Clear container to guarantee no extra dots render
+  dotsContainer.innerHTML = "";
+
+  // Dynamically insert exactly as many dots as there are slides (2 slides = 2 dots)
+  slides.forEach((_, index) => {
+    const dot = document.createElement("span");
+    dot.classList.add("dot");
+    if (index === 0) dot.classList.add("active");
+    dot.addEventListener("click", () => showSlide(index));
+    dotsContainer.appendChild(dot);
+  });
+}
 
 function showSlide(index) {
   const slides = document.querySelectorAll(".portrait-card");
@@ -2661,6 +2853,9 @@ function showSlide(index) {
 function moveSlide(step) {
   showSlide(currentAchievementSlide + step);
 }
+
+// Initialize on DOM load
+document.addEventListener("DOMContentLoaded", setupAchievementSlider);
 
     // pat sat 
     // Live Tracking lookup
