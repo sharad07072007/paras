@@ -19,7 +19,7 @@ services:
       - key: DOCTOR_EMAIL
         value: drparasleve@gmail.com
       - key: CLINIC_PHONE
-        value: "+91 7067207752"
+        value: "+91 7389808594"
       - key: SMTP_HOST
         value: smtp.gmail.com
       - key: SMTP_PORT
@@ -29,7 +29,7 @@ services:
       - key: SMTP_USER
         value: drparasleve@gmail.com
       - key: SMTP_PASS
-        sync: false
+        value: "yllm ptuo hbjm zxgx"
       - key: FAST2SMS_API_KEY
         sync: false
 
