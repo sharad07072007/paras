@@ -4,21 +4,35 @@ require('dotenv').config();
 function seed() {
   console.log('🌱 Seeding database...');
 
-  // Seed Admin
-  const adminUsername = process.env.ADMIN_USER || 'admin';
-  const adminPassword = process.env.ADMIN_PASS || 'ayurveda2026!';
+  // Seed Doctor & Staff Accounts
+  const adminUsername = (process.env.ADMIN_USER || 'paras').trim();
+  const adminPassword = (process.env.ADMIN_PASS || 'parasleve@123').trim();
 
-  const existingAdmin = db.prepare('SELECT id FROM admin_users WHERE username = ?').get(adminUsername);
-  if (!existingAdmin) {
-    const { hash, salt } = hashPassword(adminPassword);
-    db.prepare(`
-      INSERT INTO admin_users (username, password_hash, salt, role)
-      VALUES (?, ?, ?, 'physician')
-    `).run(adminUsername, hash, salt);
-    console.log(`✅ Default admin created: ${adminUsername}`);
-  } else {
-    console.log(`ℹ️ Admin user ${adminUsername} already exists.`);
+  function upsertUser(username, password, role) {
+    const existing = db.prepare('SELECT id FROM admin_users WHERE username = ?').get(username);
+    const { hash, salt } = hashPassword(password);
+    if (!existing) {
+      db.prepare(`
+        INSERT INTO admin_users (username, password_hash, salt, role)
+        VALUES (?, ?, ?, ?)
+      `).run(username, hash, salt, role);
+      console.log(`✅ Created user: ${username} (${role})`);
+    } else {
+      db.prepare(`
+        UPDATE admin_users SET password_hash = ?, salt = ?, role = ? WHERE username = ?
+      `).run(hash, salt, role, username);
+      console.log(`✅ Updated user credentials: ${username} (${role})`);
+    }
   }
+
+  // Primary doctor & staff portal logins
+  upsertUser(adminUsername, adminPassword, 'physician');
+  if (adminUsername !== 'paras') {
+    upsertUser('paras', adminPassword, 'physician');
+  }
+  upsertUser('staff', adminPassword, 'staff');
+  upsertUser('parsas', adminPassword, 'physician');
+  upsertUser('admin', adminPassword, 'physician');
 
   // Seed sample appointments if empty
   const countRow = db.prepare('SELECT COUNT(*) as count FROM appointments').get();

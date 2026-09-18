@@ -11,13 +11,13 @@ services:
       - key: NODE_ENV
         value: production
       - key: ADMIN_USER
-        value: admin
+        value: paras
       - key: ADMIN_PASS
-        value: ayurveda2026!
+        value: parasleve@123
       - key: ADMIN_SECRET
         generateValue: true
       - key: DOCTOR_EMAIL
-        value: sharadpatidar555@gmail.com
+        value: drparasleve@gmail.com
       - key: CLINIC_PHONE
         value: "+91 7067207752"
       - key: SMTP_HOST
@@ -27,7 +27,7 @@ services:
       - key: SMTP_SECURE
         value: "false"
       - key: SMTP_USER
-        value: sharadpatidar555@gmail.com
+        value: drparasleve@gmail.com
       - key: SMTP_PASS
         sync: false
       - key: FAST2SMS_API_KEY

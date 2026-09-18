@@ -5,7 +5,15 @@ const BASE_URL = process.env.BASE_URL || `http://localhost:${process.env.PORT ||
 const CLINIC_NAME = 'Shree Ayush Clinic — Dr. Paras Leve (BAMS, CRAV)';
 const CLINIC_PHONE = process.env.CLINIC_PHONE || '+91 7067207752';
 const CLINIC_ADDRESS = 'Shree Ayush Clinic, MP Nagar, Zone-II, Bhopal (M.P.) – 462011';
-const DOCTOR_EMAIL = process.env.DOCTOR_EMAIL || 'sharadpatidar555@gmail.com';
+function normalizeDoctorEmail(email) {
+  const e = (email || '').trim();
+  if (!e || e.toLowerCase() === 'drparsleve@gmail.com' || e.toLowerCase() === 'sharadpatidar555@gmail.com') {
+    return 'drparasleve@gmail.com';
+  }
+  return e;
+}
+
+const DOCTOR_EMAIL = normalizeDoctorEmail(process.env.DOCTOR_EMAIL);
 
 function getBaseUrl() {
   if (process.env.BASE_URL && !process.env.BASE_URL.includes('localhost')) {
@@ -21,8 +29,9 @@ function getBaseUrl() {
 }
 
 function getSmtpCredentials() {
-  const user = (process.env.SMTP_USER || process.env.GMAIL_USER || 'sharadpatidar555@gmail.com').trim();
-  const pass = (process.env.SMTP_PASS || process.env.GMAIL_APP_PASS || 'wjkijknsktabczlh').trim();
+  const user = normalizeDoctorEmail(process.env.SMTP_USER || process.env.GMAIL_USER);
+  const rawPass = (process.env.SMTP_PASS || process.env.GMAIL_APP_PASS || 'yllmptuohbjmzxgx').trim();
+  const pass = rawPass.replace(/\s+/g, '');
   return { user, pass };
 }
 
@@ -218,11 +227,11 @@ async function sendPatientConfirmationEmail(appointment) {
 }
 
 /**
- * AUTOMATICALLY SEND EMAIL TO DOCTOR (sharadpatidar555@gmail.com)
+ * AUTOMATICALLY SEND EMAIL TO DOCTOR (drparasleve@gmail.com)
  * Triggered immediately when a patient books an appointment
  */
 async function sendDoctorNewBookingAlert(appointment) {
-  const targetEmail = process.env.DOCTOR_EMAIL || 'sharadpatidar555@gmail.com';
+  const targetEmail = normalizeDoctorEmail(process.env.DOCTOR_EMAIL);
   const client = getTransporter();
   const baseUrl = getBaseUrl();
 

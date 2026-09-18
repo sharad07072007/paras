@@ -86,7 +86,7 @@ async function runTests() {
       }, {
         name: 'Gaurav Verma',
         phone: testPhone,
-        email: 'sharadpatidar555@gmail.com',
+        email: 'drparsleve@gmail.com',
         mode: 'Online video consultation',
         preferred_date: '2026-09-15',
         preferred_time: 'Morning (10:00 AM – 01:00 PM)',
@@ -108,7 +108,7 @@ async function runTests() {
       assert(res.status === 200 && res.body.data.reference_code === testRefCode, 'GET /api/appointments/track/:code returns booked appointment');
     }
 
-    // 5. Admin Login
+    // 5. Admin / Staff Login
     {
       const res = await makeRequest({
         hostname: 'localhost',
@@ -116,8 +116,8 @@ async function runTests() {
         path: '/api/admin/login',
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
-      }, { username: 'admin', password: 'ayurveda2026!' });
-      assert(res.status === 200 && res.body.token, 'POST /api/admin/login authenticates');
+      }, { username: 'paras', password: 'parasleve@123' });
+      assert(res.status === 200 && res.body.token, 'POST /api/admin/login authenticates with paras / parasleve@123');
       adminToken = res.body.token;
     }
 

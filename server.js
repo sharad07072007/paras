@@ -95,7 +95,7 @@ if (require.main === module && !process.env.VERCEL) {
     console.log(`🚀 Server running at: http://localhost:${PORT}`);
     console.log(`📋 Patient Portal:    http://localhost:${PORT}/`);
     console.log(`🩺 Admin Portal:      http://localhost:${PORT}/admin.html`);
-    console.log(`🔑 Default Admin:     admin / ayurveda2026!`);
+    console.log(`🔑 Staff/Doctor Login: paras / parasleve@123`);
     console.log(`🏥 Health Check:      http://localhost:${PORT}/api/health`);
     console.log('====================================================');
   });
