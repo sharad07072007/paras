@@ -2231,11 +2231,26 @@ section.achievements-section .nav-btn:hover {
             <input id="name" name="name" type="text" data-en-ph="e.g. Rajesh Sharma" data-hi-ph="उदा. राजेश शर्मा"
               placeholder="e.g. Rajesh Sharma" required>
           </div>
-          <div>
+          <!-- <div>
             <label for="phone" data-en="Mobile number *" data-hi="मोबाइल नंबर *">Mobile number *</label>
             <input id="phone" name="phone" type="tel" maxlength="15" data-en-ph="e.g. 9876543210"
               data-hi-ph="उदा. 98765*****" placeholder="e.g. 98765*****" required>
-          </div>
+          </div> -->
+          <div>
+  <label for="phone" data-en="Mobile number *" data-hi="मोबाइल नंबर *">Mobile number *</label>
+  <input 
+    id="phone" 
+    name="phone" 
+    type="tel" 
+    maxlength="10" 
+    minlength="10" 
+    pattern="^[6-9]\d{9}$" 
+    data-en-ph="e.g. 9876543210"
+    data-hi-ph="उदा. 98765*****" 
+    placeholder="e.g. 98765*****" 
+    required>
+</div>
+          
         </div>
 
         <div class="field-row">
@@ -2753,12 +2768,29 @@ document.addEventListener("DOMContentLoaded", setupAchievementSlider);
         showAlert(currentLang === 'hi' ? 'कृपया अपना पूरा नाम दर्ज करें।' : 'Please enter your full name.', 'error');
         return;
       }
+      // const cleanDigits = phone.replace(/\D/g, '');
+      // if (!phone || cleanDigits.length < 10) {
+      //   showToast('Please enter a valid 10-digit mobile number.', 'error');
+      //   showAlert(currentLang === 'hi' ? 'कृपया एक वैध 10 अंकों का मोबाइल नंबर दर्ज करें।' : 'Please enter a valid 10-digit phone number.', 'error');
+      //   return;
+      // }
       const cleanDigits = phone.replace(/\D/g, '');
-      if (!phone || cleanDigits.length < 10) {
-        showToast('Please enter a valid 10-digit mobile number.', 'error');
-        showAlert(currentLang === 'hi' ? 'कृपया एक वैध 10 अंकों का मोबाइल नंबर दर्ज करें।' : 'Please enter a valid 10-digit phone number.', 'error');
-        return;
-      }
+
+if (!phone || cleanDigits.length !== 10) {
+  showToast('Please enter a valid 10-digit mobile number.', 'error');
+  showAlert(
+    currentLang === 'hi'
+      ? 'कृपया एक वैध 10 अंकों का मोबाइल नंबर दर्ज करें।'
+      : 'Please enter a valid 10-digit phone number.',
+    'error'
+  );
+  return;
+}
+      
+      const phoneInput = document.getElementById('phone');
+phoneInput.addEventListener('input', (e) => {
+  e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+});
 
       if (!concern || concern.length < 5) {
         showToast('Please briefly describe your health concern.', 'error');
