@@ -204,7 +204,7 @@ async function sendPatientConfirmationEmail(appointment) {
         </p>
 
         <div style="margin-top:28px; padding-top:20px; border-top:1px solid #D6D0BE; font-size:12px; color:#8C8878; text-align:center;">
-          Shree Ayush Clinic · Reg. No. AY-2019-04831 · Bhopal (M.P.)
+          Dr. Paras Leve · Reg. No.60695  Bhopal|Kalapipal (M.P.)
         </div>
       </div>
     </div>
