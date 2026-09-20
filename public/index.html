@@ -999,6 +999,203 @@
       line-height: 1.5;
     }
 
+    /* PATIENT REVIEWS & TESTIMONIALS SECTION */
+    .reviews-section {
+      padding: 60px 32px;
+      max-width: 1120px;
+      margin: 0 auto;
+      border-top: 1px solid var(--line);
+    }
+
+    .reviews-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .reviews-header h2 {
+      font-size: 2rem;
+      color: var(--panel);
+      margin-bottom: 8px;
+    }
+
+    .reviews-header p {
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+      max-width: 620px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    @media (max-width: 860px) {
+      .reviews-grid {
+        grid-template-columns: 1fr;
+      }
+      .reviews-section {
+        padding: 40px 20px;
+      }
+    }
+
+    .review-form-card {
+      background: #FFF;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    }
+
+    .review-form-card h3 {
+      font-size: 1.3rem;
+      color: var(--panel);
+      margin-bottom: 6px;
+    }
+
+    .review-form-card p.subtitle {
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      margin-bottom: 18px;
+      line-height: 1.4;
+    }
+
+    .star-rating-widget {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 6px 0 14px;
+    }
+
+    .star-rating-widget .star-btn {
+      font-size: 1.85rem;
+      color: #D6D0BE;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0 2px;
+      line-height: 1;
+      transition: color 0.15s, transform 0.15s;
+    }
+
+    .star-rating-widget .star-btn:hover,
+    .star-rating-widget .star-btn.hovered,
+    .star-rating-widget .star-btn.active {
+      color: var(--gold);
+      transform: scale(1.15);
+    }
+
+    .star-rating-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--panel);
+      margin-left: 8px;
+    }
+
+    .google-review-cta {
+      margin-top: 20px;
+      padding: 14px 16px;
+      background: #FAF8F2;
+      border: 1px dashed var(--gold);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .google-review-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #FFF;
+      color: #1F3A2E;
+      border: 1px solid #D6D0BE;
+      padding: 8px 14px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.82rem;
+      transition: all 0.2s;
+    }
+
+    .google-review-btn:hover {
+      background: #4285F4;
+      color: #FFF;
+      border-color: #4285F4;
+      box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+    }
+
+    .reviews-list-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .reviews-stats-summary {
+      background: var(--panel);
+      color: #ECE8DC;
+      border-radius: 8px;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .stats-score {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .review-item-card {
+      background: #FFF;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px 18px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+      transition: transform 0.2s;
+    }
+
+    .review-item-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .review-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .review-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #E8EDE8;
+      color: var(--panel);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.8rem;
+      margin-right: 10px;
+    }
+
+    .review-cat-tag {
+      font-size: 0.72rem;
+      background: #F4F1EA;
+      color: var(--leaf);
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+
     footer {
       border-top: 1px solid var(--line);
       padding: 28px 32px;
@@ -1854,6 +2051,7 @@ section.achievements-section .nav-btn:hover {
       <div class="nav-links">
         <a href="#services" data-en="Treatments" data-hi="उपचार">Treatments</a>
         <a href="#how" data-en="Consultation" data-hi="परामर्श">Consultation</a>
+        <a href="#reviews" data-en="Reviews" data-hi="समीक्षाएं">Reviews</a>
         <a href="#contact" data-en="Contact" data-hi="संपर्क करें">Contact</a>
       </div>
       <div class="nav-actions">
@@ -1868,6 +2066,7 @@ section.achievements-section .nav-btn:hover {
     <div class="mobile-nav-drawer" id="mobileDrawer">
       <a href="#services" data-en="Treatments" data-hi="उपचार" onclick="closeMobileMenu()">Treatments</a>
       <a href="#how" data-en="Consultation" data-hi="परामर्श" onclick="closeMobileMenu()">Consultation</a>
+      <a href="#reviews" data-en="Reviews" data-hi="समीक्षाएं" onclick="closeMobileMenu()">Reviews</a>
       <a href="#contact" data-en="Contact" data-hi="संपर्क करें" onclick="closeMobileMenu()">Contact</a>
       <button class="mobile-track-btn" onclick="openTrackModal(); closeMobileMenu();" data-en="Track Appointment Status" data-hi="अपॉइंटमेंट स्थिति">Track Appointment Status</button>
       <a href="#contact" class="btn-primary" style="margin-top: 6px; width: 100%; text-align: center; justify-content: center;" data-en="Book Consultation" data-hi="परामर्श बुक करें" onclick="closeMobileMenu()">Book Consultation</a>
@@ -2347,6 +2546,109 @@ section.achievements-section .nav-btn:hover {
     </div>
   </section>
 
+  <!-- PATIENT REVIEWS & TESTIMONIALS SECTION -->
+  <section class="reviews-section" id="reviews">
+    <div class="reviews-header">
+      <span class="badge" style="background:#E8EDE8; color:var(--panel); border:1px solid #C4D2C8; margin-bottom:8px;" data-en="Patient Feedback" data-hi="मरीजों के अनुभव">Patient Feedback</span>
+      <h2 data-en="Patient Experiences & Reviews" data-hi="मरीजों के अनुभव एवं समीक्षाएं">Patient Experiences & Reviews</h2>
+      <p data-en="Read genuine healing testimonials from patients treated by Dr. Paras Leve, or submit your own review directly to the doctor." data-hi="डॉ. पारस लेवे से उपचार प्राप्त मरीजों के प्रामाणिक अनुभव पढ़ें या सीधे डॉक्टर को अपनी समीक्षा भेजें।">
+        Read genuine healing testimonials from patients treated by Dr. Paras Leve, or submit your own review directly to the doctor.
+      </p>
+    </div>
+
+    <div class="reviews-grid">
+      <!-- Write a Review Card -->
+      <div class="review-form-card">
+        <h3 data-en="Share Your Healing Experience" data-hi="अपना उपचार अनुभव साझा करें">Share Your Healing Experience</h3>
+        <p class="subtitle" data-en="Submit your feedback directly to Dr. Paras Leve. A confirmation receipt will be sent to your Gmail." data-hi="डॉ. पारस लेवे को अपनी समीक्षा भेजें। पुष्टि आपके जीमेल पर भेजी जाएगी।">
+          Submit your feedback directly to Dr. Paras Leve. A confirmation receipt will be sent to your Gmail.
+        </p>
+
+        <form id="patientReviewForm" novalidate>
+          <div style="margin-bottom: 14px;">
+            <label style="font-weight:600; font-size:0.88rem; color:var(--panel); display:block; margin-bottom:4px;" data-en="Your Rating *" data-hi="आपकी रेटिंग *">Your Rating *</label>
+            <div class="star-rating-widget" id="starRatingWidget">
+              <button type="button" class="star-btn active" data-rating="1" title="1 Star">★</button>
+              <button type="button" class="star-btn active" data-rating="2" title="2 Stars">★</button>
+              <button type="button" class="star-btn active" data-rating="3" title="3 Stars">★</button>
+              <button type="button" class="star-btn active" data-rating="4" title="4 Stars">★</button>
+              <button type="button" class="star-btn active" data-rating="5" title="5 Stars">★</button>
+              <span class="star-rating-label" id="starRatingLabel">5 / 5 — Excellent Healing Care</span>
+              <input type="hidden" id="selectedRating" value="5">
+            </div>
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label for="reviewName" style="font-weight:600; font-size:0.88rem; color:var(--panel); display:block; margin-bottom:4px;" data-en="Your Full Name *" data-hi="आपका पूरा नाम *">Your Full Name *</label>
+            <input type="text" id="reviewName" placeholder="e.g. Rajesh Sharma" required style="width:100%;">
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label for="reviewEmail" style="font-weight:600; font-size:0.88rem; color:var(--panel); display:block; margin-bottom:4px;" data-en="Gmail / Email Address *" data-hi="जीमेल / ईमेल पता *">Gmail / Email Address *</label>
+            <input type="email" id="reviewEmail" placeholder="yourname@gmail.com" required style="width:100%;">
+            <small style="color:var(--ink-soft); font-size:0.75rem; display:block; margin-top:3px;" data-en="Used to send your review confirmation receipt." data-hi="समीक्षा पुष्टि रसीद भेजने के लिए उपयोग किया जाता है।">Used to send your review confirmation receipt.</small>
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <label for="reviewCategory" style="font-weight:600; font-size:0.88rem; color:var(--panel); display:block; margin-bottom:4px;" data-en="Condition / Treatment Received" data-hi="रोग / उपचार का प्रकार">Condition / Treatment Received</label>
+            <select id="reviewCategory" style="width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:4px; font-family:inherit; background:#FFF; font-size:0.88rem;">
+              <option value="Chronic Digestion & Acidity (GERD, IBS)">Chronic Digestion & Acidity (GERD, IBS)</option>
+              <option value="Joint Pain & Sciatica (Kati Basti, Arthritis)">Joint Pain & Sciatica (Kati Basti, Arthritis)</option>
+              <option value="Skin & Chronic Allergy (Twak Roga)">Skin & Chronic Allergy (Twak Roga)</option>
+              <option value="Lifestyle & Metabolic Health (PCOS, Thyroid)">Lifestyle & Metabolic Health (PCOS, Thyroid)</option>
+              <option value="Nadi Pariksha & Classical Consultation">Nadi Pariksha & Classical Consultation</option>
+              <option value="General Ayurvedic Wellness">General Ayurvedic Wellness</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <label for="reviewText" style="font-weight:600; font-size:0.88rem; color:var(--panel); display:block; margin-bottom:4px;" data-en="Your Review / Testimonial *" data-hi="आपकी समीक्षा / अनुभव *">Your Review / Testimonial *</label>
+            <textarea id="reviewText" rows="3" placeholder="Share how Dr. Leve's consultation, Nadi Pariksha, and Ayurvedic treatment helped you..." required style="width:100%;"></textarea>
+          </div>
+
+          <div id="reviewAlert" style="display:none; padding:10px; border-radius:4px; margin-bottom:14px; font-size:0.88rem;"></div>
+
+          <button type="submit" class="btn-primary" id="btnSubmitReview" style="width:100%; justify-content:center; padding:12px 20px;">
+            <span id="btnSubmitReviewText" data-en="Submit Review & Send to Doctor" data-hi="समीक्षा सबमिट करें">Submit Review & Send to Doctor</span>
+            <span class="spinner" id="reviewSpinner" style="display:none; width:16px; height:16px; margin-left:8px;"></span>
+          </button>
+        </form>
+
+        <!-- Write Google Review via Gmail -->
+        <div class="google-review-cta">
+          <div>
+            <div style="font-weight:700; font-size:0.88rem; color:var(--panel); display:flex; align-items:center; gap:6px;">
+              <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+              Review on Google
+            </div>
+            <div style="font-size:0.75rem; color:var(--ink-soft); margin-top:2px;" data-en="Post directly using your Google / Gmail account" data-hi="अपने गूगल / जीमेल खाते से सीधे समीक्षा करें">Post directly using your Google / Gmail account</div>
+          </div>
+          <a href="https://www.google.com/maps/search/?api=1&query=Dr+Paras+Leve+BAMS+Ayurvedic+Bhopal" target="_blank" class="google-review-btn">
+            ★ Post on Google ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- Testimonials Display -->
+      <div class="reviews-list-container">
+        <div class="reviews-stats-summary">
+          <div>
+            <div style="font-size:0.8rem; text-transform:uppercase; letter-spacing:0.04em; color:rgba(236,232,220,0.8);" data-en="Overall Clinic Rating" data-hi="क्लिनिक की समग्र रेटिंग">Overall Clinic Rating</div>
+            <div style="font-size:1.1rem; margin-top:4px; color:var(--gold);">★★★★★</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="stats-score" id="avgRatingScore">4.9</div>
+            <div style="font-size:0.75rem; color:rgba(236,232,220,0.8);" id="totalReviewsCount">Based on verified patient reviews</div>
+          </div>
+        </div>
+
+        <div id="reviewsList" style="display:flex; flex-direction:column; gap:12px;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer>
     <div data-en="© 2026 Dr. Paras Leve, BAMS, CRAV. All rights reserved. Content for informational purposes."
@@ -2365,6 +2667,8 @@ section.achievements-section .nav-btn:hover {
     <div class="footer-links">
       <a href="javascript:void(0)" onclick="openTrackModal()" data-en="Track Appointment Status"
         data-hi="अपॉइंटमेंट स्थिति जांचें">Track Appointment Status</a>
+      <span>·</span>
+      <a href="#reviews" data-en="Patient Reviews" data-hi="मरीजों की समीक्षाएं">Patient Reviews</a>
       <span>·</span>
       <a href="/admin.html" target="_blank" data-en="Doctor / Staff Portal" data-hi="डॉक्टर / स्टाफ पोर्टल">Doctor /
         Staff Portal</a>
@@ -2574,12 +2878,20 @@ document.addEventListener("DOMContentLoaded", setupAchievementSlider);
     }
     function closeModal(modalId) {
       document.getElementById(modalId).classList.remove('open');
+      if (modalId === 'trackModal' && typeof clearTrackPolling === 'function') {
+        clearTrackPolling();
+      }
     }
     document.getElementById('openTrackModalBtn').addEventListener('click', openTrackModal);
 
     document.querySelectorAll('.modal-backdrop').forEach(modal => {
       modal.addEventListener('click', (e) => {
-        if (e.target === modal) modal.classList.remove('open');
+        if (e.target === modal) {
+          modal.classList.remove('open');
+          if (modal.id === 'trackModal' && typeof clearTrackPolling === 'function') {
+            clearTrackPolling();
+          }
+        }
       });
     });
 
@@ -2856,21 +3168,39 @@ phoneInput.addEventListener('input', (e) => {
       alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    // Live Tracking lookup
-    async function lookupAppointment() {
+    let trackPollingInterval = null;
+
+    function clearTrackPolling() {
+      if (trackPollingInterval) {
+        clearInterval(trackPollingInterval);
+        trackPollingInterval = null;
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // Live Tracking lookup with dynamic timeline stepper & auto-poll
+    async function lookupAppointment(isSilentPoll = false) {
       const input = document.getElementById('trackInput').value.trim();
       const resultBox = document.getElementById('trackResult');
       if (!input) return;
 
-      resultBox.style.display = 'block';
-      resultBox.innerHTML = '<p style="color:var(--ink-soft); font-size:0.9rem;">Checking records...</p>';
+      if (!isSilentPoll) {
+        resultBox.style.display = 'block';
+        resultBox.innerHTML = '<p style="color:var(--ink-soft); font-size:0.9rem; padding:8px 0;">Searching records...</p>';
+      }
 
       try {
         const res = await fetch('/api/appointments/track/' + encodeURIComponent(input));
         const json = await res.json();
 
         if (!res.ok) {
-          resultBox.innerHTML = `<div style="padding:10px; background:#FFEBEE; color:#C62828; border-radius:4px; font-size:0.88rem;">${json.error || 'Not found'}</div>`;
+          clearTrackPolling();
+          resultBox.style.display = 'block';
+          resultBox.innerHTML = `<div style="padding:12px; background:#FFEBEE; color:#C62828; border-radius:6px; font-size:0.88rem; border:1px solid #FFCDD2;">${escapeHtml(json.error || 'No appointment found.')}</div>`;
           return;
         }
 
@@ -2883,27 +3213,287 @@ phoneInput.addEventListener('input', (e) => {
         };
         const badgeColor = statusColors[appt.status] || '#333';
 
+        // Stepper generation
+        let stepperHtml = '';
+        if (appt.status === 'cancelled') {
+          stepperHtml = `
+            <div style="width:100%; text-align:center; z-index:2; background:#FFEBEE; color:#C62828; padding:8px 12px; border-radius:4px; font-weight:600; font-size:0.82rem; border:1px solid #FFCDD2;">
+              ❌ This consultation request has been cancelled. Please contact the clinic for rescheduling.
+            </div>
+          `;
+        } else {
+          const steps = [
+            { key: 'received', label: 'Received' },
+            { key: 'confirmed', label: 'Confirmed' },
+            { key: 'completed', label: 'Completed' }
+          ];
+
+          let activeIndex = 0;
+          if (appt.status === 'confirmed') activeIndex = 1;
+          if (appt.status === 'completed') activeIndex = 2;
+
+          stepperHtml = steps.map((step, idx) => {
+            const isDone = idx <= activeIndex;
+            const isCurrent = idx === activeIndex;
+            const stepBg = isDone ? (isCurrent ? badgeColor : '#2E7D32') : '#E0DCCF';
+            const textColor = isDone ? 'var(--panel)' : 'var(--ink-soft)';
+            return `
+              <div style="display:flex; flex-direction:column; align-items:center; z-index:2; background:#FFF; padding:0 6px;">
+                <div style="width:24px; height:24px; border-radius:50%; background:${stepBg}; color:#FFF; display:flex; align-items:center; justify-content:center; font-size:0.75rem; font-weight:bold;">
+                  ${isDone ? (idx < activeIndex ? '✓' : idx + 1) : idx + 1}
+                </div>
+                <span style="font-size:0.75rem; color:${textColor}; font-weight:${isCurrent ? '700' : '500'}; margin-top:4px;">${step.label}</span>
+              </div>
+            `;
+          }).join('');
+        }
+
+        resultBox.style.display = 'block';
         resultBox.innerHTML = `
-        <div style="border:1px solid var(--line); border-radius:4px; padding:12px; background:#FFF; font-size:0.88rem;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <strong style="font-family:monospace; font-size:1rem; color:var(--gold);">${appt.reference_code}</strong>
-            <span style="background:${badgeColor}; color:#FFF; padding:2px 8px; border-radius:12px; font-size:0.75rem; text-transform:uppercase; font-weight:600;">${appt.status}</span>
+          <div style="border:1px solid var(--line); border-radius:8px; padding:16px; background:#FFF; font-size:0.88rem; box-shadow:0 4px 12px rgba(0,0,0,0.03);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--line); padding-bottom:10px;">
+              <div>
+                <span style="font-size:0.72rem; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.04em;">Booking Code</span>
+                <div style="font-family:monospace; font-size:1.15rem; color:var(--gold); font-weight:bold;">${escapeHtml(appt.reference_code)}</div>
+              </div>
+              <div style="text-align:right;">
+                <span style="background:${badgeColor}; color:#FFF; padding:4px 12px; border-radius:14px; font-size:0.75rem; text-transform:uppercase; font-weight:700; letter-spacing:0.04em; display:inline-block;">${escapeHtml(appt.status)}</span>
+              </div>
+            </div>
+
+            <!-- Progress Stepper -->
+            <div style="display:flex; justify-content:space-between; align-items:center; position:relative; margin:16px 4px 20px;">
+              ${appt.status !== 'cancelled' ? '<div style="position:absolute; top:12px; left:20px; right:20px; height:2px; background:#E0DCCF; z-index:1;"></div>' : ''}
+              ${stepperHtml}
+            </div>
+
+            <div style="background:#FAF8F2; border-radius:6px; padding:12px; margin-bottom:12px;">
+              <p style="margin:0 0 6px;"><strong>Patient:</strong> ${escapeHtml(appt.patient_name)}</p>
+              <p style="margin:0 0 6px;"><strong>Mode:</strong> ${escapeHtml(appt.consultation_type)}</p>
+              <p style="margin:0 0 6px;"><strong>Schedule:</strong> ${escapeHtml(appt.confirmed_date || appt.preferred_date || 'Slot pending confirmation')} (${escapeHtml(appt.confirmed_time || appt.preferred_time_slot)})</p>
+              ${appt.meeting_link ? `<p style="margin:8px 0 0;"><a href="${escapeHtml(appt.meeting_link)}" target="_blank" style="display:inline-flex; align-items:center; gap:6px; background:var(--panel); color:#ECE8DC; padding:8px 14px; border-radius:4px; text-decoration:none; font-weight:600; font-size:0.85rem;">📹 Join Video Consultation ↗</a></p>` : ''}
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.76rem; color:var(--ink-soft);">
+              <span>Booked on: ${escapeHtml(appt.created_at)}</span>
+              <span style="display:inline-flex; align-items:center; gap:5px; color:#2E7D32; font-weight:600;">
+                <span style="width:6px; height:6px; background:#2E7D32; border-radius:50%; display:inline-block;"></span>
+                Live Tracking Active
+              </span>
+            </div>
           </div>
-          <p><strong>Patient:</strong> ${appt.patient_name}</p>
-          <p><strong>Type:</strong> ${appt.consultation_type}</p>
-          <p><strong>Schedule:</strong> ${appt.confirmed_date || appt.preferred_date} (${appt.confirmed_time || appt.preferred_time_slot})</p>
-          ${appt.meeting_link ? `<p style="margin-top:4px;"><a href="${appt.meeting_link}" target="_blank" style="color:var(--panel); font-weight:bold; text-decoration:underline;">Join Video Consultation ↗</a></p>` : ''}
-          <p style="font-size:0.78rem; color:var(--ink-soft); margin-top:6px;">Booked on: ${appt.created_at}</p>
-        </div>
-      `;
+        `;
+
+        // Automatically start live polling while modal is open
+        if (!isSilentPoll && !trackPollingInterval) {
+          trackPollingInterval = setInterval(() => {
+            const modal = document.getElementById('trackModal');
+            if (modal && modal.classList.contains('open')) {
+              lookupAppointment(true);
+            } else {
+              clearTrackPolling();
+            }
+          }, 10000);
+        }
+
       } catch (e) {
-        resultBox.innerHTML = '<div style="padding:10px; background:#FFEBEE; color:#C62828; border-radius:4px; font-size:0.88rem;">Unable to connect to clinic server.</div>';
+        if (!isSilentPoll) {
+          resultBox.style.display = 'block';
+          resultBox.innerHTML = '<div style="padding:10px; background:#FFEBEE; color:#C62828; border-radius:4px; font-size:0.88rem;">Unable to connect to clinic server. Please verify connection.</div>';
+        }
       }
     }
 
     document.getElementById('trackInput').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') lookupAppointment();
     });
+
+    // ==========================================
+    // PATIENT REVIEWS CLIENT LOGIC
+    // ==========================================
+    let currentRating = 5;
+
+    function initStarRating() {
+      const widget = document.getElementById('starRatingWidget');
+      if (!widget) return;
+      const stars = widget.querySelectorAll('.star-btn');
+      const label = document.getElementById('starRatingLabel');
+      const ratingInput = document.getElementById('selectedRating');
+
+      const labels = {
+        1: '1 / 5 — Needs Improvement',
+        2: '2 / 5 — Fair',
+        3: '3 / 5 — Good',
+        4: '4 / 5 — Very Good',
+        5: '5 / 5 — Excellent Healing Care'
+      };
+
+      stars.forEach(btn => {
+        btn.addEventListener('mouseenter', () => {
+          const r = parseInt(btn.getAttribute('data-rating'), 10);
+          stars.forEach(s => {
+            const sr = parseInt(s.getAttribute('data-rating'), 10);
+            s.classList.toggle('hovered', sr <= r);
+          });
+        });
+
+        btn.addEventListener('mouseleave', () => {
+          stars.forEach(s => s.classList.remove('hovered'));
+        });
+
+        btn.addEventListener('click', () => {
+          currentRating = parseInt(btn.getAttribute('data-rating'), 10);
+          ratingInput.value = currentRating;
+          label.textContent = labels[currentRating] || `${currentRating} / 5`;
+          stars.forEach(s => {
+            const sr = parseInt(s.getAttribute('data-rating'), 10);
+            s.classList.toggle('active', sr <= currentRating);
+          });
+        });
+      });
+    }
+
+    async function loadReviews() {
+      const container = document.getElementById('reviewsList');
+      if (!container) return;
+
+      try {
+        const res = await fetch('/api/reviews');
+        const data = await res.json();
+        if (!res.ok || !data.success) return;
+
+        if (data.stats) {
+          const avgElem = document.getElementById('avgRatingScore');
+          const countElem = document.getElementById('totalReviewsCount');
+          if (avgElem) avgElem.textContent = Number(data.stats.average).toFixed(1);
+          if (countElem) countElem.textContent = `Based on ${data.stats.total} verified reviews`;
+        }
+
+        if (data.reviews && data.reviews.length > 0) {
+          container.innerHTML = data.reviews.map(r => {
+            const initials = r.patient_name ? r.patient_name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'P';
+            const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+            const dateStr = r.created_at ? r.created_at.slice(0, 10) : '';
+
+            return `
+              <div class="review-item-card">
+                <div class="review-item-top">
+                  <div style="display:flex; align-items:center;">
+                    <div class="review-avatar">${escapeHtml(initials)}</div>
+                    <div>
+                      <strong style="font-size:0.92rem; color:var(--panel);">${escapeHtml(r.patient_name)}</strong>
+                      <div style="font-size:0.72rem; color:#2E7D32; font-weight:600;">✓ Verified Patient</div>
+                    </div>
+                  </div>
+                  <div style="text-align:right;">
+                    <div style="color:var(--gold); font-size:0.92rem;">${stars}</div>
+                    <div style="font-size:0.75rem; color:var(--ink-soft);">${escapeHtml(dateStr)}</div>
+                  </div>
+                </div>
+                <div style="margin:6px 0 8px;">
+                  <span class="review-cat-tag">${escapeHtml(r.treatment_category || 'Ayurvedic Treatment')}</span>
+                </div>
+                <p style="font-size:0.86rem; color:var(--ink); line-height:1.45; margin:0; font-style:italic;">
+                  "${escapeHtml(r.review_text)}"
+                </p>
+              </div>
+            `;
+          }).join('');
+        }
+      } catch (err) {
+        console.warn('Reviews load notice:', err.message);
+      }
+    }
+
+    // Review form submission handler
+    const reviewForm = document.getElementById('patientReviewForm');
+    if (reviewForm) {
+      reviewForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const alertBox = document.getElementById('reviewAlert');
+        const submitBtn = document.getElementById('btnSubmitReview');
+        const spinner = document.getElementById('reviewSpinner');
+        const btnText = document.getElementById('btnSubmitReviewText');
+
+        const name = document.getElementById('reviewName').value.trim();
+        const email = document.getElementById('reviewEmail').value.trim();
+        const rating = parseInt(document.getElementById('selectedRating').value, 10) || 5;
+        const category = document.getElementById('reviewCategory').value;
+        const review_text = document.getElementById('reviewText').value.trim();
+
+        if (!name || name.length < 2) {
+          alertBox.style.display = 'block';
+          alertBox.style.background = '#FFEBEE';
+          alertBox.style.color = '#C62828';
+          alertBox.textContent = 'Please enter your full name (minimum 2 characters).';
+          return;
+        }
+
+        if (!email || !email.includes('@')) {
+          alertBox.style.display = 'block';
+          alertBox.style.background = '#FFEBEE';
+          alertBox.style.color = '#C62828';
+          alertBox.textContent = 'Please provide a valid Gmail or Email address.';
+          return;
+        }
+
+        if (!review_text || review_text.length < 10) {
+          alertBox.style.display = 'block';
+          alertBox.style.background = '#FFEBEE';
+          alertBox.style.color = '#C62828';
+          alertBox.textContent = 'Please write at least 10 characters describing your experience.';
+          return;
+        }
+
+        alertBox.style.display = 'none';
+        submitBtn.disabled = true;
+        spinner.style.display = 'inline-block';
+        btnText.textContent = 'Submitting & Notifying Doctor...';
+
+        try {
+          const res = await fetch('/api/reviews', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, rating, category, review_text })
+          });
+
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Failed to submit review');
+
+          alertBox.style.display = 'block';
+          alertBox.style.background = '#E8F5E9';
+          alertBox.style.color = '#2E7D32';
+          alertBox.style.border = '1px solid #C8E6C9';
+          alertBox.innerHTML = `
+            <strong>✓ Thank you, ${escapeHtml(name)}!</strong><br>
+            Your review has been submitted directly to Dr. Paras Leve. A confirmation receipt has been sent to your Gmail (${escapeHtml(email)}).
+          `;
+
+          reviewForm.reset();
+          currentRating = 5;
+          document.getElementById('selectedRating').value = 5;
+          document.querySelectorAll('#starRatingWidget .star-btn').forEach(s => s.classList.add('active'));
+          document.getElementById('starRatingLabel').textContent = '5 / 5 — Excellent Healing Care';
+
+          // Refresh live reviews list
+          loadReviews();
+
+        } catch (err) {
+          alertBox.style.display = 'block';
+          alertBox.style.background = '#FFEBEE';
+          alertBox.style.color = '#C62828';
+          alertBox.textContent = err.message || 'Unable to submit review. Please try again.';
+        } finally {
+          submitBtn.disabled = false;
+          spinner.style.display = 'none';
+          btnText.textContent = 'Submit Review & Send to Doctor';
+        }
+      });
+    }
+
+    // Initialize reviews on DOM load
+    initStarRating();
+    loadReviews();
   </script>
 
   <div id="toastContainer"></div>

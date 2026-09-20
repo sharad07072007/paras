@@ -25,7 +25,7 @@ db.exec('PRAGMA foreign_keys = ON;');
 db.exec(`
   CREATE TABLE IF NOT EXISTS appointments (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    reference_code TEXT UNIQUE NOT NULL,
+    reference_code TEXT UNIQUE NOT NULL COLLATE NOCASE,
     patient_name TEXT NOT NULL,
     phone TEXT NOT NULL,
     email TEXT DEFAULT '',
@@ -46,6 +46,10 @@ db.exec(`
     created_at TEXT DEFAULT (datetime('now', 'localtime')),
     updated_at TEXT DEFAULT (datetime('now', 'localtime'))
   );
+
+  CREATE INDEX IF NOT EXISTS idx_appointments_ref ON appointments(reference_code);
+  CREATE INDEX IF NOT EXISTS idx_appointments_phone ON appointments(phone);
+  CREATE INDEX IF NOT EXISTS idx_appointments_status ON appointments(status);
 
   CREATE TABLE IF NOT EXISTS admin_users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -72,6 +76,20 @@ db.exec(`
     expires_at INTEGER NOT NULL,
     created_at TEXT DEFAULT (datetime('now', 'localtime'))
   );
+
+  CREATE TABLE IF NOT EXISTS patient_reviews (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    patient_name TEXT NOT NULL,
+    patient_email TEXT NOT NULL,
+    rating INTEGER NOT NULL CHECK(rating BETWEEN 1 AND 5),
+    treatment_category TEXT DEFAULT 'General Ayurvedic Consultation',
+    review_text TEXT NOT NULL,
+    is_approved INTEGER DEFAULT 1,
+    created_at TEXT DEFAULT (datetime('now', 'localtime'))
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_reviews_rating ON patient_reviews(rating);
+  CREATE INDEX IF NOT EXISTS idx_reviews_created ON patient_reviews(created_at);
 `);
 
 // Migration helper for existing databases: ensure new columns exist

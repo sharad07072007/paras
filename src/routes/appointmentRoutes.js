@@ -222,10 +222,13 @@ router.get('/quick-approve', async (req, res) => {
  */
 router.get('/track/:reference', (req, res) => {
   try {
-    const query = sanitizeText(req.params.reference);
+    const raw = (req.params.reference || '').trim();
+    const query = sanitizeText(raw);
     if (!query) {
       return res.status(400).json({ error: 'Please provide a valid reference code or phone number.' });
     }
+
+    const cleanPhone = query.replace(/\D/g, '').slice(-10);
 
     const appointment = db.prepare(`
       SELECT 
@@ -238,12 +241,15 @@ router.get('/track/:reference', (req, res) => {
         confirmed_time,
         meeting_link,
         status,
-        created_at
+        created_at,
+        updated_at
       FROM appointments
-      WHERE reference_code = ? OR phone = ?
+      WHERE UPPER(reference_code) = UPPER(?)
+         OR phone = ?
+         OR (length(?) = 10 AND (phone LIKE '%' || ? OR replace(phone, ' ', '') LIKE '%' || ?))
       ORDER BY id DESC
       LIMIT 1
-    `).get(query, query);
+    `).get(query, query, cleanPhone, cleanPhone, cleanPhone);
 
     if (!appointment) {
       return res.status(404).json({

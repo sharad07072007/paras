@@ -237,11 +237,69 @@ router.post('/appointments/:id/mark-whatsapp-sent', (req, res) => {
 });
 
 /**
+ * PATCH /api/admin/appointments/:id/status
+ * Dedicated endpoint for fast, real-time status transitions (pending, confirmed, completed, cancelled)
+ */
+router.patch('/appointments/:id/status', (req, res) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id) || id <= 0) {
+      return res.status(400).json({ error: 'Invalid appointment ID parameter.' });
+    }
+
+    const { status } = req.body || {};
+    if (!status || typeof status !== 'string') {
+      return res.status(400).json({ error: 'Status field is required and must be a string.' });
+    }
+
+    let normalizedStatus = status.trim().toLowerCase();
+    if (normalizedStatus === 'canceled') normalizedStatus = 'cancelled';
+
+    const validStatuses = ['pending', 'confirmed', 'completed', 'cancelled'];
+    if (!validStatuses.includes(normalizedStatus)) {
+      return res.status(400).json({
+        error: `Invalid status "${status}". Allowed values: ${validStatuses.join(', ')}`
+      });
+    }
+
+    const existing = db.prepare('SELECT id, status, patient_name, reference_code FROM appointments WHERE id = ?').get(id);
+    if (!existing) {
+      return res.status(404).json({ error: `Appointment #${id} not found.` });
+    }
+
+    const result = db.prepare(`
+      UPDATE appointments
+      SET status = ?, updated_at = datetime('now', 'localtime')
+      WHERE id = ?
+    `).run(normalizedStatus, id);
+
+    if (result.changes === 0) {
+      return res.status(500).json({ error: 'Failed to update appointment status.' });
+    }
+
+    const updated = db.prepare('SELECT * FROM appointments WHERE id = ?').get(id);
+
+    return res.json({
+      success: true,
+      message: `Appointment #${id} status updated to "${normalizedStatus}".`,
+      appointment: updated
+    });
+  } catch (error) {
+    console.error('Error updating appointment status:', error);
+    return res.status(500).json({ error: 'Internal server error while updating status.' });
+  }
+});
+
+/**
  * PATCH /api/admin/appointments/:id
  */
 router.patch('/appointments/:id', (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
+    if (isNaN(id) || id <= 0) {
+      return res.status(400).json({ error: 'Invalid appointment ID parameter.' });
+    }
+
     const existing = db.prepare('SELECT * FROM appointments WHERE id = ?').get(id);
 
     if (!existing) {
@@ -251,12 +309,17 @@ router.patch('/appointments/:id', (req, res) => {
     const { status, doctor_notes, preferred_date, preferred_time_slot, confirmed_date, confirmed_time, meeting_link } = req.body || {};
 
     const validStatuses = ['pending', 'confirmed', 'completed', 'cancelled'];
-    const newStatus = status ? status.toLowerCase() : existing.status;
+    let newStatus = existing.status;
 
-    if (status && !validStatuses.includes(newStatus)) {
-      return res.status(400).json({
-        error: `Invalid status. Must be one of: ${validStatuses.join(', ')}`
-      });
+    if (status) {
+      let normalized = status.toString().trim().toLowerCase();
+      if (normalized === 'canceled') normalized = 'cancelled';
+      if (!validStatuses.includes(normalized)) {
+        return res.status(400).json({
+          error: `Invalid status. Must be one of: ${validStatuses.join(', ')}`
+        });
+      }
+      newStatus = normalized;
     }
 
     const newNotes = doctor_notes !== undefined ? sanitizeText(doctor_notes) : existing.doctor_notes;
@@ -365,6 +428,20 @@ router.get('/export', (req, res) => {
   } catch (error) {
     console.error('Error exporting appointments:', error);
     return res.status(500).json({ error: 'Failed to export appointments.' });
+  }
+});
+
+/**
+ * GET /api/admin/reviews
+ * Fetch all patient reviews for doctor / staff dashboard
+ */
+router.get('/reviews', (req, res) => {
+  try {
+    const reviews = db.prepare('SELECT * FROM patient_reviews ORDER BY id DESC').all();
+    return res.json({ success: true, count: reviews.length, reviews });
+  } catch (error) {
+    console.error('Error fetching admin reviews:', error);
+    return res.status(500).json({ error: 'Failed to retrieve patient reviews.' });
   }
 });
 

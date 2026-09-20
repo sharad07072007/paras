@@ -4,8 +4,7 @@ require('dotenv').config();
 const BASE_URL = process.env.BASE_URL || `http://localhost:${process.env.PORT || 5000}`;
 const CLINIC_NAME = 'Dr. Paras Leve (BAMS)';
 const CLINIC_PHONE = process.env.CLINIC_PHONE || '+91 7389808594';
-const CLINIC_ADDRESS = '52 LIG, Housing Board Colony, Gautam Nagar, Bhopal (M.P.) – 462011 | 
-Near Bus Stand, Kalapipal (M.P.) – 465337';
+const CLINIC_ADDRESS = '52 LIG, Housing Board Colony, Gautam Nagar, Bhopal (M.P.) – 462011 | Near Bus Stand, Kalapipal (M.P.) – 465337';
 function normalizeDoctorEmail(email) {
   const e = (email || '').trim();
   if (!e || e.toLowerCase() === 'drparsleve@gmail.com' || e.toLowerCase() === 'sharadpatidar555@gmail.com') {
@@ -97,7 +96,7 @@ function generateWhatsAppMessage(appointment) {
 
   const messageText = 
 `*DR. PARAS LEVE*
-_BAMS, CRAV (Reg. No.Reg. No. 60695)_
+_BAMS, CRAV (Reg. No. 60695)_
 
 Namaste *${patientName}* 🙏
 
@@ -454,10 +453,119 @@ async function sendPatientBookingReceivedEmail(appointment) {
   }
 }
 
+/**
+ * Dispatches an alert email to Dr. Paras Leve when a new patient review is submitted
+ */
+async function sendDoctorNewReviewAlert(review) {
+  const client = getTransporter();
+  const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+  const recipient = DOCTOR_EMAIL;
+
+  const htmlContent = `
+    <div style="font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif; background:#ECE8DC; color:#23261F; padding:32px 16px;">
+      <div style="max-width:580px; margin:0 auto; background:#FBFAF6; border:1px solid #D6D0BE; border-radius:8px; padding:28px; box-shadow:0 4px 16px rgba(31,58,46,0.08);">
+        <div style="text-align:center; margin-bottom:20px;">
+          <span style="background:#FFF3E0; color:#E65100; font-size:12px; font-weight:bold; padding:4px 12px; border-radius:12px; border:1px solid #FFE0B2; text-transform:uppercase;">
+            ⭐ New Patient Review Received
+          </span>
+          <h2 style="color:#1F3A2E; margin:12px 0 4px; font-size:22px;">Patient Testimonial & Feedback</h2>
+          <div style="font-size:20px; color:#C9971F; margin:8px 0;">${stars} <span style="font-size:16px; color:#1F3A2E; font-weight:bold;">(${review.rating}/5)</span></div>
+        </div>
+
+        <div style="background:#FFF; border:1px solid #D6D0BE; border-radius:6px; padding:18px; margin:16px 0;">
+          <p style="margin:0 0 8px; font-size:14px;"><strong>Patient Name:</strong> ${review.patient_name}</p>
+          <p style="margin:0 0 8px; font-size:14px;"><strong>Patient Gmail / Email:</strong> <a href="mailto:${review.patient_email}" style="color:#1F3A2E; text-decoration:underline;">${review.patient_email}</a></p>
+          <p style="margin:0 0 8px; font-size:14px;"><strong>Treatment / Focus Area:</strong> ${review.treatment_category || 'General Ayurvedic Care'}</p>
+          <p style="margin:0 0 8px; font-size:14px;"><strong>Submitted On:</strong> ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</p>
+          <div style="margin-top:12px; padding:12px; background:#FAF8F2; border-left:3px solid #C9971F; border-radius:4px; font-style:italic; font-size:14px; color:#3A3D36; line-height:1.5;">
+            "${review.review_text}"
+          </div>
+        </div>
+
+        <div style="text-align:center; margin-top:24px;">
+          <a href="${getBaseUrl()}/admin.html" style="background:#1F3A2E; color:#ECE8DC; padding:11px 22px; text-decoration:none; border-radius:4px; font-weight:600; font-size:14px; display:inline-block;">
+            🩺 View in Clinic Dashboard
+          </a>
+        </div>
+
+        <div style="margin-top:24px; padding-top:16px; border-top:1px solid #D6D0BE; font-size:12px; color:#8C8878; text-align:center;">
+          Dr. Paras Leve (BAMS, CRAV) · Shree Ayush Clinic · Bhopal
+        </div>
+      </div>
+    </div>
+  `;
+
+  try {
+    const { user: sender } = getSmtpCredentials();
+    const info = await client.sendMail({
+      from: `"Dr. Paras Leve Clinic Alerts" <${sender}>`,
+      to: recipient,
+      subject: `⭐ New Patient Review (${review.rating}/5 Stars) — ${review.patient_name}`,
+      html: htmlContent
+    });
+    console.log(`📧 [EMAIL TO DOCTOR DISPATCHED]: Review alert sent to ${recipient}`);
+    return { sent: true, messageId: info.messageId || 'local-stream' };
+  } catch (err) {
+    console.error('Doctor review notification error:', err.message);
+    return { sent: false, error: err.message };
+  }
+}
+
+/**
+ * Sends a warm thank-you email to the patient's Gmail after submitting a review
+ */
+async function sendPatientReviewAcknowledgement(review) {
+  if (!review.patient_email || !review.patient_email.includes('@')) {
+    return { sent: false, reason: 'No email provided' };
+  }
+
+  const client = getTransporter();
+  const htmlContent = `
+    <div style="font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif; background:#ECE8DC; color:#23261F; padding:32px 16px;">
+      <div style="max-width:580px; margin:0 auto; background:#FBFAF6; border:1px solid #D6D0BE; border-radius:8px; padding:28px; box-shadow:0 4px 16px rgba(31,58,46,0.08);">
+        <h2 style="color:#1F3A2E; margin-top:0;">Namaste ${review.patient_name} 🙏</h2>
+        <p style="font-size:15px; line-height:1.6;">
+          Thank you for taking the time to share your healing feedback regarding your treatment with <strong>Dr. Paras Leve</strong>.
+        </p>
+        <div style="background:#FFF; border:1px solid #D6D0BE; border-radius:6px; padding:16px; margin:16px 0;">
+          <p style="margin:0 0 6px; font-size:13px; color:#8C8878; text-transform:uppercase;">Your Rating:</p>
+          <div style="font-size:18px; color:#C9971F; margin-bottom:8px;">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)} (${review.rating}/5)</div>
+          <p style="margin:0; font-style:italic; font-size:14px; color:#3A3D36;">"${review.review_text}"</p>
+        </div>
+        <p style="font-size:14px; line-height:1.5; color:#5C5A4E;">
+          Your feedback helps us continuously improve our authentic Ayurvedic healing care and inspire other patients on their journey toward natural wellness.
+        </p>
+        <p style="font-size:14px; margin-top:20px;">
+          Warm regards,<br>
+          <strong>Dr. Paras Leve, BAMS, CRAV</strong><br>
+          <span style="font-size:13px; color:#8C8878;">Ayurvedic Physician & Pulse Diagnostician</span>
+        </p>
+      </div>
+    </div>
+  `;
+
+  try {
+    const { user: sender } = getSmtpCredentials();
+    const info = await client.sendMail({
+      from: `"Dr. Paras Leve" <${sender}>`,
+      to: review.patient_email,
+      subject: `🌿 Thank you for your review — Dr. Paras Leve (Ayurvedic Physician)`,
+      html: htmlContent
+    });
+    console.log(`📧 [REVIEW ACKNOWLEDGEMENT SENT]: ${review.patient_email}`);
+    return { sent: true, messageId: info.messageId || 'local-stream' };
+  } catch (err) {
+    console.error('Patient review acknowledgement error:', err.message);
+    return { sent: false, error: err.message };
+  }
+}
+
 module.exports = {
   formatWhatsAppPhone,
   generateWhatsAppMessage,
   sendPatientConfirmationEmail,
   sendPatientBookingReceivedEmail,
-  sendDoctorNewBookingAlert
+  sendDoctorNewBookingAlert,
+  sendDoctorNewReviewAlert,
+  sendPatientReviewAcknowledgement
 };

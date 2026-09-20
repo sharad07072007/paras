@@ -312,6 +312,27 @@
   .badge-completed { background: #E1F5FE; color: #0277BD; border: 1px solid #B3E5FC; }
   .badge-cancelled { background: #FFEBEE; color: #C62828; border: 1px solid #FFCDD2; }
 
+  .status-quick-select {
+    font-size: 0.76rem;
+    font-weight: 500;
+    padding: 3px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+    background: #FFF;
+    color: var(--ink);
+    cursor: pointer;
+    font-family: inherit;
+    outline: none;
+    transition: all 0.2s;
+  }
+  .status-quick-select:hover {
+    border-color: var(--leaf);
+  }
+  .status-quick-select:focus {
+    border-color: var(--leaf);
+    box-shadow: 0 0 0 2px rgba(31,58,46,0.15);
+  }
+
   .notif-badge {
     display: inline-flex;
     align-items: center;
@@ -682,6 +703,7 @@
         </select>
 
         <button class="btn-action" onclick="loadDashboard()"><span style="font-size:1.1rem;">↻</span> Refresh</button>
+        <button class="btn-action" onclick="openReviewsModal()">⭐ Patient Reviews</button>
         <button class="btn-action btn-export" onclick="exportCsv()">⬇ Export CSV</button>
       </div>
     </div>
@@ -792,6 +814,27 @@
       <button class="btn-action btn-export" id="btnConfirmApproval" onclick="submitApproval()">
         ✓ Approve & Dispatch Notifications
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PATIENT REVIEWS MODAL -->
+<div class="modal-backdrop" id="adminReviewsModal">
+  <div class="modal-card" style="max-width:720px;">
+    <div class="modal-header">
+      <h3>⭐ Patient Reviews & Feedback</h3>
+      <button class="modal-close" onclick="closeReviewsModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:0.88rem; color:var(--ink-soft); margin-bottom:14px;">
+        Real-time feedback and ratings submitted by patients through the clinic website.
+      </p>
+      <div id="adminReviewsList" style="max-height:480px; overflow-y:auto; display:flex; flex-direction:column; gap:12px;">
+        <div style="text-align:center; padding:20px; color:var(--ink-soft);">Loading reviews...</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-action" onclick="closeReviewsModal()">Close</button>
     </div>
   </div>
 </div>
@@ -955,7 +998,15 @@
               <div style="font-size:0.78rem; color:var(--ink-soft);">${escapeHtml(displayTime)}</div>
             </td>
             <td>
-              <span class="badge badge-${appt.status}">${appt.status}</span>
+              <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-start;">
+                <span id="badge-${appt.id}" class="badge badge-${appt.status}">${appt.status}</span>
+                <select class="status-quick-select" id="status-sel-${appt.id}" data-current="${appt.status}" onchange="updateAppointmentStatus(${appt.id}, this.value, this)" title="Change appointment status">
+                  <option value="pending" ${appt.status === 'pending' ? 'selected' : ''}>Pending</option>
+                  <option value="confirmed" ${appt.status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
+                  <option value="completed" ${appt.status === 'completed' ? 'selected' : ''}>Completed</option>
+                  <option value="cancelled" ${appt.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                </select>
+              </div>
             </td>
             <td>
               <div style="display:flex; flex-direction:column; gap:2px;">
@@ -981,6 +1032,58 @@
     } catch (e) {
       console.error('List error:', e);
       tableBody.innerHTML = `<tr><td colspan="8" class="empty-state" style="color:var(--danger);">Error loading appointments: ${e.message}</td></tr>`;
+    }
+  }
+
+  // Real-time Status Update via Dedicated PATCH API
+  async function updateAppointmentStatus(id, newStatus, selectElem) {
+    const numId = Number(id);
+    const previousStatus = selectElem ? selectElem.getAttribute('data-current') : null;
+
+    try {
+      if (selectElem) {
+        selectElem.disabled = true;
+      }
+
+      const res = await authFetch(`/api/admin/appointments/${numId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      });
+
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'Failed to update status');
+
+      // Update current status tracker attribute
+      if (selectElem) {
+        selectElem.setAttribute('data-current', newStatus);
+      }
+
+      // Update in-memory appointment cache
+      const cached = appointmentCache.get(numId);
+      if (cached) {
+        cached.status = newStatus;
+      }
+
+      // Dynamically update status badge in table
+      const badge = document.getElementById(`badge-${numId}`);
+      if (badge) {
+        badge.className = `badge badge-${newStatus}`;
+        badge.textContent = newStatus;
+      }
+
+      // Refresh dashboard counters dynamically
+      loadStats();
+
+    } catch (err) {
+      alert('Error updating status: ' + err.message);
+      if (selectElem && previousStatus) {
+        selectElem.value = previousStatus;
+      }
+    } finally {
+      if (selectElem) {
+        selectElem.disabled = false;
+      }
     }
   }
 
@@ -1201,6 +1304,54 @@ _Wishing you holistic health, vitality, and balance._`;
   function escapeHtml(str) {
     if (!str) return '';
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  // Admin Patient Reviews
+  async function openReviewsModal() {
+    document.getElementById('adminReviewsModal').classList.add('open');
+    const container = document.getElementById('adminReviewsList');
+    container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--ink-soft);">Loading patient reviews...</div>';
+
+    try {
+      const res = await authFetch('/api/admin/reviews');
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || 'Failed to fetch reviews');
+
+      if (!data.reviews || data.reviews.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--ink-soft);">No patient reviews submitted yet.</div>';
+        return;
+      }
+
+      container.innerHTML = data.reviews.map(r => `
+        <div style="background:#FFF; border:1px solid var(--line); border-radius:6px; padding:14px; box-shadow:0 2px 6px rgba(0,0,0,0.02);">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+              <strong style="font-size:0.95rem; color:var(--panel);">${escapeHtml(r.patient_name)}</strong>
+              <div style="font-size:0.82rem; color:var(--info);">${escapeHtml(r.patient_email)}</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="color:var(--gold); font-size:0.95rem;">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</div>
+              <div style="font-size:0.75rem; color:var(--ink-soft);">${escapeHtml(r.created_at || '')}</div>
+            </div>
+          </div>
+          <div style="margin:6px 0;">
+            <span style="font-size:0.75rem; background:#F4F1EA; color:var(--leaf); font-weight:600; padding:2px 8px; border-radius:10px;">
+              ${escapeHtml(r.treatment_category || 'General Consultation')}
+            </span>
+          </div>
+          <p style="font-size:0.88rem; color:var(--ink); margin:6px 0 0; font-style:italic; line-height:1.4;">
+            "${escapeHtml(r.review_text)}"
+          </p>
+        </div>
+      `).join('');
+
+    } catch (err) {
+      container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--danger);">${escapeHtml(err.message)}</div>`;
+    }
+  }
+
+  function closeReviewsModal() {
+    document.getElementById('adminReviewsModal').classList.remove('open');
   }
 </script>
 </body>

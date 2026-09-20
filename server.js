@@ -6,6 +6,7 @@ require('dotenv').config();
 const { seed } = require('./src/db/seed');
 const appointmentRoutes = require('./src/routes/appointmentRoutes');
 const adminRoutes = require('./src/routes/adminRoutes');
+const reviewRoutes = require('./src/routes/reviewRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -57,6 +58,7 @@ app.get('/api/health', (req, res) => {
 // API Routes
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // Fallback for API routes (404)
 app.use('/api/*', (req, res) => {
