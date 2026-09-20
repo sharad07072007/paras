@@ -2,9 +2,10 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const BASE_URL = process.env.BASE_URL || `http://localhost:${process.env.PORT || 5000}`;
-const CLINIC_NAME = 'Shree Ayush Clinic — Dr. Paras Leve (BAMS, CRAV)';
-const CLINIC_PHONE = process.env.CLINIC_PHONE || '+91 7067207752';
-const CLINIC_ADDRESS = 'Shree Ayush Clinic, MP Nagar, Zone-II, Bhopal (M.P.) – 462011';
+const CLINIC_NAME = 'Dr. Paras Leve (BAMS)';
+const CLINIC_PHONE = process.env.CLINIC_PHONE || '+91 7389808594';
+const CLINIC_ADDRESS = '52 LIG, Housing Board Colony, Gautam Nagar, Bhopal (M.P.) – 462011 | 
+Near Bus Stand, Kalapipal (M.P.) – 465337';
 function normalizeDoctorEmail(email) {
   const e = (email || '').trim();
   if (!e || e.toLowerCase() === 'drparsleve@gmail.com' || e.toLowerCase() === 'sharadpatidar555@gmail.com') {
@@ -95,8 +96,8 @@ function generateWhatsAppMessage(appointment) {
   }
 
   const messageText = 
-`*SHREE AYUSH CLINIC — DR. PARAS LEVE*
-_BAMS, CRAV (Reg. No. AY-2019-04831)_
+`*DR. PARAS LEVE*
+_BAMS, CRAV (Reg. No.Reg. No. 60695)_
 
 Namaste *${patientName}* 🙏
 
