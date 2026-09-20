@@ -2477,11 +2477,6 @@ section.achievements-section .nav-btn:hover {
           <div>
             <label for="preferredTime" data-en="Preferred time slot" data-hi="पसंदीदा समय">Preferred time slot</label>
             <select id="preferredTime" name="preferredTime">
-              <!-- <option value="Morning (10:00 AM – 02:00 PM)" data-en="Morning (10:00 AM – 01:00 PM)"
-                data-hi="सुबह (10:00 – 01:00)">Morning (10:00 AM – 01:00 PM)</option>
-              <option value="Evening (04:00 PM – 08:00 PM)" data-en="Evening (05:00 PM – 07:00 PM)"
-                data-hi="शाम (05:00 – 07:00)">Evening (05:00 PM – 07:00 PM)</option> -->
-
               <option value="Morning (10:00 AM – 02:00 PM)" data-en="Morning (10:00 AM – 02:00 PM)"
                 data-hi="सुबह (10:00 – 02:00)">Morning (10:00 AM – 02:00 PM)</option>
               <option value="Evening (04:00 PM – 08:00 PM)" data-en="Evening (04:00 PM – 08:00 PM)"
@@ -2512,8 +2507,6 @@ section.achievements-section .nav-btn:hover {
       <h3 data-en="Clinic & contact details" data-hi="क्लिनिक और संपर्क विवरण">Clinic & contact details</h3>
       <div class="row">
         <b data-en="Clinic Address" data-hi="क्लिनिक का पता">Clinic Address</b>
-        <!-- <span data-en="Shree Ayush Clinic, MP Nagar, Zone-II, Bhopal (M.P.) – 462011"
-          data-hi="श्री आयुष क्लिनिक, एमपी नगर, ज़ोन-2, भोपाल (म.प्र.) – 462011"> 52 LIG, Housing Board Colony,Gautam Nagar,Bhopal (M.P.) – 462011 <br> Near Bus Stand Kalapipal (M.P) - 465337</span> -->
         <span
           data-en="52 LIG, Housing Board Colony, Gautam Nagar, Bhopal (M.P.) – 462011 | Near Bus Stand, Kalapipal (M.P.) – 465337"
           data-hi="52 एलआईजी, हाउसिंग बोर्ड कॉलोनी, गौतम नगर, भोपाल (म.प्र.) – 462011 | बस स्टैंड के पास, कालापीपल (म.प्र.) – 465337">52
@@ -2550,8 +2543,7 @@ section.achievements-section .nav-btn:hover {
   <section class="reviews-section" id="reviews">
     <div class="reviews-header">
       <!-- <span class="badge" style="background:#E8EDE8; color:var(--panel); border:1px solid #C4D2C8; margin-bottom:8px;" data-en="Patient Feedback" data-hi="मरीजों के अनुभव">Patient Feedback</span> -->
-      <!-- <div class="kicker" data-en="Recognition" data-hi="सम्मान">Patient Feedback</div> -->
-      <div class="kicker" data-hi="सम्मान">मरीज़ की प्रतिक्रिया</div>
+      <div class="kicker" data-en="Patient Feedback" data-hi="मरीज़ की प्रतिक्रिया">Patient Feedback</div>
       <h2 data-en="Patient Experiences & Reviews" data-hi="मरीजों के अनुभव एवं समीक्षाएं">Patient Experiences & Reviews</h2>
       <p data-en="Read genuine healing testimonials from patients treated by Dr. Paras Leve, or submit your own review directly to the doctor." data-hi="डॉ. पारस लेवे से उपचार प्राप्त मरीजों के प्रामाणिक अनुभव पढ़ें या सीधे डॉक्टर को अपनी समीक्षा भेजें।">
         Read genuine healing testimonials from patients treated by Dr. Paras Leve, or submit your own review directly to the doctor.
@@ -2582,24 +2574,24 @@ section.achievements-section .nav-btn:hover {
 
           <div style="margin-bottom: 14px;">
             <label for="reviewName" style="font-weight:600; font-size:0.88rem; color:var(--panel); display:block; margin-bottom:4px;" data-en="Your Full Name *" data-hi="आपका पूरा नाम *">Your Full Name *</label>
-            <input type="text" id="reviewName" placeholder="e.g. Rajesh Sharma" required style="width:100%;">
+            <input type="text" id="reviewName" placeholder="e.g. Dhurv Soni" required style="width:100%;">
           </div>
 
           <div style="margin-bottom: 14px;">
             <label for="reviewEmail" style="font-weight:600; font-size:0.88rem; color:var(--panel); display:block; margin-bottom:4px;" data-en="Gmail / Email Address *" data-hi="जीमेल / ईमेल पता *">Gmail / Email Address *</label>
-            <input type="email" id="reviewEmail" placeholder="yourname@gmail.com" required style="width:100%;">
+            <input type="email" id="reviewEmail" placeholder="xyz@gmail.com" required style="width:100%;">
             <small style="color:var(--ink-soft); font-size:0.75rem; display:block; margin-top:3px;" data-en="Used to send your review confirmation receipt." data-hi="समीक्षा पुष्टि रसीद भेजने के लिए उपयोग किया जाता है।">Used to send your review confirmation receipt.</small>
           </div>
 
           <div style="margin-bottom: 14px;">
             <label for="reviewCategory" style="font-weight:600; font-size:0.88rem; color:var(--panel); display:block; margin-bottom:4px;" data-en="Condition / Treatment Received" data-hi="रोग / उपचार का प्रकार">Condition / Treatment Received</label>
             <select id="reviewCategory" style="width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:4px; font-family:inherit; background:#FFF; font-size:0.88rem;">
-              <option value="Chronic Digestion & Acidity (GERD, IBS)">Chronic Digestion & Acidity (GERD, IBS)</option>
-              <option value="Joint Pain & Sciatica (Kati Basti, Arthritis)">Joint Pain & Sciatica (Kati Basti, Arthritis)</option>
-              <option value="Skin & Chronic Allergy (Twak Roga)">Skin & Chronic Allergy (Twak Roga)</option>
-              <option value="Lifestyle & Metabolic Health (PCOS, Thyroid)">Lifestyle & Metabolic Health (PCOS, Thyroid)</option>
-              <option value="Nadi Pariksha & Classical Consultation">Nadi Pariksha & Classical Consultation</option>
-              <option value="General Ayurvedic Wellness">General Ayurvedic Wellness</option>
+              <option value="Chronic Digestion & Acidity (GERD, IBS)" data-en="Chronic Digestion & Acidity (GERD, IBS)" data-hi="पुरानी पाचन समस्या और एसिडिटी (GERD, IBS)">Chronic Digestion & Acidity (GERD, IBS) / पुरानी पाचन समस्या और एसिडिटी (GERD, IBS)</option>
+<option value="Joint Pain & Sciatica (Kati Basti, Arthritis)" data-en="Joint Pain & Sciatica (Kati Basti, Arthritis)" data-hi="जोड़ों का दर्द और साइटिका (कटी बस्ती, आर्थराइटिस)">Joint Pain & Sciatica (Kati Basti, Arthritis) / जोड़ों का दर्द और साइटिका (कटी बस्ती, आर्थराइटिस)</option>
+<option value="Skin & Chronic Allergy (Twak Roga)" data-en="Skin & Chronic Allergy (Twak Roga)" data-hi="त्वचा एवं पुरानी एलर्जी (त्वक रोग)">Skin & Chronic Allergy (Twak Roga) / त्वचा एवं पुरानी एलर्जी (त्वक रोग)</option>
+<option value="Lifestyle & Metabolic Health (PCOS, Thyroid)" data-en="Lifestyle & Metabolic Health (PCOS, Thyroid)" data-hi="जीवनशैली एवं मेटाबॉलिक स्वास्थ्य (PCOS, थायराइड)">Lifestyle & Metabolic Health (PCOS, Thyroid) / जीवनशैली एवं मेटाबॉलिक स्वास्थ्य (PCOS, थायराइड)</option>
+<option value="Nadi Pariksha & Classical Consultation" data-en="Nadi Pariksha & Classical Consultation" data-hi="नाड़ी परीक्षा एवं शास्त्रीय परामर्श">Nadi Pariksha & Classical Consultation / नाड़ी परीक्षा एवं शास्त्रीय परामर्श</option>
+<option value="General Ayurvedic Wellness" data-en="General Ayurvedic Wellness" data-hi="सामान्य आयुर्वेदिक कल्याण">General Ayurvedic Wellness / सामान्य आयुर्वेदिक कल्याण</option>
             </select>
           </div>
 
@@ -2617,7 +2609,7 @@ section.achievements-section .nav-btn:hover {
         </form>
 
         <!-- Write Google Review via Gmail -->
-        <div class="google-review-cta">
+        <!-- <div class="google-review-cta">
           <div>
             <div style="font-weight:700; font-size:0.88rem; color:var(--panel); display:flex; align-items:center; gap:6px;">
               <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
@@ -2629,7 +2621,7 @@ section.achievements-section .nav-btn:hover {
             ★ Post on Google ↗
           </a>
         </div>
-      </div>
+      </div> -->
 
       <!-- Testimonials Display -->
       <div class="reviews-list-container">
