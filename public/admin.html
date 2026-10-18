@@ -362,6 +362,110 @@
   }
   .btn-approve-fast:hover { background: #236326; }
 
+  /* CONFIRM & ARCHIVE BUTTON */
+  .btn-confirm-archive {
+    background: #1B5E20;
+    color: #FFFFFF;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  }
+  .btn-confirm-archive:hover {
+    background: #2E7D32;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(27,94,32,0.25);
+  }
+  .btn-confirm-archive:active {
+    transform: translateY(0);
+  }
+  .btn-confirm-archive:disabled {
+    background: #A09D90;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* PENDING CARDS GRID */
+  .pending-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .appointment-card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .appointment-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--warning);
+  }
+  .appointment-card.archiving {
+    opacity: 0;
+    transform: scale(0.92) translateY(-15px);
+    max-height: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    pointer-events: none;
+  }
+  tr.archiving {
+    opacity: 0;
+    transform: translateX(40px);
+    transition: all 0.4s ease;
+  }
+
+  /* TOAST NOTIFICATION */
+  #adminToastContainer {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+  }
+  .admin-toast {
+    background: #1F3A2E;
+    color: #ECE8DC;
+    padding: 12px 20px;
+    border-radius: 6px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    font-size: 0.88rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    pointer-events: auto;
+    animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    border-left: 4px solid var(--gold);
+  }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
   .btn-icon {
     background: transparent;
     border: 1px solid var(--line);
@@ -680,6 +784,32 @@
       </div>
     </div>
 
+    <!-- ACTIVE PENDING APPOINTMENT TRACKING SECTION -->
+    <div class="pending-section" id="pendingTrackingSection" style="margin-bottom: 24px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
+        <div>
+          <h3 style="margin:0; font-family:'Cormorant Garamond', serif; font-size:1.45rem; color:var(--panel); display:flex; align-items:center; gap:8px;">
+            <span>📋 Active Pending Consultations</span>
+            <span class="badge badge-pending" id="pendingQueueBadge" style="font-size:0.75rem;">Firestore Queue</span>
+          </h3>
+          <p style="margin:2px 0 0; font-size:0.84rem; color:var(--ink-soft);">
+            Incoming consultation requests awaiting confirmation. Click "Confirm & Archive" to approve and retain permanently in Firestore database.
+          </p>
+        </div>
+        <div>
+          <button class="btn-action" onclick="fetchPendingAppointments()" title="Refresh pending requests">
+            <span>↻</span> Refresh Pending
+          </button>
+        </div>
+      </div>
+
+      <div id="pendingCardsContainer" class="pending-cards-grid">
+        <div style="grid-column:1/-1; text-align:center; padding:24px; background:var(--white); border:1px solid var(--line); border-radius:var(--radius); color:var(--ink-soft);">
+          Loading active pending appointments...
+        </div>
+      </div>
+    </div>
+
     <!-- TOOLBAR -->
     <div class="toolbar">
       <div class="search-box">
@@ -920,7 +1050,7 @@
   }
 
   async function loadDashboard() {
-    await Promise.all([loadStats(), loadAppointments()]);
+    await Promise.all([loadStats(), fetchPendingAppointments(), loadAppointments()]);
   }
 
   async function loadStats() {
@@ -936,6 +1066,202 @@
     } catch (e) {
       console.error('Stats error:', e);
     }
+  }
+
+  async function fetchPendingAppointments() {
+    const container = document.getElementById('pendingCardsContainer');
+    if (!container) return;
+
+    try {
+      container.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:20px; color:var(--ink-soft);">Loading pending consultations...</div>';
+
+      const res = await fetch('/api/appointments/pending', {
+        headers: authToken ? { 'Authorization': `Bearer ${authToken}` } : {}
+      });
+      const json = await res.json();
+
+      if (!json.success || !json.appointments || json.appointments.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column:1/-1; text-align:center; padding:28px 16px; background:var(--white); border:1px dashed var(--line); border-radius:var(--radius);">
+            <div style="font-size:1.8rem; margin-bottom:6px;">✨</div>
+            <strong style="color:var(--panel); font-size:1.05rem;">All caught up!</strong>
+            <p style="margin:4px 0 0; color:var(--ink-soft); font-size:0.85rem;">There are currently no pending consultation requests awaiting confirmation.</p>
+          </div>
+        `;
+        return;
+      }
+
+      json.appointments.forEach(a => appointmentCache.set(String(a.id), a));
+
+      container.innerHTML = json.appointments.map(appt => {
+        const displayDate = appt.preferred_date || 'Earliest available';
+        const displayTime = appt.preferred_time_slot || 'Morning (10:00 AM – 01:00 PM)';
+        const modeText = (appt.consultation_type || '').includes('Online') ? '📹 Online Video' : '🏥 In-clinic';
+        const concern = appt.health_concern ? (appt.health_concern.length > 90 ? appt.health_concern.substring(0, 87) + '...' : appt.health_concern) : 'General Ayurvedic Consultation';
+
+        return `
+          <div class="appointment-card" id="card-${appt.id}">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;">
+                <div>
+                  <span style="font-family:monospace; font-weight:700; color:var(--gold); font-size:0.95rem;">${escapeHtml(appt.reference_code)}</span>
+                  <div style="font-size:0.75rem; color:var(--ink-soft);">${escapeHtml(appt.created_at ? appt.created_at.slice(0, 16) : '')}</div>
+                </div>
+                <span class="badge badge-pending">Pending Review</span>
+              </div>
+
+              <div style="margin-bottom:10px;">
+                <strong style="font-size:1.05rem; color:var(--panel); display:block;">${escapeHtml(appt.patient_name)}</strong>
+                <div style="font-size:0.85rem; color:var(--ink); margin-top:3px;">
+                  📞 <a href="tel:${escapeHtml(appt.phone)}" style="color:var(--panel); font-weight:600; text-decoration:none;">${escapeHtml(appt.phone)}</a>
+                </div>
+                ${appt.email ? `<div style="font-size:0.78rem; color:var(--info); margin-top:2px;">✉️ ${escapeHtml(appt.email)}</div>` : ''}
+              </div>
+
+              <div style="background:#FAF8F2; padding:10px; border-radius:4px; font-size:0.82rem; margin-bottom:12px; border:1px solid var(--line);">
+                <div><strong>Type:</strong> ${escapeHtml(modeText)}</div>
+                <div><strong>Slot:</strong> ${escapeHtml(displayDate)} &bull; ${escapeHtml(displayTime)}</div>
+                <div style="margin-top:6px; color:var(--ink-soft); font-style:italic; line-height:1.35;">
+                  "${escapeHtml(concern)}"
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:8px; align-items:center; margin-top:auto; padding-top:12px; border-top:1px solid var(--line);">
+              <button class="btn-confirm-archive" onclick="confirmAndArchive('${appt.id}', '${escapeHtml(appt.reference_code)}', this)" title="Confirm consultation & archive from active queue">
+                ✓ Confirm & Archive
+              </button>
+              <button class="btn-action" style="padding:6px 12px; font-size:0.8rem;" onclick="openApprovalModal('${appt.id}')" title="Review full details and customize WhatsApp/Email alert">
+                Details
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+    } catch (err) {
+      console.error('Pending fetch error:', err);
+      container.innerHTML = `<div style="grid-column:1/-1; color:var(--danger); text-align:center; padding:16px;">Error loading pending appointments: ${escapeHtml(err.message)}</div>`;
+    }
+  }
+
+  async function confirmAndArchive(id, refCode, btnElem) {
+    if (btnElem) {
+      btnElem.disabled = true;
+      btnElem.innerHTML = '<span style="display:inline-block; animation:spin 1s linear infinite;">⏳</span> Archiving...';
+    }
+
+    try {
+      const res = await fetch(`/api/appointments/confirm/${encodeURIComponent(id)}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+        },
+        body: JSON.stringify({
+          confirmed_date: new Date().toISOString().slice(0, 10),
+          confirmed_time: 'Confirmed via Staff Portal'
+        })
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to confirm appointment');
+
+      // Instantly remove card from pending cards grid
+      const card = document.getElementById(`card-${id}`) || (btnElem ? btnElem.closest('.appointment-card') : null);
+      if (card) {
+        card.classList.add('archiving');
+        setTimeout(() => {
+          card.remove();
+          checkPendingCardsEmpty();
+        }, 350);
+      }
+
+      // Also handle table row if present
+      const row = document.getElementById(`row-${id}`) || (btnElem ? btnElem.closest('tr') : null);
+      const statusFilterVal = document.getElementById('statusFilter').value;
+      if (row) {
+        if (statusFilterVal === 'pending') {
+          row.classList.add('archiving');
+          setTimeout(() => {
+            row.remove();
+            checkTableEmpty();
+          }, 350);
+        } else {
+          const badge = document.getElementById(`badge-${id}`);
+          if (badge) {
+            badge.className = 'badge badge-confirmed';
+            badge.textContent = 'confirmed';
+          }
+          const select = document.getElementById(`status-sel-${id}`);
+          if (select) select.value = 'confirmed';
+          if (btnElem && btnElem.classList.contains('btn-confirm-archive')) {
+            btnElem.remove();
+          }
+        }
+      }
+
+      // Decrement pending counter, increment confirmed counter
+      const pendingElem = document.getElementById('statPending');
+      const confirmedElem = document.getElementById('statConfirmed');
+      if (pendingElem) {
+        const cur = parseInt(pendingElem.textContent, 10) || 0;
+        pendingElem.textContent = Math.max(0, cur - 1);
+      }
+      if (confirmedElem) {
+        const cur = parseInt(confirmedElem.textContent, 10) || 0;
+        confirmedElem.textContent = cur + 1;
+      }
+
+      showToast(`✓ Consultation ${refCode || ''} confirmed & archived permanently in Firestore.`);
+    } catch (err) {
+      alert('Failed to archive consultation: ' + err.message);
+      if (btnElem) {
+        btnElem.disabled = false;
+        btnElem.innerHTML = '✓ Confirm & Archive';
+      }
+    }
+  }
+
+  function checkPendingCardsEmpty() {
+    const container = document.getElementById('pendingCardsContainer');
+    if (container && container.querySelectorAll('.appointment-card').length === 0) {
+      container.innerHTML = `
+        <div style="grid-column:1/-1; text-align:center; padding:28px 16px; background:var(--white); border:1px dashed var(--line); border-radius:var(--radius);">
+          <div style="font-size:1.8rem; margin-bottom:6px;">✨</div>
+          <strong style="color:var(--panel); font-size:1.05rem;">All caught up!</strong>
+          <p style="margin:4px 0 0; color:var(--ink-soft); font-size:0.85rem;">All pending consultation requests have been confirmed and permanently archived.</p>
+        </div>
+      `;
+    }
+  }
+
+  function checkTableEmpty() {
+    const tbody = document.getElementById('appointmentsTableBody');
+    if (tbody && tbody.querySelectorAll('tr').length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" class="empty-state">No appointments found matching current filter.</td></tr>`;
+    }
+  }
+
+  function showToast(message) {
+    let toastContainer = document.getElementById('adminToastContainer');
+    if (!toastContainer) {
+      toastContainer = document.createElement('div');
+      toastContainer.id = 'adminToastContainer';
+      document.body.appendChild(toastContainer);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = 'admin-toast';
+    toast.innerHTML = `<span>${escapeHtml(message)}</span>`;
+    toastContainer.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(10px)';
+      toast.style.transition = 'all 0.3s ease';
+      setTimeout(() => toast.remove(), 300);
+    }, 4000);
   }
 
   function handleSearch() {
@@ -966,7 +1292,7 @@
       }
 
       appointmentCache.clear();
-      json.appointments.forEach(appt => appointmentCache.set(Number(appt.id), appt));
+      json.appointments.forEach(appt => appointmentCache.set(String(appt.id), appt));
 
       tableBody.innerHTML = json.appointments.map(appt => {
         const concernSnippet = appt.health_concern ? (appt.health_concern.length > 45 ? appt.health_concern.substring(0, 42) + '...' : appt.health_concern) : '—';
@@ -978,10 +1304,10 @@
         const emailSent = appt.email_sent_at ? `<span class="notif-badge notif-email" title="Email sent on ${appt.email_sent_at}">✓ Email</span>` : '<span style="opacity:0.4; font-size:0.75rem;">— Email</span>';
 
         return `
-          <tr>
+          <tr id="row-${appt.id}">
             <td>
               <strong style="font-family:monospace; color:var(--gold); font-size:0.95rem;">${appt.reference_code}</strong>
-              <div style="font-size:0.75rem; color:var(--ink-soft);">${appt.created_at}</div>
+              <div style="font-size:0.75rem; color:var(--ink-soft);">${appt.created_at || ''}</div>
             </td>
             <td>
               <strong>${escapeHtml(appt.patient_name)}</strong>
@@ -990,7 +1316,7 @@
             </td>
             <td>
               <span style="font-size:0.82rem; color:var(--ink-soft);">
-                ${appt.consultation_type.includes('Online') ? '📹 Online' : '🏥 In-clinic'}
+                ${appt.consultation_type && appt.consultation_type.includes('Online') ? '📹 Online' : '🏥 In-clinic'}
               </span>
             </td>
             <td>
@@ -1000,7 +1326,7 @@
             <td>
               <div style="display:flex; flex-direction:column; gap:4px; align-items:flex-start;">
                 <span id="badge-${appt.id}" class="badge badge-${appt.status}">${appt.status}</span>
-                <select class="status-quick-select" id="status-sel-${appt.id}" data-current="${appt.status}" onchange="updateAppointmentStatus(${appt.id}, this.value, this)" title="Change appointment status">
+                <select class="status-quick-select" id="status-sel-${appt.id}" data-current="${appt.status}" onchange="updateAppointmentStatus('${appt.id}', this.value, this)" title="Change appointment status">
                   <option value="pending" ${appt.status === 'pending' ? 'selected' : ''}>Pending</option>
                   <option value="confirmed" ${appt.status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
                   <option value="completed" ${appt.status === 'completed' ? 'selected' : ''}>Completed</option>
@@ -1018,11 +1344,16 @@
               ${escapeHtml(concernSnippet)}
             </td>
             <td>
-              <div style="display:flex; align-items:center;">
-                <button class="btn-approve-fast" onclick="openApprovalModal(${appt.id})" title="Approve & Send WhatsApp/Email">
-                  ${isPending ? '✓ Approve & Notify' : 'Review & Notify'}
+              <div style="display:flex; align-items:center; gap:6px;">
+                ${isPending ? `
+                  <button class="btn-confirm-archive" onclick="confirmAndArchive('${appt.id}', '${escapeHtml(appt.reference_code)}', this)" title="Confirm & Archive to permanent database">
+                    ✓ Confirm & Archive
+                  </button>
+                ` : ''}
+                <button class="btn-approve-fast" onclick="openApprovalModal('${appt.id}')" title="Approve & Send WhatsApp/Email">
+                  ${isPending ? 'Details' : 'Review & Notify'}
                 </button>
-                <button class="btn-icon" style="color:var(--danger);" onclick="deleteAppointment(${appt.id}, '${escapeHtml(appt.reference_code)}')" title="Delete">✕</button>
+                <button class="btn-icon" style="color:var(--danger);" onclick="deleteAppointment('${appt.id}', '${escapeHtml(appt.reference_code)}')" title="Delete">✕</button>
               </div>
             </td>
           </tr>
@@ -1037,7 +1368,7 @@
 
   // Real-time Status Update via Dedicated PATCH API
   async function updateAppointmentStatus(id, newStatus, selectElem) {
-    const numId = Number(id);
+    const strId = String(id);
     const previousStatus = selectElem ? selectElem.getAttribute('data-current') : null;
 
     try {
@@ -1045,7 +1376,7 @@
         selectElem.disabled = true;
       }
 
-      const res = await authFetch(`/api/admin/appointments/${numId}/status`, {
+      const res = await authFetch(`/api/admin/appointments/${encodeURIComponent(strId)}/status`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
@@ -1060,13 +1391,13 @@
       }
 
       // Update in-memory appointment cache
-      const cached = appointmentCache.get(numId);
+      const cached = appointmentCache.get(strId);
       if (cached) {
         cached.status = newStatus;
       }
 
       // Dynamically update status badge in table
-      const badge = document.getElementById(`badge-${numId}`);
+      const badge = document.getElementById(`badge-${strId}`);
       if (badge) {
         badge.className = `badge badge-${newStatus}`;
         badge.textContent = newStatus;
@@ -1090,15 +1421,15 @@
   // Open Approval & Notification Modal
   async function openApprovalModal(id) {
     try {
-      const numId = Number(id);
-      let appt = appointmentCache.get(numId);
+      const strId = String(id);
+      let appt = appointmentCache.get(strId);
 
       if (!appt) {
-        const res = await authFetch(`/api/admin/appointments/${numId}`);
+        const res = await authFetch(`/api/admin/appointments/${encodeURIComponent(strId)}`);
         const json = await res.json();
         if (json.success && json.appointment) {
           appt = json.appointment;
-          appointmentCache.set(numId, appt);
+          appointmentCache.set(strId, appt);
         }
       }
 

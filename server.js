@@ -89,6 +89,11 @@ try {
   console.warn('Seed notice:', e.message);
 }
 
+const { seedInitialDataIfEmpty } = require('./src/db/firestore');
+seedInitialDataIfEmpty().catch(e => {
+  console.warn('Firestore initial seed notice:', e.message);
+});
+
 // Start Server (only in standalone Node.js environments, NOT under Vercel serverless runtime)
 if (require.main === module && !process.env.VERCEL) {
   app.listen(PORT, () => {

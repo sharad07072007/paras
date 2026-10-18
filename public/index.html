@@ -3360,11 +3360,16 @@ phoneInput.addEventListener('input', (e) => {
           if (countElem) countElem.textContent = `Based on ${data.stats.total} verified reviews`;
         }
 
-        if (data.reviews && data.reviews.length > 0) {
-          container.innerHTML = data.reviews.map(r => {
-            const initials = r.patient_name ? r.patient_name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'P';
-            const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
-            const dateStr = r.created_at ? r.created_at.slice(0, 10) : '';
+        const reviewItems = Array.isArray(data.reviews) ? data.reviews : [];
+        if (reviewItems.length > 0) {
+          container.innerHTML = reviewItems.map(r => {
+            const author = r.reviewer_name || r.patient_name || r.name || 'Verified Patient';
+            const initials = author.split(' ').map(n => n[0]).filter(Boolean).join('').slice(0, 2).toUpperCase() || 'P';
+            const stars = '★'.repeat(r.rating || 5) + '☆'.repeat(Math.max(0, 5 - (r.rating || 5)));
+            const rawDate = r.timestamp || r.created_at || '';
+            const dateStr = rawDate.length >= 10 ? rawDate.slice(0, 10) : 'Recent';
+            const comment = r.comment || r.review_text || '';
+            const category = r.treatment_category || r.category || 'Ayurvedic Treatment';
 
             return `
               <div class="review-item-card">
@@ -3372,7 +3377,7 @@ phoneInput.addEventListener('input', (e) => {
                   <div style="display:flex; align-items:center;">
                     <div class="review-avatar">${escapeHtml(initials)}</div>
                     <div>
-                      <strong style="font-size:0.92rem; color:var(--panel);">${escapeHtml(r.patient_name)}</strong>
+                      <strong style="font-size:0.92rem; color:var(--panel);">${escapeHtml(author)}</strong>
                       <div style="font-size:0.72rem; color:#2E7D32; font-weight:600;">✓ Verified Patient</div>
                     </div>
                   </div>
@@ -3382,14 +3387,16 @@ phoneInput.addEventListener('input', (e) => {
                   </div>
                 </div>
                 <div style="margin:6px 0 8px;">
-                  <span class="review-cat-tag">${escapeHtml(r.treatment_category || 'Ayurvedic Treatment')}</span>
+                  <span class="review-cat-tag">${escapeHtml(category)}</span>
                 </div>
                 <p style="font-size:0.86rem; color:var(--ink); line-height:1.45; margin:0; font-style:italic;">
-                  "${escapeHtml(r.review_text)}"
+                  "${escapeHtml(comment)}"
                 </p>
               </div>
             `;
           }).join('');
+        } else {
+          container.innerHTML = `<div style="text-align:center; padding:18px; color:var(--ink-soft); font-size:0.88rem;">No reviews submitted yet. Be the first to share your experience!</div>`;
         }
       } catch (err) {
         console.warn('Reviews load notice:', err.message);
@@ -3439,13 +3446,24 @@ phoneInput.addEventListener('input', (e) => {
         alertBox.style.display = 'none';
         submitBtn.disabled = true;
         spinner.style.display = 'inline-block';
-        btnText.textContent = 'Submitting & Notifying Doctor...';
+        btnText.textContent = 'Submitting to Firestore...';
 
         try {
           const res = await fetch('/api/reviews', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, rating, category, review_text })
+            body: JSON.stringify({
+              name,
+              reviewer_name: name,
+              patient_name: name,
+              email,
+              patient_email: email,
+              rating,
+              category,
+              treatment_category: category,
+              comment: review_text,
+              review_text
+            })
           });
 
           const data = await res.json();
@@ -3457,7 +3475,7 @@ phoneInput.addEventListener('input', (e) => {
           alertBox.style.border = '1px solid #C8E6C9';
           alertBox.innerHTML = `
             <strong>✓ Thank you, ${escapeHtml(name)}!</strong><br>
-            Your review has been submitted directly to Dr. Paras Leve. A confirmation receipt has been sent to your Gmail (${escapeHtml(email)}).
+            Your review has been permanently recorded in Google Cloud Firestore. A confirmation receipt has been sent to your Gmail (${escapeHtml(email)}).
           `;
 
           reviewForm.reset();
@@ -3466,8 +3484,8 @@ phoneInput.addEventListener('input', (e) => {
           document.querySelectorAll('#starRatingWidget .star-btn').forEach(s => s.classList.add('active'));
           document.getElementById('starRatingLabel').textContent = '5 / 5 — Excellent Healing Care';
 
-          // Refresh live reviews list
-          loadReviews();
+          // Refresh live reviews list dynamically
+          await loadReviews();
 
         } catch (err) {
           alertBox.style.display = 'block';

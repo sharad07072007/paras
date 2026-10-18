@@ -1,6 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const { db, verifyPassword, hashPassword } = require('../db/database');
+const {
+  getAdminUser,
+  verifyPassword,
+  getAppointmentStats,
+  listAppointments,
+  getAppointmentById,
+  confirmAppointment,
+  updateAppointment,
+  deleteAppointment,
+  getAllReviews
+} = require('../db/firestore');
 const { signToken, requireAdminAuth } = require('../middleware/auth');
 const { sanitizeText } = require('../middleware/validator');
 const {
@@ -11,14 +21,14 @@ const {
 /**
  * POST /api/admin/login
  */
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body || {};
     if (!username || !password) {
       return res.status(400).json({ error: 'Username and password are required.' });
     }
 
-    const user = db.prepare('SELECT * FROM admin_users WHERE username = ?').get(username.trim());
+    const user = await getAdminUser(username.trim());
     if (!user) {
       return res.status(401).json({ error: 'Invalid username or password.' });
     }
@@ -63,28 +73,12 @@ router.get('/me', (req, res) => {
 /**
  * GET /api/admin/stats
  */
-router.get('/stats', (req, res) => {
+router.get('/stats', async (req, res) => {
   try {
-    const totalRow = db.prepare('SELECT COUNT(*) as count FROM appointments').get();
-    const pendingRow = db.prepare("SELECT COUNT(*) as count FROM appointments WHERE status = 'pending'").get();
-    const confirmedRow = db.prepare("SELECT COUNT(*) as count FROM appointments WHERE status = 'confirmed'").get();
-    const completedRow = db.prepare("SELECT COUNT(*) as count FROM appointments WHERE status = 'completed'").get();
-    const onlineRow = db.prepare("SELECT COUNT(*) as count FROM appointments WHERE consultation_type LIKE '%Online%'").get();
-    const clinicRow = db.prepare("SELECT COUNT(*) as count FROM appointments WHERE consultation_type LIKE '%In-clinic%'").get();
-
-    return res.json({
-      success: true,
-      stats: {
-        total: totalRow.count,
-        pending: pendingRow.count,
-        confirmed: confirmedRow.count,
-        completed: completedRow.count,
-        online: onlineRow.count,
-        inClinic: clinicRow.count
-      }
-    });
+    const stats = await getAppointmentStats();
+    return res.json({ success: true, stats });
   } catch (error) {
-    console.error('Error fetching admin stats:', error);
+    console.error('Error fetching admin stats from Firestore:', error);
     return res.status(500).json({ error: 'Failed to retrieve dashboard statistics.' });
   }
 });
@@ -92,68 +86,42 @@ router.get('/stats', (req, res) => {
 /**
  * GET /api/admin/appointments
  */
-router.get('/appointments', (req, res) => {
+router.get('/appointments', async (req, res) => {
   try {
     const { status, search, type, limit = 100, offset = 0 } = req.query;
 
-    let query = 'SELECT * FROM appointments WHERE 1=1';
-    const params = [];
-
-    if (status && status !== 'all') {
-      query += ' AND status = ?';
-      params.push(status);
-    }
-
-    if (type && type !== 'all') {
-      query += ' AND consultation_type = ?';
-      params.push(type);
-    }
-
-    if (search && search.trim()) {
-      const term = `%${search.trim()}%`;
-      const num = parseInt(search.trim(), 10);
-      if (!isNaN(num) && num > 0) {
-        query += ' AND (id = ? OR patient_name LIKE ? OR phone LIKE ? OR reference_code LIKE ? OR health_concern LIKE ?)';
-        params.push(num, term, term, term, term);
-      } else {
-        query += ' AND (patient_name LIKE ? OR phone LIKE ? OR reference_code LIKE ? OR health_concern LIKE ?)';
-        params.push(term, term, term, term);
-      }
-    }
-
-    query += ' ORDER BY id DESC LIMIT ? OFFSET ?';
-    params.push(parseInt(limit, 10) || 100, parseInt(offset, 10) || 0);
-
-    const rows = db.prepare(query).all(...params);
+    const result = await listAppointments({
+      status,
+      search,
+      type,
+      limit: parseInt(limit, 10) || 100,
+      offset: parseInt(offset, 10) || 0
+    });
 
     return res.json({
       success: true,
-      count: rows.length,
-      appointments: rows
+      count: result.count,
+      appointments: result.appointments
     });
   } catch (error) {
-    console.error('Error listing appointments:', error);
+    console.error('Error listing appointments from Firestore:', error);
     return res.status(500).json({ error: 'Failed to list appointments.' });
   }
 });
 
 /**
  * GET /api/admin/appointments/:id
- * Fetch single appointment by numeric ID
  */
-router.get('/appointments/:id', (req, res) => {
+router.get('/appointments/:id', async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
-    if (isNaN(id)) {
-      return res.status(400).json({ error: 'Invalid appointment ID.' });
-    }
-    const appointment = db.prepare('SELECT * FROM appointments WHERE id = ?').get(id);
+    const id = req.params.id;
+    const appointment = await getAppointmentById(id);
     if (!appointment) {
       return res.status(404).json({ error: 'Appointment not found.' });
     }
     return res.json({ success: true, appointment });
   } catch (error) {
-    console.error('Error fetching appointment:', error);
+    console.error('Error fetching appointment from Firestore:', error);
     return res.status(500).json({ error: 'Failed to retrieve appointment.' });
   }
 });
@@ -164,8 +132,8 @@ router.get('/appointments/:id', (req, res) => {
  */
 router.post('/appointments/:id/approve', async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
-    const existing = db.prepare('SELECT * FROM appointments WHERE id = ?').get(id);
+    const id = req.params.id;
+    const existing = await getAppointmentById(id);
 
     if (!existing) {
       return res.status(404).json({ error: 'Appointment not found.' });
@@ -181,29 +149,28 @@ router.post('/appointments/:id/approve', async (req, res) => {
 
     const finalDate = sanitizeText(confirmed_date) || existing.preferred_date || new Date().toISOString().slice(0, 10);
     const finalTime = sanitizeText(confirmed_time) || existing.preferred_time_slot || 'Morning (10:00 AM – 01:00 PM)';
-    const finalMeetingLink = sanitizeText(meeting_link) || existing.meeting_link || 
-      (existing.consultation_type.includes('Online') ? `https://meet.google.com/ayur-${existing.reference_code.toLowerCase().replace(/[^a-z0-9]/g, '-')}` : '');
+    const finalMeetingLink = sanitizeText(meeting_link) || existing.meeting_link ||
+      (existing.consultation_type && existing.consultation_type.includes('Online')
+        ? `https://meet.google.com/ayur-${(existing.reference_code || 'appt').toLowerCase().replace(/[^a-z0-9]/g, '-')}`
+        : '');
     const finalNotes = doctor_notes !== undefined ? sanitizeText(doctor_notes) : existing.doctor_notes;
 
-    db.prepare(`
-      UPDATE appointments
-      SET status = 'confirmed',
-          confirmed_date = ?,
-          confirmed_time = ?,
-          meeting_link = ?,
-          doctor_notes = ?,
-          updated_at = datetime('now', 'localtime')
-      WHERE id = ?
-    `).run(finalDate, finalTime, finalMeetingLink, finalNotes, id);
-
-    const updated = db.prepare('SELECT * FROM appointments WHERE id = ?').get(id);
+    const updated = await confirmAppointment(id, {
+      confirmed_date: finalDate,
+      confirmed_time: finalTime,
+      meeting_link: finalMeetingLink,
+      doctor_notes: finalNotes
+    });
 
     // 1. Send Email Notification
     let emailResult = { sent: false };
-    if (send_email && updated.email) {
-      emailResult = await sendPatientConfirmationEmail(updated);
+    if (send_email && updated && updated.email) {
+      emailResult = await sendPatientConfirmationEmail(updated).catch(e => {
+        console.error('Email error:', e.message);
+        return { sent: false };
+      });
       if (emailResult.sent) {
-        db.prepare("UPDATE appointments SET email_sent_at = datetime('now', 'localtime') WHERE id = ?").run(id);
+        await updateAppointment(id, { email_sent_at: new Date().toISOString() });
       }
     }
 
@@ -212,13 +179,13 @@ router.post('/appointments/:id/approve', async (req, res) => {
 
     return res.json({
       success: true,
-      message: 'Consultation successfully approved and confirmed.',
+      message: 'Consultation successfully approved and confirmed in permanent database.',
       appointment: updated,
       whatsapp: wa,
       email_sent: emailResult.sent
     });
   } catch (error) {
-    console.error('Error approving appointment:', error);
+    console.error('Error approving appointment in Firestore:', error);
     return res.status(500).json({ error: 'Failed to approve appointment and dispatch notifications.' });
   }
 });
@@ -226,10 +193,10 @@ router.post('/appointments/:id/approve', async (req, res) => {
 /**
  * POST /api/admin/appointments/:id/mark-whatsapp-sent
  */
-router.post('/appointments/:id/mark-whatsapp-sent', (req, res) => {
+router.post('/appointments/:id/mark-whatsapp-sent', async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
-    db.prepare("UPDATE appointments SET whatsapp_sent_at = datetime('now', 'localtime') WHERE id = ?").run(id);
+    const id = req.params.id;
+    await updateAppointment(id, { whatsapp_sent_at: new Date().toISOString() });
     return res.json({ success: true, message: 'WhatsApp notification marked as dispatched.' });
   } catch (error) {
     return res.status(500).json({ error: error.message });
@@ -240,10 +207,10 @@ router.post('/appointments/:id/mark-whatsapp-sent', (req, res) => {
  * PATCH /api/admin/appointments/:id/status
  * Dedicated endpoint for fast, real-time status transitions (pending, confirmed, completed, cancelled)
  */
-router.patch('/appointments/:id/status', (req, res) => {
+router.patch('/appointments/:id/status', async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
-    if (isNaN(id) || id <= 0) {
+    const id = req.params.id;
+    if (!id) {
       return res.status(400).json({ error: 'Invalid appointment ID parameter.' });
     }
 
@@ -262,30 +229,26 @@ router.patch('/appointments/:id/status', (req, res) => {
       });
     }
 
-    const existing = db.prepare('SELECT id, status, patient_name, reference_code FROM appointments WHERE id = ?').get(id);
+    const existing = await getAppointmentById(id);
     if (!existing) {
-      return res.status(404).json({ error: `Appointment #${id} not found.` });
+      return res.status(404).json({ error: `Appointment "${id}" not found.` });
     }
 
-    const result = db.prepare(`
-      UPDATE appointments
-      SET status = ?, updated_at = datetime('now', 'localtime')
-      WHERE id = ?
-    `).run(normalizedStatus, id);
-
-    if (result.changes === 0) {
-      return res.status(500).json({ error: 'Failed to update appointment status.' });
+    const updatePayload = { status: normalizedStatus };
+    if (normalizedStatus === 'confirmed' && !existing.confirmed_timestamp) {
+      updatePayload.confirmed_timestamp = new Date().toISOString();
+      updatePayload.confirmed_at = updatePayload.confirmed_timestamp;
     }
 
-    const updated = db.prepare('SELECT * FROM appointments WHERE id = ?').get(id);
+    const updated = await updateAppointment(id, updatePayload);
 
     return res.json({
       success: true,
-      message: `Appointment #${id} status updated to "${normalizedStatus}".`,
+      message: `Appointment status updated to "${normalizedStatus}".`,
       appointment: updated
     });
   } catch (error) {
-    console.error('Error updating appointment status:', error);
+    console.error('Error updating appointment status in Firestore:', error);
     return res.status(500).json({ error: 'Internal server error while updating status.' });
   }
 });
@@ -293,14 +256,10 @@ router.patch('/appointments/:id/status', (req, res) => {
 /**
  * PATCH /api/admin/appointments/:id
  */
-router.patch('/appointments/:id', (req, res) => {
+router.patch('/appointments/:id', async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
-    if (isNaN(id) || id <= 0) {
-      return res.status(400).json({ error: 'Invalid appointment ID parameter.' });
-    }
-
-    const existing = db.prepare('SELECT * FROM appointments WHERE id = ?').get(id);
+    const id = req.params.id;
+    const existing = await getAppointmentById(id);
 
     if (!existing) {
       return res.status(404).json({ error: 'Appointment not found.' });
@@ -322,29 +281,29 @@ router.patch('/appointments/:id', (req, res) => {
       newStatus = normalized;
     }
 
-    const newNotes = doctor_notes !== undefined ? sanitizeText(doctor_notes) : existing.doctor_notes;
-    const newDate = preferred_date !== undefined ? sanitizeText(preferred_date) : existing.preferred_date;
-    const newTime = preferred_time_slot !== undefined ? sanitizeText(preferred_time_slot) : existing.preferred_time_slot;
-    const newConfDate = confirmed_date !== undefined ? sanitizeText(confirmed_date) : existing.confirmed_date;
-    const newConfTime = confirmed_time !== undefined ? sanitizeText(confirmed_time) : existing.confirmed_time;
-    const newMeetingLink = meeting_link !== undefined ? sanitizeText(meeting_link) : existing.meeting_link;
+    const fields = {
+      status: newStatus,
+      doctor_notes: doctor_notes !== undefined ? sanitizeText(doctor_notes) : existing.doctor_notes,
+      preferred_date: preferred_date !== undefined ? sanitizeText(preferred_date) : existing.preferred_date,
+      preferred_time_slot: preferred_time_slot !== undefined ? sanitizeText(preferred_time_slot) : existing.preferred_time_slot,
+      confirmed_date: confirmed_date !== undefined ? sanitizeText(confirmed_date) : existing.confirmed_date,
+      confirmed_time: confirmed_time !== undefined ? sanitizeText(confirmed_time) : existing.confirmed_time,
+      meeting_link: meeting_link !== undefined ? sanitizeText(meeting_link) : existing.meeting_link
+    };
 
-    db.prepare(`
-      UPDATE appointments
-      SET status = ?, doctor_notes = ?, preferred_date = ?, preferred_time_slot = ?,
-          confirmed_date = ?, confirmed_time = ?, meeting_link = ?, updated_at = datetime('now', 'localtime')
-      WHERE id = ?
-    `).run(newStatus, newNotes, newDate, newTime, newConfDate, newConfTime, newMeetingLink, id);
+    if (newStatus === 'confirmed' && !existing.confirmed_timestamp) {
+      fields.confirmed_timestamp = new Date().toISOString();
+    }
 
-    const updated = db.prepare('SELECT * FROM appointments WHERE id = ?').get(id);
+    const updated = await updateAppointment(id, fields);
 
     return res.json({
       success: true,
-      message: 'Appointment updated successfully.',
+      message: 'Appointment updated successfully in permanent database.',
       appointment: updated
     });
   } catch (error) {
-    console.error('Error updating appointment:', error);
+    console.error('Error updating appointment in Firestore:', error);
     return res.status(500).json({ error: 'Failed to update appointment.' });
   }
 });
@@ -352,23 +311,23 @@ router.patch('/appointments/:id', (req, res) => {
 /**
  * DELETE /api/admin/appointments/:id
  */
-router.delete('/appointments/:id', (req, res) => {
+router.delete('/appointments/:id', async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
-    const existing = db.prepare('SELECT id FROM appointments WHERE id = ?').get(id);
+    const id = req.params.id;
+    const existing = await getAppointmentById(id);
 
     if (!existing) {
       return res.status(404).json({ error: 'Appointment not found.' });
     }
 
-    db.prepare('DELETE FROM appointments WHERE id = ?').run(id);
+    await deleteAppointment(id);
 
     return res.json({
       success: true,
-      message: 'Appointment deleted successfully.'
+      message: 'Appointment deleted successfully from permanent database.'
     });
   } catch (error) {
-    console.error('Error deleting appointment:', error);
+    console.error('Error deleting appointment in Firestore:', error);
     return res.status(500).json({ error: 'Failed to delete appointment.' });
   }
 });
@@ -376,9 +335,10 @@ router.delete('/appointments/:id', (req, res) => {
 /**
  * GET /api/admin/export
  */
-router.get('/export', (req, res) => {
+router.get('/export', async (req, res) => {
   try {
-    const appointments = db.prepare('SELECT * FROM appointments ORDER BY id DESC').all();
+    const result = await listAppointments({ limit: 1000 });
+    const appointments = result.appointments;
 
     const headers = [
       'ID',
@@ -417,7 +377,7 @@ router.get('/export', (req, res) => {
         appt.whatsapp_sent_at || 'No',
         appt.email_sent_at || 'No',
         appt.doctor_notes,
-        appt.created_at
+        appt.created_at || appt.timestamp
       ].map(escapeCsv).join(',');
       csvRows.push(row);
     }
@@ -426,7 +386,7 @@ router.get('/export', (req, res) => {
     res.setHeader('Content-Disposition', `attachment; filename="ayurveda_consultations_${new Date().toISOString().slice(0, 10)}.csv"`);
     return res.send(csvRows.join('\r\n'));
   } catch (error) {
-    console.error('Error exporting appointments:', error);
+    console.error('Error exporting appointments from Firestore:', error);
     return res.status(500).json({ error: 'Failed to export appointments.' });
   }
 });
@@ -435,12 +395,12 @@ router.get('/export', (req, res) => {
  * GET /api/admin/reviews
  * Fetch all patient reviews for doctor / staff dashboard
  */
-router.get('/reviews', (req, res) => {
+router.get('/reviews', async (req, res) => {
   try {
-    const reviews = db.prepare('SELECT * FROM patient_reviews ORDER BY id DESC').all();
+    const { reviews } = await getAllReviews();
     return res.json({ success: true, count: reviews.length, reviews });
   } catch (error) {
-    console.error('Error fetching admin reviews:', error);
+    console.error('Error fetching admin reviews from Firestore:', error);
     return res.status(500).json({ error: 'Failed to retrieve patient reviews.' });
   }
 });

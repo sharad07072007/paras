@@ -132,7 +132,7 @@ async function runTests() {
           'Authorization': `Bearer ${adminToken}`
         }
       });
-      assert(res.status === 200 && res.body.appointment && res.body.appointment.id === testApptId, 'GET /api/admin/appointments/:id returns single appointment');
+      assert(res.status === 200 && res.body.appointment && String(res.body.appointment.id) === String(testApptId), 'GET /api/admin/appointments/:id returns single appointment');
     }
 
     // 7. Admin Approval
@@ -307,6 +307,114 @@ async function runTests() {
       assert(
         res.status === 200 && res.body.success && res.body.count > 0,
         'GET /api/admin/reviews returns reviews list for admin dashboard'
+      );
+    }
+
+    // 17. GET /api/appointments/pending
+    {
+      const res = await makeRequest({
+        hostname: 'localhost',
+        port: PORT,
+        path: '/api/appointments/pending',
+        method: 'GET'
+      });
+      assert(
+        res.status === 200 && res.body.success && Array.isArray(res.body.appointments),
+        'GET /api/appointments/pending returns only pending appointments'
+      );
+      const allPending = res.body.appointments.every(a => a.status === 'pending');
+      assert(allPending, 'Every record in /api/appointments/pending has status === "pending"');
+    }
+
+    // 18. PUT /api/appointments/confirm/:id (Confirms appointment and archives from pending queue)
+    {
+      // Create a fresh pending appointment to confirm
+      const createRes = await makeRequest({
+        hostname: 'localhost',
+        port: PORT,
+        path: '/api/appointments',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      }, {
+        name: 'Vikas Patel',
+        phone: '9876543210',
+        email: 'vikas.patel@gmail.com',
+        mode: 'In-clinic visit',
+        preferred_date: '2026-10-30',
+        preferred_time: 'Evening (04:00 PM – 07:00 PM)',
+        concern: 'Chronic neck stiffness and cervical spondylosis.'
+      });
+      assert(createRes.status === 201 && createRes.body.data.id, 'POST /api/appointments creates pending appointment for confirm test');
+      const newApptId = createRes.body.data.id;
+
+      // Verify it shows up in pending queue
+      const pendingBefore = await makeRequest({
+        hostname: 'localhost',
+        port: PORT,
+        path: '/api/appointments/pending',
+        method: 'GET'
+      });
+      const inPendingBefore = pendingBefore.body.appointments.some(a => String(a.id) === String(newApptId));
+      assert(inPendingBefore, 'New appointment is initially present in GET /api/appointments/pending');
+
+      // Call PUT /api/appointments/confirm/:id
+      const confirmRes = await makeRequest({
+        hostname: 'localhost',
+        port: PORT,
+        path: `/api/appointments/confirm/${encodeURIComponent(newApptId)}`,
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${adminToken}`
+        },
+        body: JSON.stringify({
+          confirmed_date: '2026-10-30',
+          confirmed_time: '04:30 PM',
+          doctor_notes: 'Bring previous cervical spine X-Ray reports.'
+        })
+      });
+      assert(
+        confirmRes.status === 200 && confirmRes.body.success && confirmRes.body.appointment.status === 'confirmed',
+        'PUT /api/appointments/confirm/:id sets status to "confirmed"'
+      );
+      assert(
+        Boolean(confirmRes.body.appointment.confirmed_timestamp || confirmRes.body.appointment.confirmed_at),
+        'PUT /api/appointments/confirm/:id adds permanent confirmed timestamp'
+      );
+
+      // Verify it is now removed from pending queue
+      const pendingAfter = await makeRequest({
+        hostname: 'localhost',
+        port: PORT,
+        path: '/api/appointments/pending',
+        method: 'GET'
+      });
+      const inPendingAfter = pendingAfter.body.appointments.some(a => String(a.id) === String(newApptId));
+      assert(!inPendingAfter, 'Confirmed appointment is automatically removed/archived from GET /api/appointments/pending');
+    }
+
+    // 19. POST /api/reviews with reviewer_name and comment fields
+    {
+      const reviewRes = await makeRequest({
+        hostname: 'localhost',
+        port: PORT,
+        path: '/api/reviews',
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      }, {
+        reviewer_name: 'Meena Sharma',
+        email: 'meena.sharma@gmail.com',
+        rating: 5,
+        comment: 'Remarkable healing experience with Dr. Paras Leve. Highly experienced Ayurvedic physician.',
+        category: 'Nadi Pariksha & Classical Consultation'
+      });
+      assert(
+        reviewRes.status === 201 && reviewRes.body.success && reviewRes.body.review.reviewer_name === 'Meena Sharma',
+        'POST /api/reviews accepts reviewer_name and comment fields permanently'
+      );
+      assert(
+        Boolean(reviewRes.body.review.timestamp || reviewRes.body.review.created_at),
+        'POST /api/reviews permanently records timestamp'
       );
     }
 

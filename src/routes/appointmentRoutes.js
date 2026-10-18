@@ -1,7 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const crypto = require('node:crypto');
-const { db } = require('../db/database');
+const {
+  createAppointment,
+  getPendingAppointments,
+  confirmAppointment,
+  getAppointmentById,
+  getAppointmentByReferenceOrPhone
+} = require('../db/firestore');
 const { validateAppointmentInput, sanitizeText } = require('../middleware/validator');
 const { rateLimiter } = require('../middleware/rateLimiter');
 const {
@@ -12,17 +18,11 @@ const {
 } = require('../services/notificationService');
 
 // Rate limit booking to prevent automated spam
-const bookingLimiter = rateLimiter({ windowMs: 60 * 1000, max: 15 });
-
-function generateReferenceCode() {
-  const randomNum = Math.floor(1000 + Math.random() * 9000);
-  const year = new Date().getFullYear();
-  return `AYU-${year}-${randomNum}`;
-}
+const bookingLimiter = rateLimiter({ windowMs: 60 * 1000, max: 20 });
 
 /**
  * POST /api/appointments
- * Public booking submission with automated doctor alert
+ * Public booking submission saving permanently to Google Cloud Firestore
  */
 router.post('/', bookingLimiter, validateAppointmentInput, async (req, res) => {
   try {
@@ -36,56 +36,17 @@ router.post('/', bookingLimiter, validateAppointmentInput, async (req, res) => {
       health_concern
     } = req.sanitized;
 
-    let referenceCode;
-    let attempts = 0;
-    while (attempts < 5) {
-      referenceCode = generateReferenceCode();
-      const existing = db.prepare('SELECT id FROM appointments WHERE reference_code = ?').get(referenceCode);
-      if (!existing) break;
-      attempts++;
-    }
-
-    const approvalToken = crypto.randomBytes(24).toString('hex');
-    const meetingLink = consultation_type.includes('Online')
-      ? `https://meet.google.com/ayur-${referenceCode.toLowerCase().replace(/[^a-z0-9]/g, '-')}`
-      : '';
-
-    const insertStmt = db.prepare(`
-      INSERT INTO appointments (
-        reference_code,
-        patient_name,
-        phone,
-        email,
-        consultation_type,
-        preferred_date,
-        preferred_time_slot,
-        health_concern,
-        status,
-        doctor_notes,
-        approval_token,
-        meeting_link
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', '', ?, ?)
-    `);
-
-    const result = insertStmt.run(
-      referenceCode,
+    const newRecord = await createAppointment({
       patient_name,
       phone,
       email,
       consultation_type,
-      preferred_date || 'Earliest available',
-      preferred_time_slot || 'Morning (10:00 AM - 01:00 PM)',
-      health_concern,
-      approvalToken,
-      meetingLink
-    );
-
-    const newRecord = db.prepare(`
-      SELECT * FROM appointments WHERE id = ?
-    `).get(result.lastInsertRowid);
+      preferred_date: preferred_date || 'Earliest available',
+      preferred_time_slot: preferred_time_slot || 'Morning (10:00 AM - 01:00 PM)',
+      health_concern
+    });
 
     // Dispatch automated emails to both Doctor and Patient (if email provided)
-    // We await them so serverless environments (e.g. Vercel) complete network transmission
     const emailTasks = [
       sendDoctorNewBookingAlert(newRecord).catch(e => {
         console.error('Doctor alert dispatch error:', e.message);
@@ -112,18 +73,139 @@ router.post('/', bookingLimiter, validateAppointmentInput, async (req, res) => {
         reference_code: newRecord.reference_code,
         patient_name: newRecord.patient_name,
         phone: newRecord.phone,
+        email: newRecord.email,
         consultation_type: newRecord.consultation_type,
         preferred_date: newRecord.preferred_date,
         preferred_time_slot: newRecord.preferred_time_slot,
+        health_concern: newRecord.health_concern,
         status: newRecord.status,
-        created_at: newRecord.created_at
+        created_at: newRecord.created_at,
+        timestamp: newRecord.timestamp
       }
     });
   } catch (error) {
-    console.error('Error creating appointment:', error);
+    console.error('Error creating appointment in Firestore:', error);
     return res.status(500).json({
       error: 'An unexpected error occurred while processing your appointment request. Please try again or call the clinic directly.'
     });
+  }
+});
+
+/**
+ * GET /api/appointments/pending
+ * Fetch only appointments where status is 'pending' from Firestore
+ */
+router.get('/pending', async (req, res) => {
+  try {
+    const pendingAppointments = await getPendingAppointments();
+    return res.json({
+      success: true,
+      count: pendingAppointments.length,
+      appointments: pendingAppointments
+    });
+  } catch (error) {
+    console.error('Error fetching pending appointments from Firestore:', error);
+    return res.status(500).json({ error: 'Failed to retrieve pending appointments.' });
+  }
+});
+
+/**
+ * PUT /api/appointments/confirm/:id
+ * Updates an appointment's status to 'confirmed' and adds a confirmed timestamp,
+ * effectively removing it from the active staff portal view while retaining it permanently in Firestore.
+ */
+router.put('/confirm/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!id) {
+      return res.status(400).json({ error: 'Appointment ID parameter is required.' });
+    }
+
+    const {
+      confirmed_date,
+      confirmed_time,
+      meeting_link,
+      doctor_notes,
+      send_email = true
+    } = req.body || {};
+
+    const updatedAppt = await confirmAppointment(id, {
+      confirmed_date: sanitizeText(confirmed_date),
+      confirmed_time: sanitizeText(confirmed_time),
+      meeting_link: sanitizeText(meeting_link),
+      doctor_notes: sanitizeText(doctor_notes)
+    });
+
+    if (!updatedAppt) {
+      return res.status(404).json({ error: `Appointment "${id}" not found.` });
+    }
+
+    // Optional email confirmation dispatch
+    let emailResult = { sent: false };
+    if (send_email && updatedAppt.email) {
+      emailResult = await sendPatientConfirmationEmail(updatedAppt).catch(e => {
+        console.error('Confirmation email dispatch error:', e.message);
+        return { sent: false };
+      });
+    }
+
+    // Generate WhatsApp deep link helper
+    const wa = generateWhatsAppMessage(updatedAppt);
+
+    return res.json({
+      success: true,
+      message: 'Appointment confirmed and archived from active queue.',
+      appointment: updatedAppt,
+      whatsapp: wa,
+      email_sent: emailResult.sent
+    });
+  } catch (error) {
+    console.error('Error confirming appointment in Firestore:', error);
+    return res.status(500).json({ error: 'Failed to confirm appointment.' });
+  }
+});
+
+/**
+ * GET /api/appointments/track/:reference
+ * Patient lookup by booking reference code or registered phone number
+ */
+router.get('/track/:reference', async (req, res) => {
+  try {
+    const raw = (req.params.reference || '').trim();
+    const query = sanitizeText(raw);
+    if (!query) {
+      return res.status(400).json({ error: 'Please provide a valid reference code or phone number.' });
+    }
+
+    const appointment = await getAppointmentByReferenceOrPhone(query);
+
+    if (!appointment) {
+      return res.status(404).json({
+        error: `No appointment found matching "${query}". Please check your booking code or phone number.`
+      });
+    }
+
+    return res.json({
+      success: true,
+      data: {
+        id: appointment.id,
+        reference_code: appointment.reference_code,
+        patient_name: appointment.patient_name,
+        consultation_type: appointment.consultation_type,
+        preferred_date: appointment.preferred_date,
+        preferred_time_slot: appointment.preferred_time_slot,
+        confirmed_date: appointment.confirmed_date,
+        confirmed_time: appointment.confirmed_time,
+        confirmed_timestamp: appointment.confirmed_timestamp || appointment.confirmed_at,
+        meeting_link: appointment.meeting_link,
+        status: appointment.status,
+        created_at: appointment.created_at,
+        updated_at: appointment.updated_at
+      }
+    });
+  } catch (error) {
+    console.error('Error tracking appointment in Firestore:', error);
+    return res.status(500).json({ error: 'Server error retrieving appointment status.' });
   }
 });
 
@@ -138,7 +220,17 @@ router.get('/quick-approve', async (req, res) => {
       return res.status(400).send('<h3>Invalid approval link. Missing token.</h3>');
     }
 
-    const appointment = db.prepare('SELECT * FROM appointments WHERE approval_token = ?').get(token);
+    // Find appointment by approval token
+    let appointment = null;
+    const pending = await getPendingAppointments();
+    appointment = pending.find(a => a.approval_token === token);
+
+    if (!appointment) {
+      // Check if already confirmed or lookup by token
+      const all = await getAppointmentById(token);
+      appointment = all;
+    }
+
     if (!appointment) {
       return res.status(404).send('<h3>Appointment not found or approval token expired.</h3>');
     }
@@ -147,32 +239,22 @@ router.get('/quick-approve', async (req, res) => {
     const confirmedTime = sanitizeText(time) || appointment.preferred_time_slot || 'Morning (10:00 AM – 01:00 PM)';
     const meetingLink = appointment.meeting_link || `https://meet.google.com/ayur-${appointment.reference_code.toLowerCase()}`;
 
-    // Update to confirmed
-    db.prepare(`
-      UPDATE appointments
-      SET status = 'confirmed',
-          confirmed_date = ?,
-          confirmed_time = ?,
-          meeting_link = ?,
-          updated_at = datetime('now', 'localtime')
-      WHERE id = ?
-    `).run(confirmedDate, confirmedTime, meetingLink, appointment.id);
-
-    const updatedAppt = db.prepare('SELECT * FROM appointments WHERE id = ?').get(appointment.id);
+    // Update to confirmed in Firestore
+    const updatedAppt = await confirmAppointment(appointment.id, {
+      confirmed_date: confirmedDate,
+      confirmed_time: confirmedTime,
+      meeting_link: meetingLink
+    });
 
     // Send Email to patient
     let emailResult = { sent: false };
-    if (updatedAppt.email) {
-      emailResult = await sendPatientConfirmationEmail(updatedAppt);
-      if (emailResult.sent) {
-        db.prepare("UPDATE appointments SET email_sent_at = datetime('now', 'localtime') WHERE id = ?").run(appointment.id);
-      }
+    if (updatedAppt && updatedAppt.email) {
+      emailResult = await sendPatientConfirmationEmail(updatedAppt).catch(e => ({ sent: false }));
     }
 
     // Generate WhatsApp deep link
-    const wa = generateWhatsAppMessage(updatedAppt);
+    const wa = generateWhatsAppMessage(updatedAppt || appointment);
 
-    // Render HTML response for Doctor
     return res.send(`
       <!DOCTYPE html>
       <html>
@@ -192,10 +274,10 @@ router.get('/quick-approve', async (req, res) => {
         <div class="card">
           <span class="badge">✓ APPROVED & CONFIRMED</span>
           <h2>Consultation Confirmed</h2>
-          <p><strong>Patient:</strong> ${updatedAppt.patient_name}</p>
-          <p><strong>Booking Ref:</strong> <code style="color:#C9971F; font-size:16px;">${updatedAppt.reference_code}</code></p>
+          <p><strong>Patient:</strong> ${appointment.patient_name}</p>
+          <p><strong>Booking Ref:</strong> <code style="color:#C9971F; font-size:16px;">${appointment.reference_code}</code></p>
           <p><strong>Confirmed Schedule:</strong> ${confirmedDate} (${confirmedTime})</p>
-          <p><strong>Email Notification:</strong> ${emailResult.sent ? '<span style="color:#2E7D32;">✓ Dispatched to ' + updatedAppt.email + '</span>' : '<span style="color:#8C8878;">No email provided or queued</span>'}</p>
+          <p><strong>Email Notification:</strong> ${emailResult.sent ? '<span style="color:#2E7D32;">✓ Dispatched to ' + appointment.email + '</span>' : '<span style="color:#8C8878;">No email provided or queued</span>'}</p>
           
           <div style="margin-top:24px; padding-top:16px; border-top:1px solid #D6D0BE;">
             <p style="font-size:14px; margin-bottom:8px;">Send instant WhatsApp confirmation to patient:</p>
@@ -217,71 +299,21 @@ router.get('/quick-approve', async (req, res) => {
 });
 
 /**
- * GET /api/appointments/track/:reference
- * Patient lookup by booking reference code or registered phone number
- */
-router.get('/track/:reference', (req, res) => {
-  try {
-    const raw = (req.params.reference || '').trim();
-    const query = sanitizeText(raw);
-    if (!query) {
-      return res.status(400).json({ error: 'Please provide a valid reference code or phone number.' });
-    }
-
-    const cleanPhone = query.replace(/\D/g, '').slice(-10);
-
-    const appointment = db.prepare(`
-      SELECT 
-        reference_code,
-        patient_name,
-        consultation_type,
-        preferred_date,
-        preferred_time_slot,
-        confirmed_date,
-        confirmed_time,
-        meeting_link,
-        status,
-        created_at,
-        updated_at
-      FROM appointments
-      WHERE UPPER(reference_code) = UPPER(?)
-         OR phone = ?
-         OR (length(?) = 10 AND (phone LIKE '%' || ? OR replace(phone, ' ', '') LIKE '%' || ?))
-      ORDER BY id DESC
-      LIMIT 1
-    `).get(query, query, cleanPhone, cleanPhone, cleanPhone);
-
-    if (!appointment) {
-      return res.status(404).json({
-        error: `No appointment found matching "${query}". Please check your booking code or phone number.`
-      });
-    }
-
-    return res.json({
-      success: true,
-      data: appointment
-    });
-  } catch (error) {
-    console.error('Error tracking appointment:', error);
-    return res.status(500).json({ error: 'Server error retrieving appointment status.' });
-  }
-});
-
-/**
  * GET /api/appointments/clinic-info
  */
 router.get('/clinic-info', (req, res) => {
-  try {
-    const rows = db.prepare('SELECT key, value FROM clinic_profile').all();
-    const info = {};
-    for (const row of rows) {
-      info[row.key] = row.value;
+  return res.json({
+    success: true,
+    data: {
+      doctor_name: 'Dr. Paras Leve',
+      qualifications: 'BAMS, CRAV (Certificate of Rashtriya Ayurveda Vidyapeeth)',
+      registration: 'AY-2019-04831 (Ministry of AYUSH)',
+      phone: '+91 7389808594',
+      address: 'Shree Ayush Clinic, MP Nagar, Zone-II, Bhopal – 462011',
+      hours_weekday: 'Mon–Fri, 10:00 AM – 7:00 PM',
+      hours_weekend: 'Sat–Sun, 10:00 AM – 5:00 PM'
     }
-    return res.json({ success: true, data: info });
-  } catch (error) {
-    console.error('Error fetching clinic info:', error);
-    return res.status(500).json({ error: 'Failed to retrieve clinic info.' });
-  }
+  });
 });
 
 module.exports = router;
