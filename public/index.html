@@ -3047,7 +3047,24 @@ document.addEventListener("DOMContentLoaded", setupAchievementSlider);
     }
 
     // Form submission with backend integration
-    const form = document.getElementById('appointmentForm');
+      async function parseResponse(res) {
+    const text = await res.text();
+    let data = {};
+    try {
+      data = JSON.parse(text);
+    } catch (parseErr) {
+      if (!res.ok) {
+        throw new Error(`Server returned HTTP ${res.status}: ${res.statusText || 'Endpoint unavailable'}`);
+      }
+      throw new Error('Server returned invalid data format instead of JSON.');
+    }
+    if (!res.ok) {
+      const errorMsg = data.details ? (Array.isArray(data.details) ? data.details.join(' ') : data.details) : (data.error || data.message || `Server error (${res.status})`);
+      throw new Error(errorMsg);
+    }
+    return data;
+  }
+const form = document.getElementById('appointmentForm');
     const alertBox = document.getElementById('formAlert');
     const submitBtn = document.getElementById('submitBtn');
     const submitSpinner = document.getElementById('submitSpinner');
@@ -3120,12 +3137,7 @@ phoneInput.addEventListener('input', (e) => {
           })
         });
 
-        const data = await response.json();
-
-        if (!response.ok) {
-          const errorMsg = data.details ? data.details.join(' ') : (data.error || 'Failed to submit booking');
-          throw new Error(errorMsg);
-        }
+        const data = await parseResponse(response);
 
         form.reset();
         const today = new Date().toISOString().split('T')[0];
@@ -3186,12 +3198,13 @@ phoneInput.addEventListener('input', (e) => {
 
       try {
         const res = await fetch('/api/appointments/track/' + encodeURIComponent(input));
-        const json = await res.json();
-
-        if (!res.ok) {
+        let json;
+        try {
+          json = await parseResponse(res);
+        } catch (fetchErr) {
           clearTrackPolling();
           resultBox.style.display = 'block';
-          resultBox.innerHTML = `<div style="padding:12px; background:#FFEBEE; color:#C62828; border-radius:6px; font-size:0.88rem; border:1px solid #FFCDD2;">${escapeHtml(json.error || 'No appointment found.')}</div>`;
+          resultBox.innerHTML = `<div style="padding:12px; background:#FFEBEE; color:#C62828; border-radius:6px; font-size:0.88rem; border:1px solid #FFCDD2;">${escapeHtml(fetchErr.message || 'No appointment found.')}</div>`;
           return;
         }
 
@@ -3350,8 +3363,8 @@ phoneInput.addEventListener('input', (e) => {
 
       try {
         const res = await fetch('/api/reviews');
-        const data = await res.json();
-        if (!res.ok || !data.success) return;
+        const data = await parseResponse(res);
+        if (!data.success) return;
 
         if (data.stats) {
           const avgElem = document.getElementById('avgRatingScore');
@@ -3466,8 +3479,7 @@ phoneInput.addEventListener('input', (e) => {
             })
           });
 
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error || 'Failed to submit review');
+          const data = await parseResponse(res);
 
           alertBox.style.display = 'block';
           alertBox.style.background = '#E8F5E9';

@@ -1015,7 +1015,13 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
       });
-      const data = await res.json();
+      const text = await res.text();
+      let data = {};
+      try {
+        data = JSON.parse(text);
+      } catch (parseErr) {
+        throw new Error(res.ok ? 'Invalid response format from server.' : `Server error (${res.status}): Please check backend deployment.`);
+      }
       if (!res.ok) throw new Error(data.error || 'Authentication failed');
 
       authToken = data.token;
@@ -1034,6 +1040,23 @@
     authToken = null;
     localStorage.removeItem('ayurveda_admin_token');
     showLogin();
+  }
+
+  async function parseResponse(res) {
+    const text = await res.text();
+    let data = {};
+    try {
+      data = JSON.parse(text);
+    } catch (parseErr) {
+      if (!res.ok) {
+        throw new Error(`Server returned HTTP ${res.status}: ${res.statusText || 'Endpoint unavailable'}`);
+      }
+      throw new Error('Server returned invalid data format instead of JSON.');
+    }
+    if (!res.ok) {
+      throw new Error(data.error || data.message || `Server error (${res.status})`);
+    }
+    return data;
   }
 
   async function authFetch(url, options = {}) {
@@ -1056,7 +1079,7 @@
   async function loadStats() {
     try {
       const res = await authFetch('/api/admin/stats');
-      const data = await res.json();
+      const data = await parseResponse(res);
       if (data.success) {
         document.getElementById('statTotal').textContent = data.stats.total;
         document.getElementById('statPending').textContent = data.stats.pending;
@@ -1078,7 +1101,7 @@
       const res = await fetch('/api/appointments/pending', {
         headers: authToken ? { 'Authorization': `Bearer ${authToken}` } : {}
       });
-      const json = await res.json();
+      const json = await parseResponse(res);
 
       if (!json.success || !json.appointments || json.appointments.length === 0) {
         container.innerHTML = `
@@ -1164,8 +1187,7 @@
         })
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to confirm appointment');
+      const data = await parseResponse(res);
 
       // Instantly remove card from pending cards grid
       const card = document.getElementById(`card-${id}`) || (btnElem ? btnElem.closest('.appointment-card') : null);
@@ -1284,7 +1306,7 @@
 
     try {
       const res = await authFetch(`/api/admin/appointments?${params.toString()}`);
-      const json = await res.json();
+      const json = await parseResponse(res);
 
       if (!json.success || !json.appointments || json.appointments.length === 0) {
         tableBody.innerHTML = `<tr><td colspan="8" class="empty-state">No appointments found matching the current filters.</td></tr>`;
@@ -1382,8 +1404,7 @@
         body: JSON.stringify({ status: newStatus })
       });
 
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || 'Failed to update status');
+      const json = await parseResponse(res);
 
       // Update current status tracker attribute
       if (selectElem) {
@@ -1426,7 +1447,7 @@
 
       if (!appt) {
         const res = await authFetch(`/api/admin/appointments/${encodeURIComponent(strId)}`);
-        const json = await res.json();
+        const json = await parseResponse(res);
         if (json.success && json.appointment) {
           appt = json.appointment;
           appointmentCache.set(strId, appt);
@@ -1559,8 +1580,7 @@ _Wishing you holistic health, vitality, and balance._`;
         })
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to approve appointment');
+      const data = await parseResponse(res);
 
       lastWhatsAppUrl = data.whatsapp.url;
 
@@ -1608,8 +1628,7 @@ _Wishing you holistic health, vitality, and balance._`;
 
     try {
       const res = await authFetch(`/api/admin/appointments/${id}`, { method: 'DELETE' });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to delete');
+      const data = await parseResponse(res);
       loadDashboard();
     } catch (e) {
       alert('Error: ' + e.message);
@@ -1645,8 +1664,8 @@ _Wishing you holistic health, vitality, and balance._`;
 
     try {
       const res = await authFetch('/api/admin/reviews');
-      const data = await res.json();
-      if (!res.ok || !data.success) throw new Error(data.error || 'Failed to fetch reviews');
+      const data = await parseResponse(res);
+      if (!data.success) throw new Error(data.error || 'Failed to fetch reviews');
 
       if (!data.reviews || data.reviews.length === 0) {
         container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--ink-soft);">No patient reviews submitted yet.</div>';
