@@ -122,6 +122,33 @@ function verifyPassword(password, hash, salt) {
   return crypto.timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(calculated, 'hex'));
 }
 
+/**
+ * Sanitize a patient/reviewer name and append a unique timestamp or code
+ * Removes invalid Firestore path characters (/, ., #, $, [, ], etc.)
+ */
+function generateCustomDocId(name, suffix = null) {
+  const safeName = (name || 'Anonymous')
+    .normalize('NFKD')
+    .replace(/[/\\.#$\[\]?*]/g, '') // remove invalid Firestore path characters
+    .replace(/[^a-zA-Z0-9_\-]/g, '_') // convert spaces/symbols to underscores
+    .replace(/_+/g, '_') // collapse multiple underscores
+    .replace(/^_+|_+$/g, ''); // trim leading/trailing underscores
+
+  const fallback = safeName.length > 0 ? safeName : 'Patient';
+
+  let uniquePart = suffix;
+  if (!uniquePart) {
+    const now = new Date();
+    const pad = (n) => String(n).padStart(2, '0');
+    const dateStr = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}`;
+    const timeStr = `${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+    const rand = Math.floor(100 + Math.random() * 900);
+    uniquePart = `${dateStr}_${timeStr}_${rand}`;
+  }
+
+  return `${fallback}_${uniquePart}`.slice(0, 100);
+}
+
 // Collections references
 function reviewsCol() {
   return firestoreInstance.collection('reviews');
@@ -170,8 +197,11 @@ async function createReview(data) {
     created_at: timestamp
   };
 
+  const docId = generateCustomDocId(reviewerName);
+
   try {
-    const docRef = await reviewsCol().add(reviewDoc);
+    const docRef = reviewsCol().doc(docId);
+    await docRef.set(reviewDoc);
     const saved = { id: docRef.id, ...reviewDoc };
 
     // Also mirror to SQLite if available so both stores are synced
@@ -342,8 +372,12 @@ async function createAppointment(data) {
     updated_at: now
   };
 
+  const patientName = (data.patient_name || data.name || '').trim();
+  const docId = generateCustomDocId(patientName, refCode.replace(/[^a-zA-Z0-9_\-]/g, ''));
+
   try {
-    const docRef = await appointmentsCol().add(appointmentDoc);
+    const docRef = appointmentsCol().doc(docId);
+    await docRef.set(appointmentDoc);
     const saved = { id: docRef.id, ...appointmentDoc };
 
     // Mirror to SQLite if available
